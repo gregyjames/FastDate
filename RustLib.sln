@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RustLib", "RustLib\RustLib.csproj", "{E9B2A397-026D-42A3-AD50-EB7472632704}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", "build\_build.csproj", "{A91432F9-0C35-442C-AB88-00F9D9EA3186}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RustLibTester", "RustLibTester\RustLibTester.csproj", "{E000EF5E-B368-4081-B6E1-2890D80BF860}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A91432F9-0C35-442C-AB88-00F9D9EA3186}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A91432F9-0C35-442C-AB88-00F9D9EA3186}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9B2A397-026D-42A3-AD50-EB7472632704}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9B2A397-026D-42A3-AD50-EB7472632704}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9B2A397-026D-42A3-AD50-EB7472632704}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9B2A397-026D-42A3-AD50-EB7472632704}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E000EF5E-B368-4081-B6E1-2890D80BF860}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E000EF5E-B368-4081-B6E1-2890D80BF860}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E000EF5E-B368-4081-B6E1-2890D80BF860}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E000EF5E-B368-4081-B6E1-2890D80BF860}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

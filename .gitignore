@@ -1,0 +1,13 @@
+/artifacts
+/rust-lib/target
+/.idea
+/.nuke/temp
+/.nuke/temp
+/.nuke/temp
+/.nuke/temp
+.nuke/temp/build-attempt.log
+*.log
+*.dylib
+/.nuke/temp
+RustLib/NativeMethods.g.cs
+.nuke/temp/build.log

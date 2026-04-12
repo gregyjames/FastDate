@@ -1,0 +1,176 @@
+name: Build and Package
+
+on:
+  push:
+    tags:
+      - 'v*' # Specify the tag pattern, e.g., 'v1.0.0'
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+env:
+  DOTNET_VERSION: '10.0.x'
+  RUST_VERSION: 'stable'
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        include:
+          - os: ubuntu-latest
+            rust-target: x86_64-unknown-linux-gnu
+            lib-name: librust_lib.so
+          - os: windows-latest
+            rust-target: x86_64-pc-windows-msvc
+            lib-name: rust_lib.dll
+          - os: macos-latest
+            rust-target: x86_64-apple-darwin
+            lib-name: librust_lib.dylib
+    
+    runs-on: ${{ matrix.os }}
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+    
+    - name: Setup Rust
+      uses: dtolnay/rust-toolchain@stable
+      with:
+        toolchain: ${{ env.RUST_VERSION }}
+        targets: ${{ matrix.rust-target }}
+    
+    - name: Get version from tag
+      id: get_version
+      shell: bash
+      run: |
+        if [[ $GITHUB_REF == refs/tags/v* ]]; then
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Using tag version: $VERSION"
+        else
+          # Use commit SHA for non-tag builds
+          SHORT_SHA=$(git rev-parse --short HEAD)
+          VERSION="0.0.0-dev.$SHORT_SHA"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Using dev version: $VERSION"
+        fi
+
+    - name: Install NUKE
+      run: dotnet tool install Nuke.GlobalTool --global
+
+    - name: Build with NUKE
+      run: nuke --configuration Release
+    
+    - name: Upload native library
+      uses: actions/upload-artifact@v4
+      with:
+        name: native-lib-${{ matrix.os }}
+        path: libs/${{ matrix.lib-name }}
+        if-no-files-found: error
+    
+    - name: Upload NuGet package (Windows only)
+      if: matrix.os == 'windows-latest'
+      uses: actions/upload-artifact@v4
+      with:
+        name: nuget-package
+        path: artifacts/*.nupkg
+        if-no-files-found: error
+    
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results-${{ matrix.os }}
+        path: '**/TestResults/**/*'
+        if-no-files-found: ignore
+
+  package:
+    needs: build
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+    - name: Download all native libraries
+      uses: actions/download-artifact@v4
+      with:
+        pattern: native-lib-*
+        path: libs-collected
+    - name: Get version from tag
+      id: get_version
+      shell: bash
+      run: |
+        if [[ $GITHUB_REF == refs/tags/v* ]]; then
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Using tag version: $VERSION"
+        else
+          # Use commit SHA for non-tag builds
+          SHORT_SHA=$(git rev-parse --short HEAD)
+          VERSION="0.0.0-dev.$SHORT_SHA"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Using dev version: $VERSION"
+        fi
+    - name: Organize native libraries
+      shell: bash
+      run: |
+        mkdir -p libs
+        # Copy Windows DLL
+        if [ -f libs-collected/native-lib-windows-latest/rust_lib.dll ]; then
+          cp libs-collected/native-lib-windows-latest/rust_lib.dll libs/
+        fi
+        # Copy Linux SO
+        if [ -f libs-collected/native-lib-ubuntu-latest/librust_lib.so ]; then
+          cp libs-collected/native-lib-ubuntu-latest/librust_lib.so libs/
+        fi
+        # Copy macOS dylib
+        if [ -f libs-collected/native-lib-macos-latest/librust_lib.dylib ]; then
+          cp libs-collected/native-lib-macos-latest/librust_lib.dylib libs/
+        fi
+        ls -la libs/
+    
+    - name: Install NUKE
+      run: dotnet tool install Nuke.GlobalTool --global
+    
+    - name: Create multi-platform package
+      run: nuke Pack --configuration Release --version ${{ steps.get_version.outputs.version }}
+    
+    - name: Upload final NuGet package
+      uses: actions/upload-artifact@v4
+      with:
+        name: nuget-package-multiplatform
+        path: artifacts/*.nupkg
+        if-no-files-found: error
+    
+    - name: Publish NuGet package to GitHub Packages
+      run: |
+        dotnet nuget push artifacts/*.nupkg \
+          --source "github" \
+          --api-key ${{ secrets.GITHUB_TOKEN }} \
+          --skip-duplicate
+      env:
+          NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Create Release
+      id: create_release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: artifacts/*.nupkg
+        generate_release_notes: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 

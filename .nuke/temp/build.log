@@ -1,0 +1,118 @@
+00:21:04.439 | V |                      | ArgumentsFromParametersFile.OnBuildCreated (150)
+00:21:04.453 | V |                      | HandleReSharperSurrogateArguments.OnBuildCreated (150)
+00:21:04.453 | V |                      | InjectParameterValues.OnBuildCreated (100)
+00:21:04.468 | V |                      | HandleShellCompletion.OnBuildCreated (75)
+00:21:04.677 | V |                      | GenerateBuildServerConfigurations.OnBuildCreated (50)
+00:21:04.677 | V |                      | InvokeBuildServerConfigurationGeneration.OnBuildCreated (45)
+00:21:04.685 | V |                      | UpdateNotification.OnBuildCreated (10)
+00:21:04.685 | V |                      | UnsetVisualStudioEnvironmentVariables.OnBuildCreated (0)
+00:21:04.686 | V |                      | HandleVisualStudioDebugging.OnBuildCreated (0)
+00:21:04.686 | V |                      | EventInvoker.OnBuildCreated (-3.4028235E+38)
+00:21:04.695 | V |                      | HandlePlanRequests.OnBuildInitialized (10)
+00:21:04.695 | V |                      | HandleHelpRequests.OnBuildInitialized (5)
+00:21:04.695 | V |                      | Telemetry.OnBuildInitialized (0)
+00:21:05.119 | V |                      | Sending BuildStarted telemetry event ...
+00:21:05.120 | V |                      |   build_components         = 
+00:21:05.120 | V |                      |   build_type               = Project
+00:21:05.120 | V |                      |   compile_time             = 2
+00:21:05.120 | V |                      |   config_generators        = 
+00:21:05.120 | V |                      |   host                     = Terminal
+00:21:05.120 | V |                      |   num_custom_components    = 0
+00:21:05.120 | V |                      |   num_custom_extensions    = 0
+00:21:05.120 | V |                      |   num_partitioned_targets  = 0
+00:21:05.120 | V |                      |   num_secrets              = 0
+00:21:05.120 | V |                      |   num_targets              = 5
+00:21:05.120 | V |                      |   os_architecture          = Arm64
+00:21:05.120 | V |                      |   os_platform              = OSX
+00:21:05.120 | V |                      |   repo_branch              = main
+00:21:05.120 | V |                      |   repo_commit              = c5d82a
+00:21:05.120 | V |                      |   repo_provider            = GitHub
+00:21:05.120 | V |                      |   repo_url                 = 510530
+00:21:05.120 | V |                      |   target_framework         = .NETCoreApp,Version=v10.0
+00:21:05.120 | V |                      |   version_dotnet_sdk       = 10.0.100
+00:21:05.120 | V |                      |   version_nuke_common      = 10.0.0
+00:21:05.120 | V |                      |   version_nuke_global_tool = 10.0.0
+00:21:06.029 | V |                      | InjectNonParameterValues.OnBuildInitialized (-100)
+00:21:06.056 | V |                      | EventInvoker.OnBuildInitialized (-3.4028235E+38)
+00:21:06.070 | V | BuildRust            | EventInvoker.OnTargetRunning (-3.4028235E+38)
+00:21:06.071 | I | BuildRust            | Building Rust in Debug mode
+00:21:06.123 | I | BuildRust            | > /Users/gregjames/.cargo/bin/cargo build
+00:21:06.123 | I | BuildRust            | @ /Users/gregjames/Desktop/Files/[01] Greg/[03] Projects/RustLibrary/rust-lib
+00:21:06.269 | I | BuildRust            |     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.06s
+00:21:06.270 | I | BuildRust            | Copying dll for OSX...
+00:21:06.271 | I | BuildRust            | Rust library built and copied successfully
+00:21:06.271 | V | BuildRust            | Telemetry.OnTargetSucceeded (0)
+00:21:06.272 | V | BuildRust            | EventInvoker.OnTargetSucceeded (-3.4028235E+38)
+00:21:06.272 | V | Restore              | EventInvoker.OnTargetRunning (-3.4028235E+38)
+00:21:06.291 | I | Restore              | > /usr/local/share/dotnet/dotnet restore "/Users/gregjames/Desktop/Files/[01] Greg/[03] Projects/RustLibrary/RustLib.sln"
+00:21:06.291 | V | Restore              | @ /Users/gregjames/Desktop/Files/[01] Greg/[03] Projects/RustLibrary
+00:21:06.657 | D | Restore              |   Determining projects to restore...
+00:21:06.812 | D | Restore              |   All projects are up-to-date for restore.
+00:21:06.819 | V | Restore              | Telemetry.OnTargetSucceeded (0)
+00:21:07.009 | V | Restore              | Sending TargetSucceeded telemetry event ...
+00:21:07.009 | V | Restore              |   build_components         = 
+00:21:07.009 | V | Restore              |   build_type               = Project
+00:21:07.009 | V | Restore              |   compile_time             = 4
+00:21:07.009 | V | Restore              |   config_generators        = 
+00:21:07.009 | V | Restore              |   host                     = Terminal
+00:21:07.009 | V | Restore              |   num_custom_components    = 0
+00:21:07.009 | V | Restore              |   num_custom_extensions    = 0
+00:21:07.009 | V | Restore              |   num_partitioned_targets  = 0
+00:21:07.009 | V | Restore              |   num_secrets              = 0
+00:21:07.009 | V | Restore              |   num_targets              = 5
+00:21:07.009 | V | Restore              |   os_architecture          = Arm64
+00:21:07.009 | V | Restore              |   os_platform              = OSX
+00:21:07.009 | V | Restore              |   repo_branch              = main
+00:21:07.009 | V | Restore              |   repo_commit              = c5d82a
+00:21:07.009 | V | Restore              |   repo_provider            = GitHub
+00:21:07.009 | V | Restore              |   repo_url                 = 510530
+00:21:07.009 | V | Restore              |   target_current_partition = 1
+00:21:07.009 | V | Restore              |   target_duration          = 1
+00:21:07.009 | V | Restore              |   target_framework         = .NETCoreApp,Version=v10.0
+00:21:07.009 | V | Restore              |   target_name              = Restore
+00:21:07.009 | V | Restore              |   target_total_partitions  = 1
+00:21:07.009 | V | Restore              |   version_dotnet_sdk       = 10.0.100
+00:21:07.009 | V | Restore              |   version_nuke_common      = 10.0.0
+00:21:07.009 | V | Restore              |   version_nuke_global_tool = 10.0.0
+00:21:07.438 | V | Restore              | EventInvoker.OnTargetSucceeded (-3.4028235E+38)
+00:21:07.439 | V | Compile              | EventInvoker.OnTargetRunning (-3.4028235E+38)
+00:21:07.450 | I | Compile              | > /usr/local/share/dotnet/dotnet build "/Users/gregjames/Desktop/Files/[01] Greg/[03] Projects/RustLibrary/RustLib.sln" --configuration Debug --no-restore --property:Version=1.0.0
+00:21:07.450 | V | Compile              | @ /Users/gregjames/Desktop/Files/[01] Greg/[03] Projects/RustLibrary
+00:21:08.227 | D | Compile              |   RustLib -> /Users/gregjames/Desktop/Files/[01] Greg/[03] Projects/RustLibrary/RustLib/bin/Debug/net10.0/RustLib.dll
+00:21:08.274 | D | Compile              |   RustLibTester -> /Users/gregjames/Desktop/Files/[01] Greg/[03] Projects/RustLibrary/RustLibTester/bin/Debug/net10.0/RustLibTester.dll
+00:21:08.282 | D | Compile              | 
+00:21:08.283 | D | Compile              | Build succeeded.
+00:21:08.283 | D | Compile              |     0 Warning(s)
+00:21:08.283 | D | Compile              |     0 Error(s)
+00:21:08.283 | D | Compile              | 
+00:21:08.283 | D | Compile              | Time Elapsed 00:00:00.66
+00:21:08.290 | V | Compile              | Telemetry.OnTargetSucceeded (0)
+00:21:08.386 | V | Compile              | Sending TargetSucceeded telemetry event ...
+00:21:08.386 | V | Compile              |   build_components         = 
+00:21:08.386 | V | Compile              |   build_type               = Project
+00:21:08.386 | V | Compile              |   compile_time             = 6
+00:21:08.386 | V | Compile              |   config_generators        = 
+00:21:08.386 | V | Compile              |   host                     = Terminal
+00:21:08.386 | V | Compile              |   num_custom_components    = 0
+00:21:08.386 | V | Compile              |   num_custom_extensions    = 0
+00:21:08.386 | V | Compile              |   num_partitioned_targets  = 0
+00:21:08.386 | V | Compile              |   num_secrets              = 0
+00:21:08.386 | V | Compile              |   num_targets              = 5
+00:21:08.386 | V | Compile              |   os_architecture          = Arm64
+00:21:08.386 | V | Compile              |   os_platform              = OSX
+00:21:08.386 | V | Compile              |   repo_branch              = main
+00:21:08.386 | V | Compile              |   repo_commit              = c5d82a
+00:21:08.386 | V | Compile              |   repo_provider            = GitHub
+00:21:08.386 | V | Compile              |   repo_url                 = 510530
+00:21:08.386 | V | Compile              |   target_current_partition = 1
+00:21:08.386 | V | Compile              |   target_duration          = 1
+00:21:08.386 | V | Compile              |   target_framework         = .NETCoreApp,Version=v10.0
+00:21:08.386 | V | Compile              |   target_name              = Compile
+00:21:08.386 | V | Compile              |   target_total_partitions  = 1
+00:21:08.386 | V | Compile              |   version_dotnet_sdk       = 10.0.100
+00:21:08.386 | V | Compile              |   version_nuke_common      = 10.0.0
+00:21:08.386 | V | Compile              |   version_nuke_global_tool = 10.0.0
+00:21:08.629 | V | Compile              | EventInvoker.OnTargetSucceeded (-3.4028235E+38)
+00:21:08.631 | V |                      | UpdateNotification.OnBuildFinished (10)
+00:21:08.631 | V |                      | SerializeBuildServerState.OnBuildFinished (0)
+00:21:08.631 | V |                      | EventInvoker.OnBuildFinished (-3.4028235E+38)

@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>OmegaStrain</RootNamespace>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <!-- Windows -->
+        <Content Include="..\libs\rust_lib.dll" Condition="Exists('..\libs\rust_lib.dll')">
+            <PackagePath>runtimes\win-x64\native\rust_lib.dll</PackagePath>
+            <Pack>true</Pack>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <Link>rust_lib.dll</Link>
+        </Content>
+
+        <!-- Linux -->
+        <Content Include="..\libs\librust_lib.so" Condition="Exists('..\libs\librust_lib.so')">
+            <PackagePath>runtimes\linux-x64\native\librust_lib.so</PackagePath>
+            <Pack>true</Pack>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <Link>librust_lib.so</Link>
+        </Content>
+
+        <!-- macOS -->
+        <Content Include="..\libs\librust_lib.dylib" Condition="Exists('..\libs\librust_lib.dylib')">
+            <PackagePath>runtimes\osx-x64\native\librust_lib.dylib</PackagePath>
+            <Pack>true</Pack>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <Link>librust_lib.dylib</Link>
+        </Content>
+    </ItemGroup>
+    
+</Project>
