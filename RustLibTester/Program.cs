@@ -1,10 +1,41 @@
-﻿namespace RustLib;
+﻿using System.Globalization;
+using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Running;
 
-class Program
+namespace RustLib;
+
+[MemoryDiagnoser]
+public class DateParsingBenchmarks
 {
-    static void Main(string[] args)
+    private string _dateStr = null!;
+
+    [GlobalSetup]
+    public void Setup()
     {
-        var s = Library.Add(4, 5);
-        Console.WriteLine("Hello, World! {0}", s);
+        _dateStr = "2026-04-12T15:04:05";
+    }
+
+    [Benchmark]
+    public DateTime RustFastDate()
+    {
+        return FastDate.FromISO8601(_dateStr);
+    }
+
+    [Benchmark]
+    public DateTime ParseExact()
+    {
+        return DateTime.ParseExact(
+            _dateStr,
+            "yyyy-MM-dd'T'HH:mm:ss",
+            CultureInfo.InvariantCulture
+        );
+    }
+}
+
+public static class Program
+{
+    public static void Main(string[] args)
+    {
+        BenchmarkRunner.Run<DateParsingBenchmarks>();
     }
 }
