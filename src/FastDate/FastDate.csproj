@@ -19,6 +19,24 @@
     <Import Project="build/FastDate.targets" />
 
     <ItemGroup>
+        <None Include="$(MSBuildThisFileDirectory)..\runtimes\win-x64\native\fastdate.dll" Condition="Exists('$(MSBuildThisFileDirectory)..\runtimes\win-x64\native\fastdate.dll')">
+            <Link>fastdate.dll</Link>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <Visible>False</Visible>
+        </None>
+        <None Include="$(MSBuildThisFileDirectory)..\runtimes\osx-arm64\native\libfastdate.dylib" Condition="Exists('$(MSBuildThisFileDirectory)..\runtimes\osx-arm64\native\libfastdate.dylib')">
+            <Link>libfastdate.dylib</Link>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <Visible>False</Visible>
+        </None>
+        <None Include="$(MSBuildThisFileDirectory)..\runtimes\linux-x64\native\libfastdate.so" Condition="Exists('$(MSBuildThisFileDirectory)..\runtimes\linux-x64\native\libfastdate.so')">
+            <Link>libfastdate.so</Link>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <Visible>False</Visible>
+        </None>
+    </ItemGroup>
+    
+    <ItemGroup>
         <None Include="..\..\logo.png" Pack="True" PackagePath="" Link="logo.png" />
 
         <!-- Native libraries for NuGet packaging and local development -->

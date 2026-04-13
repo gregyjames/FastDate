@@ -5,6 +5,7 @@
 #pragma warning disable CS8500
 #pragma warning disable CS8981
 using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 
@@ -18,8 +19,10 @@ namespace FastDate
 
 
 
-        [DllImport(__DllName, EntryPoint = "parse_iso_date_neon", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-        internal static extern PackedDateTime parse_iso_date_neon(byte* input);
+        [LibraryImport(__DllName, EntryPoint = "parse_iso_date_neon")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [SuppressGCTransition]
+        internal static partial PackedDateTime parse_iso_date_neon(byte* input);
 
 
     }
