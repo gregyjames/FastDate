@@ -1,15 +1,20 @@
 <Project>
     <Target Name="CopyNativeLibraries" AfterTargets="Build">
         <ItemGroup>
-            <NativeLibrary Include="$(MSBuildProjectDirectory)\runtimes\**\libfastdate.dylib" />
-            <NativeLibrary Include="$(MSBuildProjectDirectory)\runtimes\**\libfastdate.so" />
-            <NativeLibrary Include="$(MSBuildProjectDirectory)\runtimes\**\fastdate.dll" />
+            <NativeFiles Include="$(MSBuildProjectDirectory)\runtimes\**\*"
+                         Condition="Exists('$(MSBuildProjectDirectory)\runtimes\')" />
+
+            <NativeFiles Include="$(MSBuildThisFileDirectory)..\runtimes\**\*"
+                         Condition="!Exists('$(MSBuildProjectDirectory)\runtimes\') AND Exists('$(MSBuildThisFileDirectory)..\runtimes\')" />
         </ItemGroup>
 
-        <Copy SourceFiles="@(NativeLibrary)"
-              DestinationFiles="@(NativeLibrary->'$(OutputPath)runtimes\%(RecursiveDir)%(Filename)%(Extension)')"
-              SkipUnchangedFiles="true" />
+        <Message Importance="High" Text="FastDate: Copying native assets to output directory..." Condition="'@(NativeFiles)' != ''" />
 
+        <Copy SourceFiles="@(NativeFiles)"
+              DestinationFiles="@(NativeFiles->'$(OutputPath)runtimes\%(RecursiveDir)%(Filename)%(Extension)')"
+              SkipUnchangedFiles="true"
+              Condition="'@(NativeFiles)' != ''" />
+        
         <Copy SourceFiles="@(NativeLibrary)"
               DestinationFolder="$(OutputPath)"
               SkipUnchangedFiles="true" />
