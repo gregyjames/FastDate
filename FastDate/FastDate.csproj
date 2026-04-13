@@ -44,8 +44,6 @@
 
         <!-- Native libraries for NuGet packaging and local development -->
         <Content Include="runtimes\**\*" Pack="true" PackagePath="runtimes" CopyToOutputDirectory="PreserveNewest" />
-
-        <None Include="build\HyperTrieCore.targets" Pack="true" PackagePath="build\HyperTrieCore.targets"/>
         <None Include="..\README.md" Pack="true" PackagePath="/" />
         <None Include="..\LICENSE.md" Pack="true" PackagePath="/" />
     </ItemGroup>
