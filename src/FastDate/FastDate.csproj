@@ -50,7 +50,13 @@
         <None Include="..\..\logo.png" Pack="True" PackagePath="" Link="logo.png" />
 
         <!-- Native libraries for NuGet packaging and local development -->
-        <Content Include="runtimes\**\*" Pack="true" PackagePath="runtimes" CopyToOutputDirectory="PreserveNewest" />
+        <Content Include="runtimes\**\*">
+            <Pack>true</Pack>
+            <PackagePath>runtimes</PackagePath>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <LinkBase>runtimes</LinkBase>
+        </Content>
+        
         <None Include="build\FastDate.targets" Pack="true" PackagePath="build\HyperTrieCore.targets"/>
         <None Include="..\..\README.md" Pack="true" PackagePath="/" />
         <None Include="..\..\LICENSE.md" Pack="true" PackagePath="/" />
