@@ -13,31 +13,7 @@
         <RepositoryType>git</RepositoryType>
     </PropertyGroup>
 
-    <ItemGroup>
-        <!-- Windows -->
-        <Content Include="..\libs\rust_lib.dll" Condition="Exists('..\libs\rust_lib.dll')">
-            <PackagePath>runtimes\win-x64\native\rust_lib.dll</PackagePath>
-            <Pack>true</Pack>
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <Link>fastdate.dll</Link>
-        </Content>
-
-        <!-- Linux -->
-        <Content Include="..\libs\librust_lib.so" Condition="Exists('..\libs\librust_lib.so')">
-            <PackagePath>runtimes\linux-x64\native\librust_lib.so</PackagePath>
-            <Pack>true</Pack>
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <Link>libfastdate.so</Link>
-        </Content>
-
-        <!-- macOS -->
-        <Content Include="..\libs\librust_lib.dylib" Condition="Exists('..\libs\librust_lib.dylib')">
-            <PackagePath>runtimes\osx-x64\native\librust_lib.dylib</PackagePath>
-            <Pack>true</Pack>
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <Link>libfastdate.dylib</Link>
-        </Content>
-    </ItemGroup>
+    <Import Project="build/FastDate.targets" />
 
     <ItemGroup>
         <None Include="..\..\logo.png" Pack="True" PackagePath="" Link="logo.png" />

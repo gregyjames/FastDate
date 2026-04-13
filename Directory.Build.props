@@ -1,0 +1,16 @@
+<Project>
+    <PropertyGroup>
+        <UseArtifactsOutput>true</UseArtifactsOutput>
+        <NoWarn>CS8604,NU1507</NoWarn>
+    </PropertyGroup>
+    <PropertyGroup>
+        <CoverletOutput Condition="'$(CoverletOutput)' == ''">$(MSBuildThisFileDirectory)artifacts/coverage/coverage.xml</CoverletOutput>
+        <Include>[FastDate*]*</Include>
+        <Exclude>[*.Tests]*</Exclude>
+        <ExcludeByFile>**/artifacts/**</ExcludeByFile>
+    </PropertyGroup>
+    <PropertyGroup>
+        <CollectCoverage>true</CollectCoverage>
+        <CoverletOutputFormat>cobertura</CoverletOutputFormat>
+    </PropertyGroup>
+</Project>
