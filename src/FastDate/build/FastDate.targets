@@ -1,16 +1,12 @@
 <Project>
     <Target Name="CopyNativeLibraries" AfterTargets="Build">
         <ItemGroup>
-            <!-- For NuGet package structure -->
-            <NativeLibrary Include="$(MSBuildThisFileDirectory)../runtimes/osx-arm64/native/libfastdate.dylib"
-                           Condition="Exists('$(MSBuildThisFileDirectory)../runtimes/osx-arm64/native/libfastdate.dylib')" />
-            <NativeLibrary Include="$(MSBuildThisFileDirectory)../runtimes/linux-x64/native/libfastdate.so"
-                           Condition="Exists('$(MSBuildThisFileDirectory)../runtimes/linux-x64/native/libfastdate.so')" />
-            <NativeLibrary Include="$(MSBuildThisFileDirectory)../runtimes/win-x64/native/fastdate.dll"
-                           Condition="Exists('$(MSBuildThisFileDirectory)../runtimes/win-x64/native/fastdate.dll')" />
-            <NativeLibrary Include="$(MSBuildThisFileDirectory)../runtimes/win-x86/native/fastdate.dll"
-                           Condition="Exists('$(MSBuildThisFileDirectory)../runtimes/win-x86/native/fastdate.dll')" />
+            <NativeLibrary Include="$(MSBuildProjectDirectory)\runtimes\**\libfastdate.dylib" />
+            <NativeLibrary Include="$(MSBuildProjectDirectory)\runtimes\**\libfastdate.so" />
+            <NativeLibrary Include="$(MSBuildProjectDirectory)\runtimes\**\fastdate.dll" />
         </ItemGroup>
-        <Copy SourceFiles="@(NativeLibrary)" DestinationFolder="$(OutputPath)" SkipUnchangedFiles="true" />
+        <Copy SourceFiles="@(NativeLibrary)"
+              DestinationFiles="@(NativeLibrary->'$(OutputPath)runtimes\%(RecursiveDir)%(Filename)%(Extension)')"
+              SkipUnchangedFiles="true" />
     </Target>
-</Project>  
+</Project>
