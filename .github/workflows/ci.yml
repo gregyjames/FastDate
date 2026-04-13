@@ -1,0 +1,106 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  rust-ci:
+    name: Rust CI
+    runs-on: ubuntu-latest
+    env:
+      RUSTFLAGS: "-C target-feature=+aes,+sse2"
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy, rustfmt, llvm-tools-preview
+
+      - name: Rust Cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: "src/fastdatecore -> target"
+          
+      - name: Install cargo-llvm-cov
+        uses: taiki-e/install-action@cargo-llvm-cov
+          
+      - name: Check formatting
+        run: cargo fmt --all -- --check
+        working-directory: src/fastdatecore
+
+      - name: Clippy
+        run: cargo clippy -- -D warnings
+        working-directory: src/fastdatecore
+
+      - name: Rust Tests + Coverage
+        run: cargo llvm-cov --all-features --codecov --output-path codecov.json
+        working-directory: src/fastdatecore
+
+      - name: Upload Rust coverage
+        uses: codecov/codecov-action@v6
+        with:
+          files: src/fastdatecore/codecov.json
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: false
+          flags: rust
+  
+  csharp-ci:
+    name: C# CI
+    runs-on: ubuntu-latest
+    env:
+      RUSTFLAGS: "-C target-feature=+aes,+sse2"
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Install .NET SDK
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj*', '**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Install dependencies (Linux)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential libssl-dev gcc g++
+
+      - name: Install Rust (for native lib)
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Rust Cache (FFI Lib)
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: "src/hypertrie -> target"
+
+      - name: Build and Test via Nuke
+        id: test
+        shell: bash
+        run: |
+          chmod +x ./build.sh
+          
+          SKIP_FLAG=""
+          if [ "${{ steps.nuget-cache.outputs.cache-hit }}" == "true" ]; then
+            SKIP_FLAG="--skip Restore"
+          fi
+          
+          ./build.sh BuildRustSingle $SKIP_FLAG --rust-target aarch64-apple-darwin --runtime-id osx-arm64 --lib-name libfastdate.dylib
+          ./build.sh Test $SKIP_FLAG --configuration Release
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v6
+        with:
+          report_type: coverage
+          files: 'artifacts/**/coverage.cobertura.xml'
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: false
+          flags: csharp
