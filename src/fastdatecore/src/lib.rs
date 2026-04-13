@@ -1,3 +1,4 @@
+#[cfg(target_arch = "aarch64")]
 use std::arch::aarch64::*;
 
 #[repr(C)]
@@ -12,6 +13,7 @@ const MULTIPLIERS: [u8; 16] = [10, 1, 10, 1, 10, 1, 10, 1, 10, 1, 10, 1, 0, 0, 0
 
 const ASCII_ZERO: u8 = b'0';
 
+#[cfg(target_arch = "aarch64")]
 #[unsafe(no_mangle)]
 /// Parse the iso datetime into a packed datetime object.
 /// # Safety
