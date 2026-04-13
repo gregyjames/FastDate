@@ -1,26 +1,21 @@
 <Project>
     <Target Name="CopyNativeLibraries" AfterTargets="Build">
         <ItemGroup>
-            <NativeAssets Include="$(MSBuildProjectDirectory)\runtimes\osx-arm64\native\libfastdate.dylib">
-                <RelativePath>runtimes\osx-arm64\native\libfastdate.dylib</RelativePath>
-            </NativeAssets>
-            <NativeAssets Include="$(MSBuildProjectDirectory)\runtimes\linux-x64\native\libfastdate.so">
-                <RelativePath>runtimes\linux-x64\native\libfastdate.so</RelativePath>
-            </NativeAssets>
-            <NativeAssets Include="$(MSBuildProjectDirectory)\runtimes\win-x64\native\fastdate.dll">
-                <RelativePath>runtimes\win-x64\native\fastdate.dll</RelativePath>
-            </NativeAssets>
-        </ItemGroup>
+            <NativeFiles Include="$(MSBuildProjectDirectory)\runtimes\**\*"
+                         Condition="Exists('$(MSBuildProjectDirectory)\runtimes\')" />
 
-        <Message Importance="High" Text="FastDate: Copying native assets to output directory..." Condition="'@(NativeFiles)' != ''" />
+            <NativeFiles Include="$(MSBuildThisFileDirectory)..\runtimes\**\*"
+                         Condition="!Exists('$(MSBuildProjectDirectory)\runtimes\') AND Exists('$(MSBuildThisFileDirectory)..\runtimes\')" />
+        </ItemGroup>
 
         <Copy SourceFiles="@(NativeFiles)"
               DestinationFiles="@(NativeFiles->'$(OutputPath)runtimes\%(RecursiveDir)%(Filename)%(Extension)')"
               SkipUnchangedFiles="true"
               Condition="'@(NativeFiles)' != ''" />
-        
-        <Copy SourceFiles="@(NativeLibrary)"
+
+        <Copy SourceFiles="@(NativeFiles)"
               DestinationFolder="$(OutputPath)"
-              SkipUnchangedFiles="true" />
+              SkipUnchangedFiles="true"
+              Condition="'@(NativeFiles)' != ''" />
     </Target>
 </Project>

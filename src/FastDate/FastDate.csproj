@@ -28,18 +28,13 @@
         <PublishTrimmed>true</PublishTrimmed>
         <TrimMode>full</TrimMode>
     </PropertyGroup>
-
+    
     <ItemGroup>
-        <Content Include="runtimes\**\*">
+        <None Include="runtimes\**\*">
             <Pack>true</Pack>
             <PackagePath>runtimes</PackagePath>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <Link>runtimes\%(RecursiveDir)%(Filename)%(Extension)</Link>
-            <AssetType>native</AssetType>
-        </Content>
-    </ItemGroup>
-    
-    <ItemGroup>
+        </None>
         <None Include="build\FastDate.targets" Pack="true" PackagePath="build\FastDate.targets"/>
         <None Include="..\..\logo.png" Pack="True" PackagePath="" Link="logo.png" />
         <None Include="..\..\README.md" Pack="true" PackagePath="/" />
