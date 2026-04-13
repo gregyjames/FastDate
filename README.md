@@ -27,9 +27,10 @@ InvocationCount=1  UnrollFactor=1
 ```
 | Method               | Mean      | Error     | StdDev    | Median      | Ratio | RatioSD | Rank | Allocated | Alloc Ratio |
 |--------------------- |----------:|----------:|----------:|------------:|------:|--------:|-----:|----------:|------------:|
-| Rust_FastDate_String |  24.17 ns |  15.04 ns |  42.67 ns |   0.0000 ns |  0.03 |    0.06 |    1 |         - |          NA |
-| System_Utf8Parser    | 108.94 ns |  20.24 ns |  56.41 ns |  83.0000 ns |  0.14 |    0.09 |    2 |         - |          NA |
-| System_ParseExact    | 889.60 ns | 118.65 ns | 346.10 ns | 770.5000 ns |  1.14 |    0.60 |    3 |         - |          NA |
+| Rust_FastDate_Utf8   |  46.79 ns |  30.56 ns |  85.18 ns |   0.0000 ns |  0.07 |    0.13 |    1 |         - |          NA |
+| Rust_FastDate_String |  64.10 ns |  18.08 ns |  48.56 ns |  41.0000 ns |  0.10 |    0.08 |    2 |         - |          NA |
+| System_Utf8Parser    | 125.42 ns |  48.54 ns | 133.71 ns |  82.0000 ns |  0.19 |    0.22 |    2 |         - |          NA |
+| System_ParseExact    | 732.60 ns | 102.38 ns | 283.70 ns | 604.5000 ns |  1.11 |    0.54 |    3 |         - |          NA |
 
 ## Limitations
 - Currently only Supports Apple ARM64 (neon) but more to come!
