@@ -1,170 +1,104 @@
-name: Build and Package
+name: Build and Release
 
 on:
   push:
     tags:
-      - 'v*' # Specify the tag pattern, e.g., 'v1.0.0'
-  pull_request:
-    branches: [ main ]
-  workflow_dispatch:
-
-env:
-  DOTNET_VERSION: '10.0.x'
-  RUST_VERSION: 'stable'
+      - 'v*'
 
 permissions:
   contents: write
   packages: write
 
 jobs:
-  build:
+  build-rust:
     strategy:
       matrix:
-        os: [macos-latest]
         include:
-          - os: macos-latest
-            rust-target: x86_64-apple-darwin
-            lib-name: librust_lib.dylib
-    
+          - platform: macos-arm64
+            os: macos-latest
+            target: aarch64-apple-darwin
+            lib_name: libfastdate.dylib
+            runtime_id: osx-arm64
+
     runs-on: ${{ matrix.os }}
-    
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-    
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: ${{ env.DOTNET_VERSION }}
-    
-    - name: Setup Rust
-      uses: dtolnay/rust-toolchain@stable
-      with:
-        toolchain: ${{ env.RUST_VERSION }}
-        targets: ${{ matrix.rust-target }}
-    
-    - name: Get version from tag
-      id: get_version
-      shell: bash
-      run: |
-        if [[ $GITHUB_REF == refs/tags/v* ]]; then
-          VERSION=${GITHUB_REF#refs/tags/v}
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "Using tag version: $VERSION"
-        else
-          # Use commit SHA for non-tag builds
-          SHORT_SHA=$(git rev-parse --short HEAD)
-          VERSION="0.0.0-dev.$SHORT_SHA"
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "Using dev version: $VERSION"
-        fi
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
-    - name: Install NUKE
-      run: dotnet tool install Nuke.GlobalTool --global
+      - name: Install dependencies (Linux)
+        if: contains(matrix.os, 'ubuntu')
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential gcc-multilib libssl-dev gcc g++
 
-    - name: Build with NUKE
-      run: nuke --configuration Release
-    
-    - name: Upload native library
-      uses: actions/upload-artifact@v4
-      with:
-        name: native-lib-${{ matrix.os }}
-        path: libs/${{ matrix.lib-name }}
-        if-no-files-found: error
-    
-    - name: Upload NuGet package (Windows only)
-      if: matrix.os == 'windows-latest'
-      uses: actions/upload-artifact@v4
-      with:
-        name: nuget-package
-        path: artifacts/*.nupkg
-        if-no-files-found: error
-    
-    - name: Upload test results
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: test-results-${{ matrix.os }}
-        path: '**/TestResults/**/*'
-        if-no-files-found: ignore
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          target: ${{ matrix.target }}
 
-  package:
-    needs: build
+      - name: Install .NET SDK
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Build Rust Library via Nuke
+        shell: bash
+        run: |
+          chmod +x ./build.sh
+          # Extract version organically directly from the pushed tag (e.g., v1.0.32-beta.4 -> 1.0.32-beta.4)
+          VERSION="${GITHUB_REF_NAME#v}"
+          CLEAN_VERSION="${VERSION//_/-}"
+          ./build.sh BuildRustSingle \
+            --rust-target ${{ matrix.target }} \
+            --runtime-id ${{ matrix.runtime_id }} \
+            --lib-name ${{ matrix.lib_name }} \
+            --version "$CLEAN_VERSION"
+
+      - name: Upload Library
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ matrix.runtime_id }}
+          path: src/FastDate/runtimes/${{ matrix.runtime_id }}
+
+  build-nuget:
+    needs: [build-rust]
     runs-on: ubuntu-latest
-    
+    if: always() && needs.build-rust.result == 'success'
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-    
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: ${{ env.DOTNET_VERSION }}
-    - name: Download all native libraries
-      uses: actions/download-artifact@v4
-      with:
-        pattern: native-lib-*
-        path: libs-collected
-    - name: Get version from tag
-      id: get_version
-      shell: bash
-      run: |
-        if [[ $GITHUB_REF == refs/tags/v* ]]; then
-          VERSION=${GITHUB_REF#refs/tags/v}
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "Using tag version: $VERSION"
-        else
-          # Use commit SHA for non-tag builds
-          SHORT_SHA=$(git rev-parse --short HEAD)
-          VERSION="0.0.0-dev.$SHORT_SHA"
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "Using dev version: $VERSION"
-        fi
-    - name: Organize native libraries
-      shell: bash
-      run: |
-        mkdir -p libs
-        # Copy Windows DLL
-        if [ -f libs-collected/native-lib-windows-latest/rust_lib.dll ]; then
-          cp libs-collected/native-lib-windows-latest/rust_lib.dll libs/
-        fi
-        # Copy Linux SO
-        if [ -f libs-collected/native-lib-ubuntu-latest/librust_lib.so ]; then
-          cp libs-collected/native-lib-ubuntu-latest/librust_lib.so libs/
-        fi
-        # Copy macOS dylib
-        if [ -f libs-collected/native-lib-macos-latest/librust_lib.dylib ]; then
-          cp libs-collected/native-lib-macos-latest/librust_lib.dylib libs/
-        fi
-        ls -la libs/
-    
-    - name: Install NUKE
-      run: dotnet tool install Nuke.GlobalTool --global
-    
-    - name: Create multi-platform package
-      run: nuke Pack --configuration Release --version ${{ steps.get_version.outputs.version }}
-    
-    - name: Upload final NuGet package
-      uses: actions/upload-artifact@v4
-      with:
-        name: nuget-package-multiplatform
-        path: artifacts/*.nupkg
-        if-no-files-found: error
-    
-    - name: Publish NuGet package to GitHub Packages
-      run: |
-        dotnet nuget push artifacts/*.nupkg \
-          --source "github" \
-          --api-key ${{ secrets.GITHUB_TOKEN }} \
-          --skip-duplicate
-      env:
-          NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    
-    - name: Create Release
-      id: create_release
-      uses: softprops/action-gh-release@v1
-      with:
-        files: artifacts/*.nupkg
-        generate_release_notes: true
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Install .NET SDK
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Download all native libraries
+        uses: actions/download-artifact@v8
+        with:
+          path: src/FastDate/runtimes
+          merge-multiple: false
+
+      - name: Build, Pack, and Publish via Nuke
+        shell: bash
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          chmod +x ./build.sh
+          VERSION="${GITHUB_REF_NAME#v}"
+          CLEAN_VERSION="${VERSION//_/-}"
+          ./build.sh PublishNuGet PublishGitHub \
+            --configuration Release \
+            --nu-get-api-key "$NUGET_API_KEY" \
+            --version "$CLEAN_VERSION"
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v3
+        with:
+          files: artifacts/packages/*.nupkg
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
