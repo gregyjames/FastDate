@@ -20,14 +20,16 @@ BenchmarkDotNet v0.15.8, macOS Tahoe 26.1 (25B78) [Darwin 25.1.0]
 Apple M1, 1 CPU, 8 logical and 8 physical cores
 .NET SDK 10.0.201
   [Host]     : .NET 10.0.5 (10.0.5, 10.0.526.15411), Arm64 RyuJIT armv8.0-a
-  DefaultJob : .NET 10.0.5 (10.0.5, 10.0.526.15411), Arm64 RyuJIT armv8.0-a
+  Job-CNUJVU : .NET 10.0.5 (10.0.5, 10.0.526.15411), Arm64 RyuJIT armv8.0-a
 
+InvocationCount=1  UnrollFactor=1  
 
 ```
-| Method       | Mean      | Error    | StdDev   | Allocated |
-|------------- |----------:|---------:|---------:|----------:|
-| RustFastDate |  19.34 ns | 0.070 ns | 0.059 ns |         - |
-| ParseExact   | 137.47 ns | 0.532 ns | 0.416 ns |         - |
+| Method               | Mean      | Error     | StdDev    | Median      | Ratio | RatioSD | Rank | Allocated | Alloc Ratio |
+|--------------------- |----------:|----------:|----------:|------------:|------:|--------:|-----:|----------:|------------:|
+| Rust_FastDate_String |  24.17 ns |  15.04 ns |  42.67 ns |   0.0000 ns |  0.03 |    0.06 |    1 |         - |          NA |
+| System_Utf8Parser    | 108.94 ns |  20.24 ns |  56.41 ns |  83.0000 ns |  0.14 |    0.09 |    2 |         - |          NA |
+| System_ParseExact    | 889.60 ns | 118.65 ns | 346.10 ns | 770.5000 ns |  1.14 |    0.60 |    3 |         - |          NA |
 
 ## Limitations
 - Currently only Supports Apple ARM64 (neon) but more to come!
