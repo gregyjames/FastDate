@@ -70,13 +70,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nuget-
 
-      - name: Install dependencies (Linux)
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential libssl-dev gcc g++
-
       - name: Install Rust (for native lib)
         uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy, rustfmt, llvm-tools-preview
+          target: aarch64-apple-darwin
 
       - name: Rust Cache (FFI Lib)
         uses: Swatinem/rust-cache@v2
