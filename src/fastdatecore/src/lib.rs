@@ -13,31 +13,37 @@ const MULTIPLIERS: [u8; 16] = [10, 1, 10, 1, 10, 1, 10, 1, 10, 1, 10, 1, 0, 0, 0
 const ASCII_ZERO: u8 = b'0';
 
 #[unsafe(no_mangle)]
+/// Parse the iso datetime into a packed datetime object.
+/// # Safety
+///
+/// This method assumes input is in the correct ISO 8601 format.
 pub unsafe extern "C" fn parse_iso_date_neon(input: *const u8) -> PackedDateTime {
-    let src = vld1q_u8(input);
-    let digits = vsubq_u8(src, vdupq_n_u8(ASCII_ZERO));
+    unsafe {
+        let src = vld1q_u8(input);
+        let digits = vsubq_u8(src, vdupq_n_u8(ASCII_ZERO));
 
-    let aligned = vqtbl1q_u8(digits, vld1q_u8(SHUFFLE.as_ptr()));
-    let mult = vld1q_u8(MULTIPLIERS.as_ptr());
+        let aligned = vqtbl1q_u8(digits, vld1q_u8(SHUFFLE.as_ptr()));
+        let mult = vld1q_u8(MULTIPLIERS.as_ptr());
 
-    let prod_lo = vmull_u8(vget_low_u8(aligned), vget_low_u8(mult));
-    let prod_hi = vmull_u8(vget_high_u8(aligned), vget_high_u8(mult));
+        let prod_lo = vmull_u8(vget_low_u8(aligned), vget_low_u8(mult));
+        let prod_hi = vmull_u8(vget_high_u8(aligned), vget_high_u8(mult));
 
-    let date_parts = vpaddlq_u16(prod_lo);
-    let time_parts = vpaddlq_u16(prod_hi);
+        let date_parts = vpaddlq_u16(prod_lo);
+        let time_parts = vpaddlq_u16(prod_hi);
 
-    let year = vgetq_lane_u32(date_parts, 0) * 100 + vgetq_lane_u32(date_parts, 1);
-    let month = vgetq_lane_u32(date_parts, 2);
-    let day = vgetq_lane_u32(date_parts, 3);
+        let year = vgetq_lane_u32(date_parts, 0) * 100 + vgetq_lane_u32(date_parts, 1);
+        let month = vgetq_lane_u32(date_parts, 2);
+        let day = vgetq_lane_u32(date_parts, 3);
 
-    let hour = vgetq_lane_u32(time_parts, 0);
-    let minute = vgetq_lane_u32(time_parts, 1);
+        let hour = vgetq_lane_u32(time_parts, 0);
+        let minute = vgetq_lane_u32(time_parts, 1);
 
-    let second =
-        ((*input.add(17) - ASCII_ZERO) as u32) * 10 + ((*input.add(18) - ASCII_ZERO) as u32);
+        let second =
+            ((*input.add(17) - ASCII_ZERO) as u32) * 10 + ((*input.add(18) - ASCII_ZERO) as u32);
 
-    PackedDateTime {
-        date: (year << 16) | (month << 8) | day,
-        time: (hour << 24) | (minute << 16) | (second << 8),
+        PackedDateTime {
+            date: (year << 16) | (month << 8) | day,
+            time: (hour << 24) | (minute << 16) | (second << 8),
+        }
     }
 }

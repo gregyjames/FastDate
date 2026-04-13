@@ -7,7 +7,7 @@ on:
 jobs:
   rust-ci:
     name: Rust CI
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     env:
       RUSTFLAGS: "-C target-feature=+aes,+sse2"
     steps:
@@ -17,6 +17,7 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
         with:
           components: clippy, rustfmt, llvm-tools-preview
+          target: aarch64-apple-darwin
 
       - name: Rust Cache
         uses: Swatinem/rust-cache@v2
@@ -48,7 +49,7 @@ jobs:
   
   csharp-ci:
     name: C# CI
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     env:
       RUSTFLAGS: "-C target-feature=+aes,+sse2"
     steps:
