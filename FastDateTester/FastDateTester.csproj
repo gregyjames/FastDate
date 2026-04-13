@@ -10,7 +10,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\RustLib\RustLib.csproj" />
+      <ProjectReference Include="..\FastDate\FastDate.csproj" />
     </ItemGroup>
 
     <ItemGroup>

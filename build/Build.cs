@@ -1,18 +1,12 @@
-using System;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
 using Nuke.Common;
-using Nuke.Common.CI;
-using Nuke.Common.Execution;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Utilities.Collections;
 using Serilog;
-using static Nuke.Common.EnvironmentInfo;
-using static Nuke.Common.IO.PathConstruction;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
 class Build : NukeBuild
@@ -33,7 +27,7 @@ class Build : NukeBuild
     
     [Solution] readonly Solution Solution;
     AbsolutePath SourceDirectory => RootDirectory / "src";
-    AbsolutePath RustLibDirectory => RootDirectory / "rust-lib";
+    AbsolutePath RustLibDirectory => RootDirectory / "fastdatecore";
     AbsolutePath TestsDirectory => RootDirectory / "tests";
     AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
     AbsolutePath LibsDirectory => RootDirectory / "libs";
@@ -55,7 +49,7 @@ class Build : NukeBuild
             }
         });
 
-    Target BuildRust => _ => _
+    Target BuildRust => d => d
         .Executes(() =>
         {
             Log.Information("Building Rust in {config} mode", Configuration);

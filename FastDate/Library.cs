@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics.Arm;
 using System.Text;
 
-namespace RustLib;
+namespace FastDate;
 
 internal static class DateTimeExtensions
 {

@@ -2,7 +2,7 @@
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
 
-namespace RustLib;
+namespace FastDate;
 
 [MemoryDiagnoser]
 public class DateParsingBenchmarks
