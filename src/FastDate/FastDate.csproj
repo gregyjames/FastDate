@@ -57,7 +57,7 @@
             <LinkBase>runtimes</LinkBase>
         </Content>
         
-        <None Include="build\FastDate.targets" Pack="true" PackagePath="build\HyperTrieCore.targets"/>
+        <None Include="build\FastDate.targets" Pack="true" PackagePath="build\FastDate.targets"/>
         <None Include="..\..\README.md" Pack="true" PackagePath="/" />
         <None Include="..\..\LICENSE.md" Pack="true" PackagePath="/" />
     </ItemGroup>
