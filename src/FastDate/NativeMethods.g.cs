@@ -12,7 +12,7 @@ namespace FastDate
 {
     internal static unsafe partial class NativeMethods
     {
-        const string __DllName = "rust_lib";
+        const string __DllName = "fastdate";
 
 
 
