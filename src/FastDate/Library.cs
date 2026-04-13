@@ -1,9 +1,8 @@
-﻿using System.Buffers;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics.Arm;
-using System.Text;
+using System.Runtime.Intrinsics.X86;
 
 namespace FastDate;
 
@@ -29,7 +28,7 @@ internal static class DateTimeExtensions
 public static class FastDate
 {
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveInlining)]
-    public static unsafe DateTime FromISO8601(string datetime)
+    public static unsafe DateTime FromIso8601(string datetime)
     {
         if (datetime.Length != 19) ThrowFormat();
         
@@ -43,20 +42,34 @@ public static class FastDate
             }
         }
 
-        DateTime date = DateTime.MinValue;
+        DateTime date;
         
-        if (AdvSimd.Arm64.IsSupported || AdvSimd.IsSupported)
+        if ((AdvSimd.Arm64.IsSupported || AdvSimd.IsSupported) && OperatingSystem.IsMacOS())
         {
             var packed = NativeMethods.parse_iso_date_neon_fast(buffer);
             if (packed.date == 0) ThrowFormat();
             date = packed.ToDateTime();
+        }
+        else
+        {
+            switch (Sse.IsSupported)
+            {
+                case true when OperatingSystem.IsWindows():
+                case true when OperatingSystem.IsLinux():
+                    Console.WriteLine("SSE is supported on platform, but FastDate is only for NEON.");
+                    break;
+                default:
+                    throw new NotSupportedException("Platform not supported.");
+            }
+
+            date = DateTime.ParseExact(datetime, "yyyy-MM-dd'T'HH:mm:ss", CultureInfo.InvariantCulture);
         }
         
         return date;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveOptimization | MethodImplOptions.AggressiveInlining)]
-    public static unsafe DateTime FromISO8601(ReadOnlySpan<byte> data)
+    public static unsafe DateTime FromIso8601(ReadOnlySpan<byte> data)
     {
         if (data.Length < 19) ThrowFormat();
         

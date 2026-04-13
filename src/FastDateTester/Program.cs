@@ -40,9 +40,7 @@ public class DateParsingBenchmarks
     [Benchmark]
     public DateTime System_Utf8Parser()
     {
-        var data = _utf8Dates[(uint)_index++ % Iterations];
-    
-        if (System.Buffers.Text.Utf8Parser.TryParse(data, out DateTime dt, out _))
+        if (System.Buffers.Text.Utf8Parser.TryParse(GetNextUtf8(), out DateTime dt, out _))
         {
             return dt;
         }
@@ -52,16 +50,13 @@ public class DateParsingBenchmarks
     [Benchmark]
     public DateTime Rust_FastDate_Utf8()
     {
-        // 1. Get the raw bytes from our pre-allocated array
-        ReadOnlySpan<byte> data = _utf8Dates[(uint)_index++ % Iterations];
-        
-        return FastDate.FastDate.FromISO8601(data);
+        return FastDate.FastDate.FromIso8601(GetNextUtf8());
     }
     
     [Benchmark]
     public DateTime Rust_FastDate_String()
     {
-        return FastDate.FastDate.FromISO8601(GetNextString());
+        return FastDate.FastDate.FromIso8601(GetNextString());
     }
 }
 
