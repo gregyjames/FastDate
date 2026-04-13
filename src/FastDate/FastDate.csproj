@@ -7,10 +7,11 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
         <PackageIcon>logo.png</PackageIcon>
+        <PackageId>FastDate</PackageId>
         <Title>FastDate</Title>
+        <RuntimeIdentifiers>osx-arm64;win-x64;linux-x64</RuntimeIdentifiers>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <Copyright>Greg James @ 2026</Copyright>
-        <RuntimeIdentifiers>osx-arm64</RuntimeIdentifiers>
         <PackageProjectUrl>https://github.com/gregyjames/FastDate</PackageProjectUrl>
         <RepositoryUrl>https://github.com/gregyjames/FastDate</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
@@ -34,14 +35,13 @@
             <PackagePath>runtimes</PackagePath>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <Link>runtimes\%(RecursiveDir)%(Filename)%(Extension)</Link>
-            <Visible>false</Visible>
             <AssetType>native</AssetType>
         </Content>
     </ItemGroup>
     
     <ItemGroup>
-        <None Include="..\..\logo.png" Pack="True" PackagePath="" Link="logo.png" />
         <None Include="build\FastDate.targets" Pack="true" PackagePath="build\FastDate.targets"/>
+        <None Include="..\..\logo.png" Pack="True" PackagePath="" Link="logo.png" />
         <None Include="..\..\README.md" Pack="true" PackagePath="/" />
         <None Include="..\..\LICENSE.md" Pack="true" PackagePath="/" />
     </ItemGroup>
