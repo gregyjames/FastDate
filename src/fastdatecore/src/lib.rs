@@ -47,3 +47,51 @@ pub unsafe extern "C" fn parse_iso_date_neon(input: *const u8) -> PackedDateTime
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    #[cfg(target_arch = "aarch64")]
+    fn test_parse_iso_date_neon_standard() {
+        let input = b"2026-04-12T15:04:05";
+        unsafe {
+            let result = parse_iso_date_neon(input.as_ptr());
+
+            // Year: 2026, Month: 4, Day: 12
+            // Expected Date: (2026 << 16) | (4 << 8) | 12 = 132776972
+            assert_eq!(result.date >> 16, 2026);
+            assert_eq!((result.date >> 8) & 0xFF, 4);
+            assert_eq!(result.date & 0xFF, 12);
+
+            // Hour: 15, Minute: 4, Second: 5
+            // Expected Time: (15 << 24) | (4 << 16) | (5 << 8) = 251921664
+            assert_eq!(result.time >> 24, 15);
+            assert_eq!((result.time >> 16) & 0xFF, 4);
+            assert_eq!((result.time >> 8) & 0xFF, 5);
+        }
+    }
+
+    #[test]
+    #[cfg(target_arch = "aarch64")]
+    fn test_parse_iso_date_boundaries() {
+        // Test Year 0001 and high values like 9999
+        let inputs = [
+            (b"0001-01-01T00:00:00", 1, 1, 1, 0, 0, 0),
+            (b"9999-12-31T23:59:59", 9999, 12, 31, 23, 59, 59),
+        ];
+
+        for (str_input, y, m, d, hh, mm, ss) in inputs {
+            unsafe {
+                let result = parse_iso_date_neon(str_input.as_ptr());
+                assert_eq!(result.date >> 16, y);
+                assert_eq!((result.date >> 8) & 0xFF, m);
+                assert_eq!(result.date & 0xFF, d);
+                assert_eq!(result.time >> 24, hh);
+                assert_eq!((result.time >> 16) & 0xFF, mm);
+                assert_eq!((result.time >> 8) & 0xFF, ss);
+            }
+        }
+    }
+}
