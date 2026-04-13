@@ -15,3 +15,6 @@ RustLib/NativeMethods.g.cs
 /libs
 /fastdatecore/target
 /.nuke/temp
+/src/fastdatecore/target
+/fastdatecore/.idea
+/.nuke/temp

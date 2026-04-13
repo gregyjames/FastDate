@@ -19,7 +19,7 @@
             <PackagePath>runtimes\win-x64\native\rust_lib.dll</PackagePath>
             <Pack>true</Pack>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <Link>rust_lib.dll</Link>
+            <Link>fastdate.dll</Link>
         </Content>
 
         <!-- Linux -->
@@ -27,7 +27,7 @@
             <PackagePath>runtimes\linux-x64\native\librust_lib.so</PackagePath>
             <Pack>true</Pack>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <Link>librust_lib.so</Link>
+            <Link>libfastdate.so</Link>
         </Content>
 
         <!-- macOS -->
@@ -35,17 +35,17 @@
             <PackagePath>runtimes\osx-x64\native\librust_lib.dylib</PackagePath>
             <Pack>true</Pack>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <Link>librust_lib.dylib</Link>
+            <Link>libfastdate.dylib</Link>
         </Content>
     </ItemGroup>
 
     <ItemGroup>
-        <None Include="..\logo.png" Pack="True" PackagePath="" Link="logo.png" />
+        <None Include="..\..\logo.png" Pack="True" PackagePath="" Link="logo.png" />
 
         <!-- Native libraries for NuGet packaging and local development -->
         <Content Include="runtimes\**\*" Pack="true" PackagePath="runtimes" CopyToOutputDirectory="PreserveNewest" />
-        <None Include="..\README.md" Pack="true" PackagePath="/" />
-        <None Include="..\LICENSE.md" Pack="true" PackagePath="/" />
+        <None Include="..\..\README.md" Pack="true" PackagePath="/" />
+        <None Include="..\..\LICENSE.md" Pack="true" PackagePath="/" />
     </ItemGroup>
     
 </Project>

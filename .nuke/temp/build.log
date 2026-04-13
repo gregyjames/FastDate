@@ -1,363 +1,362 @@
-19:22:56.793 | V |                      | ArgumentsFromParametersFile.OnBuildCreated (150)
-19:22:56.801 | V |                      | HandleReSharperSurrogateArguments.OnBuildCreated (150)
-19:22:56.801 | V |                      | InjectParameterValues.OnBuildCreated (100)
-19:22:56.814 | V |                      | HandleShellCompletion.OnBuildCreated (75)
-19:22:57.029 | V |                      | GenerateBuildServerConfigurations.OnBuildCreated (50)
-19:22:57.029 | V |                      | InvokeBuildServerConfigurationGeneration.OnBuildCreated (45)
-19:22:57.038 | V |                      | UpdateNotification.OnBuildCreated (10)
-19:22:57.038 | V |                      | UnsetVisualStudioEnvironmentVariables.OnBuildCreated (0)
-19:22:57.038 | V |                      | HandleVisualStudioDebugging.OnBuildCreated (0)
-19:22:57.039 | V |                      | EventInvoker.OnBuildCreated (-3.4028235E+38)
-19:22:57.045 | V |                      | HandlePlanRequests.OnBuildInitialized (10)
-19:22:57.045 | V |                      | HandleHelpRequests.OnBuildInitialized (5)
-19:22:57.045 | V |                      | Telemetry.OnBuildInitialized (0)
-19:22:57.401 | V |                      | Sending BuildStarted telemetry event ...
-19:22:57.402 | V |                      |   build_components         = 
-19:22:57.402 | V |                      |   build_type               = Project
-19:22:57.402 | V |                      |   compile_time             = 5
-19:22:57.402 | V |                      |   config_generators        = 
-19:22:57.402 | V |                      |   host                     = Rider
-19:22:57.402 | V |                      |   num_custom_components    = 0
-19:22:57.402 | V |                      |   num_custom_extensions    = 0
-19:22:57.402 | V |                      |   num_partitioned_targets  = 0
-19:22:57.402 | V |                      |   num_secrets              = 0
-19:22:57.402 | V |                      |   num_targets              = 5
-19:22:57.402 | V |                      |   os_architecture          = Arm64
-19:22:57.402 | V |                      |   os_platform              = OSX
-19:22:57.402 | V |                      |   repo_branch              = main
-19:22:57.402 | V |                      |   repo_commit              = bd77e4
-19:22:57.402 | V |                      |   repo_provider            = GitHub
-19:22:57.402 | V |                      |   repo_url                 = 1f20f9
-19:22:57.402 | V |                      |   target_framework         = .NETCoreApp,Version=v10.0
-19:22:57.402 | V |                      |   version_dotnet_sdk       = 10.0.201
-19:22:57.402 | V |                      |   version_nuke_common      = 10.0.0
-19:22:57.402 | V |                      |   version_nuke_global_tool = 10.0.0
-19:22:57.968 | V |                      | InjectNonParameterValues.OnBuildInitialized (-100)
-19:22:58.012 | V |                      | EventInvoker.OnBuildInitialized (-3.4028235E+38)
-19:22:58.018 | V | BuildRust            | EventInvoker.OnTargetRunning (-3.4028235E+38)
-19:22:58.019 | I | BuildRust            | Building Rust in Release mode
-19:22:58.090 | I | BuildRust            | > /Users/gregjames/.cargo/bin/cargo build --release --quiet
-19:22:58.090 | I | BuildRust            | @ /Users/gregjames/Desktop/Files/[01] Greg/[03] Projects/FastDate/fastdatecore
-19:22:58.268 | I | BuildRust            | warning[E0133]: call to unsafe function `std::arch::aarch64::vld1q_u8` is unsafe and requires unsafe block
-19:22:58.268 | I | BuildRust            |   --> src/lib.rs:23:15
-19:22:58.268 | I | BuildRust            |    |
-19:22:58.268 | I | BuildRust            | 23 |     let src = vld1q_u8(input);
-19:22:58.268 | I | BuildRust            |    |               ^^^^^^^^^^^^^^^ call to unsafe function
-19:22:58.268 | I | BuildRust            |    |
-19:22:58.268 | I | BuildRust            |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
-19:22:58.268 | I | BuildRust            |    = note: consult the function's documentation for information on how to avoid undefined behavior
-19:22:58.268 | I | BuildRust            | note: an unsafe function restricts its caller, but its body is safe by default
-19:22:58.268 | I | BuildRust            |   --> src/lib.rs:22:1
-19:22:58.268 | I | BuildRust            |    |
-19:22:58.268 | I | BuildRust            | 22 | pub unsafe extern "C" fn parse_iso_date_neon(input: *const u8) -> PackedDateTime {
-19:22:58.268 | I | BuildRust            |    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-19:22:58.268 | I | BuildRust            |    = note: `#[warn(unsafe_op_in_unsafe_fn)]` (part of `#[warn(rust_2024_compatibility)]`) on by default
-19:22:58.268 | I | BuildRust            | 
-19:22:58.268 | I | BuildRust            | warning[E0133]: call to function `std::arch::aarch64::vsubq_u8` with `#[target_feature]` is unsafe and requires unsafe block
-19:22:58.268 | I | BuildRust            |   --> src/lib.rs:24:18
-19:22:58.268 | I | BuildRust            |    |
-19:22:58.268 | I | BuildRust            | 24 |     let digits = vsubq_u8(src, vdupq_n_u8(ASCII_ZERO));
-19:22:58.268 | I | BuildRust            |    |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ call to function with `#[target_feature]`
-19:22:58.268 | I | BuildRust            |    |
-19:22:58.268 | I | BuildRust            |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
-19:22:58.269 | I | BuildRust            |    = help: in order for the call to be safe, the context requires the following additional target feature: neon
-19:22:58.269 | I | BuildRust            |    = note: the neon target feature being enabled in the build configuration does not remove the requirement to list it in `#[target_feature]`
-19:22:58.269 | I | BuildRust            | 
-19:22:58.269 | I | BuildRust            | warning[E0133]: call to function `std::arch::aarch64::vdupq_n_u8` with `#[target_feature]` is unsafe and requires unsafe block
-19:22:58.269 | I | BuildRust            |   --> src/lib.rs:24:32
-19:22:58.269 | I | BuildRust            |    |
-19:22:58.269 | I | BuildRust            | 24 |     let digits = vsubq_u8(src, vdupq_n_u8(ASCII_ZERO));
-19:22:58.269 | I | BuildRust            |    |                                ^^^^^^^^^^^^^^^^^^^^^^ call to function with `#[target_feature]`
-19:22:58.269 | I | BuildRust            |    |
-19:22:58.269 | I | BuildRust            |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
-19:22:58.269 | I | BuildRust            |    = help: in order for the call to be safe, the context requires the following additional target feature: neon
-19:22:58.269 | I | BuildRust            |    = note: the neon target feature being enabled in the build configuration does not remove the requirement to list it in `#[target_feature]`
-19:22:58.269 | I | BuildRust            | 
-19:22:58.269 | I | BuildRust            | warning[E0133]: call to function `std::arch::aarch64::vqtbl1q_u8` with `#[target_feature]` is unsafe and requires unsafe block
-19:22:58.269 | I | BuildRust            |   --> src/lib.rs:26:19
-19:22:58.269 | I | BuildRust            |    |
-19:22:58.269 | I | BuildRust            | 26 |     let aligned = vqtbl1q_u8(digits, vld1q_u8(SHUFFLE.as_ptr()));
-19:22:58.269 | I | BuildRust            |    |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ call to function with `#[target_feature]`
-19:22:58.269 | I | BuildRust            |    |
-19:22:58.269 | I | BuildRust            |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
-19:22:58.269 | I | BuildRust            |    = help: in order for the call to be safe, the context requires the following additional target feature: neon
-19:22:58.269 | I | BuildRust            |    = note: the neon target feature being enabled in the build configuration does not remove the requirement to list it in `#[target_feature]`
-19:22:58.269 | I | BuildRust            | 
-19:22:58.269 | I | BuildRust            | warning[E0133]: call to unsafe function `std::arch::aarch64::vld1q_u8` is unsafe and requires unsafe block
-19:22:58.269 | I | BuildRust            |   --> src/lib.rs:26:38
-19:22:58.269 | I | BuildRust            |    |
-19:22:58.269 | I | BuildRust            | 26 |     let aligned = vqtbl1q_u8(digits, vld1q_u8(SHUFFLE.as_ptr()));
-19:22:58.269 | I | BuildRust            |    |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^ call to unsafe function
-19:22:58.269 | I | BuildRust            |    |
-19:22:58.269 | I | BuildRust            |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
-19:22:58.269 | I | BuildRust            |    = note: consult the function's documentation for information on how to avoid undefined behavior
-19:22:58.269 | I | BuildRust            | 
-19:22:58.269 | I | BuildRust            | warning[E0133]: call to unsafe function `std::arch::aarch64::vld1q_u8` is unsafe and requires unsafe block
-19:22:58.270 | I | BuildRust            |   --> src/lib.rs:27:16
-19:22:58.270 | I | BuildRust            |    |
-19:22:58.270 | I | BuildRust            | 27 |     let mult = vld1q_u8(MULTIPLIERS.as_ptr());
-19:22:58.270 | I | BuildRust            |    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ call to unsafe function
-19:22:58.270 | I | BuildRust            |    |
-19:22:58.270 | I | BuildRust            |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
-19:22:58.270 | I | BuildRust            |    = note: consult the function's documentation for information on how to avoid undefined behavior
-19:22:58.270 | I | BuildRust            | 
-19:22:58.270 | I | BuildRust            | warning[E0133]: call to function `std::arch::aarch64::vmull_u8` with `#[target_feature]` is unsafe and requires unsafe block
-19:22:58.270 | I | BuildRust            |   --> src/lib.rs:29:19
-19:22:58.270 | I | BuildRust            |    |
-19:22:58.270 | I | BuildRust            | 29 |     let prod_lo = vmull_u8(vget_low_u8(aligned), vget_low_u8(mult));
-19:22:58.270 | I | BuildRust            |    |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ call to function with `#[target_feature]`
-19:22:58.270 | I | BuildRust            |    |
-19:22:58.270 | I | BuildRust            |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
-19:22:58.270 | I | BuildRust            |    = help: in order for the call to be safe, the context requires the following additional target feature: neon
-19:22:58.270 | I | BuildRust            |    = note: the neon target feature being enabled in the build configuration does not remove the requirement to list it in `#[target_feature]`
-19:22:58.270 | I | BuildRust            | 
-19:22:58.270 | I | BuildRust            | warning[E0133]: call to function `std::arch::aarch64::vget_low_u8` with `#[target_feature]` is unsafe and requires unsafe block
-19:22:58.270 | I | BuildRust            |   --> src/lib.rs:29:28
-19:22:58.271 | I | BuildRust            |    |
-19:22:58.271 | I | BuildRust            | 29 |     let prod_lo = vmull_u8(vget_low_u8(aligned), vget_low_u8(mult));
-19:22:58.271 | I | BuildRust            |    |                            ^^^^^^^^^^^^^^^^^^^^ call to function with `#[target_feature]`
-19:22:58.271 | I | BuildRust            |    |
-19:22:58.271 | I | BuildRust            |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
-19:22:58.271 | I | BuildRust            |    = help: in order for the call to be safe, the context requires the following additional target feature: neon
-19:22:58.271 | I | BuildRust            |    = note: the neon target feature being enabled in the build configuration does not remove the requirement to list it in `#[target_feature]`
-19:22:58.271 | I | BuildRust            | 
-19:22:58.271 | I | BuildRust            | warning[E0133]: call to function `std::arch::aarch64::vget_low_u8` with `#[target_feature]` is unsafe and requires unsafe block
-19:22:58.271 | I | BuildRust            |   --> src/lib.rs:29:50
-19:22:58.271 | I | BuildRust            |    |
-19:22:58.271 | I | BuildRust            | 29 |     let prod_lo = vmull_u8(vget_low_u8(aligned), vget_low_u8(mult));
-19:22:58.271 | I | BuildRust            |    |                                                  ^^^^^^^^^^^^^^^^^ call to function with `#[target_feature]`
-19:22:58.271 | I | BuildRust            |    |
-19:22:58.271 | I | BuildRust            |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
-19:22:58.271 | I | BuildRust            |    = help: in order for the call to be safe, the context requires the following additional target feature: neon
-19:22:58.271 | I | BuildRust            |    = note: the neon target feature being enabled in the build configuration does not remove the requirement to list it in `#[target_feature]`
-19:22:58.271 | I | BuildRust            | 
-19:22:58.272 | I | BuildRust            | warning[E0133]: call to function `std::arch::aarch64::vmull_u8` with `#[target_feature]` is unsafe and requires unsafe block
-19:22:58.272 | I | BuildRust            |   --> src/lib.rs:30:19
-19:22:58.272 | I | BuildRust            |    |
-19:22:58.272 | I | BuildRust            | 30 |     let prod_hi = vmull_u8(vget_high_u8(aligned), vget_high_u8(mult));
-19:22:58.272 | I | BuildRust            |    |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ call to function with `#[target_feature]`
-19:22:58.272 | I | BuildRust            |    |
-19:22:58.272 | I | BuildRust            |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
-19:22:58.272 | I | BuildRust            |    = help: in order for the call to be safe, the context requires the following additional target feature: neon
-19:22:58.272 | I | BuildRust            |    = note: the neon target feature being enabled in the build configuration does not remove the requirement to list it in `#[target_feature]`
-19:22:58.272 | I | BuildRust            | 
-19:22:58.272 | I | BuildRust            | warning[E0133]: call to function `std::arch::aarch64::vget_high_u8` with `#[target_feature]` is unsafe and requires unsafe block
-19:22:58.272 | I | BuildRust            |   --> src/lib.rs:30:28
-19:22:58.272 | I | BuildRust            |    |
-19:22:58.272 | I | BuildRust            | 30 |     let prod_hi = vmull_u8(vget_high_u8(aligned), vget_high_u8(mult));
-19:22:58.272 | I | BuildRust            |    |                            ^^^^^^^^^^^^^^^^^^^^^ call to function with `#[target_feature]`
-19:22:58.272 | I | BuildRust            |    |
-19:22:58.272 | I | BuildRust            |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
-19:22:58.272 | I | BuildRust            |    = help: in order for the call to be safe, the context requires the following additional target feature: neon
-19:22:58.272 | I | BuildRust            |    = note: the neon target feature being enabled in the build configuration does not remove the requirement to list it in `#[target_feature]`
-19:22:58.272 | I | BuildRust            | 
-19:22:58.272 | I | BuildRust            | warning[E0133]: call to function `std::arch::aarch64::vget_high_u8` with `#[target_feature]` is unsafe and requires unsafe block
-19:22:58.272 | I | BuildRust            |   --> src/lib.rs:30:51
-19:22:58.272 | I | BuildRust            |    |
-19:22:58.272 | I | BuildRust            | 30 |     let prod_hi = vmull_u8(vget_high_u8(aligned), vget_high_u8(mult));
-19:22:58.272 | I | BuildRust            |    |                                                   ^^^^^^^^^^^^^^^^^^ call to function with `#[target_feature]`
-19:22:58.272 | I | BuildRust            |    |
-19:22:58.272 | I | BuildRust            |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
-19:22:58.272 | I | BuildRust            |    = help: in order for the call to be safe, the context requires the following additional target feature: neon
-19:22:58.273 | I | BuildRust            |    = note: the neon target feature being enabled in the build configuration does not remove the requirement to list it in `#[target_feature]`
-19:22:58.273 | I | BuildRust            | 
-19:22:58.273 | I | BuildRust            | warning[E0133]: call to function `std::arch::aarch64::vpaddlq_u16` with `#[target_feature]` is unsafe and requires unsafe block
-19:22:58.273 | I | BuildRust            |   --> src/lib.rs:32:22
-19:22:58.273 | I | BuildRust            |    |
-19:22:58.273 | I | BuildRust            | 32 |     let date_parts = vpaddlq_u16(prod_lo);
-19:22:58.273 | I | BuildRust            |    |                      ^^^^^^^^^^^^^^^^^^^^ call to function with `#[target_feature]`
-19:22:58.273 | I | BuildRust            |    |
-19:22:58.273 | I | BuildRust            |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
-19:22:58.273 | I | BuildRust            |    = help: in order for the call to be safe, the context requires the following additional target feature: neon
-19:22:58.273 | I | BuildRust            |    = note: the neon target feature being enabled in the build configuration does not remove the requirement to list it in `#[target_feature]`
-19:22:58.273 | I | BuildRust            | 
-19:22:58.273 | I | BuildRust            | warning[E0133]: call to function `std::arch::aarch64::vpaddlq_u16` with `#[target_feature]` is unsafe and requires unsafe block
-19:22:58.273 | I | BuildRust            |   --> src/lib.rs:33:22
-19:22:58.273 | I | BuildRust            |    |
-19:22:58.273 | I | BuildRust            | 33 |     let time_parts = vpaddlq_u16(prod_hi);
-19:22:58.273 | I | BuildRust            |    |                      ^^^^^^^^^^^^^^^^^^^^ call to function with `#[target_feature]`
-19:22:58.273 | I | BuildRust            |    |
-19:22:58.273 | I | BuildRust            |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
-19:22:58.273 | I | BuildRust            |    = help: in order for the call to be safe, the context requires the following additional target feature: neon
-19:22:58.273 | I | BuildRust            |    = note: the neon target feature being enabled in the build configuration does not remove the requirement to list it in `#[target_feature]`
-19:22:58.273 | I | BuildRust            | 
-19:22:58.273 | I | BuildRust            | warning[E0133]: call to function `std::arch::aarch64::vgetq_lane_u32` with `#[target_feature]` is unsafe and requires unsafe block
-19:22:58.273 | I | BuildRust            |   --> src/lib.rs:35:16
-19:22:58.273 | I | BuildRust            |    |
-19:22:58.273 | I | BuildRust            | 35 |     let year = vgetq_lane_u32(date_parts, 0) * 100 + vgetq_lane_u32(date_parts, 1);
-19:22:58.273 | I | BuildRust            |    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ call to function with `#[target_feature]`
-19:22:58.273 | I | BuildRust            |    |
-19:22:58.273 | I | BuildRust            |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
-19:22:58.273 | I | BuildRust            |    = help: in order for the call to be safe, the context requires the following additional target feature: neon
-19:22:58.273 | I | BuildRust            |    = note: the neon target feature being enabled in the build configuration does not remove the requirement to list it in `#[target_feature]`
-19:22:58.273 | I | BuildRust            | 
-19:22:58.273 | I | BuildRust            | warning[E0133]: call to function `std::arch::aarch64::vgetq_lane_u32` with `#[target_feature]` is unsafe and requires unsafe block
-19:22:58.273 | I | BuildRust            |   --> src/lib.rs:35:54
-19:22:58.273 | I | BuildRust            |    |
-19:22:58.273 | I | BuildRust            | 35 |     let year = vgetq_lane_u32(date_parts, 0) * 100 + vgetq_lane_u32(date_parts, 1);
-19:22:58.273 | I | BuildRust            |    |                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ call to function with `#[target_feature]`
-19:22:58.274 | I | BuildRust            |    |
-19:22:58.274 | I | BuildRust            |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
-19:22:58.274 | I | BuildRust            |    = help: in order for the call to be safe, the context requires the following additional target feature: neon
-19:22:58.274 | I | BuildRust            |    = note: the neon target feature being enabled in the build configuration does not remove the requirement to list it in `#[target_feature]`
-19:22:58.274 | I | BuildRust            | 
-19:22:58.274 | I | BuildRust            | warning[E0133]: call to function `std::arch::aarch64::vgetq_lane_u32` with `#[target_feature]` is unsafe and requires unsafe block
-19:22:58.274 | I | BuildRust            |   --> src/lib.rs:36:17
-19:22:58.274 | I | BuildRust            |    |
-19:22:58.274 | I | BuildRust            | 36 |     let month = vgetq_lane_u32(date_parts, 2);
-19:22:58.274 | I | BuildRust            |    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ call to function with `#[target_feature]`
-19:22:58.274 | I | BuildRust            |    |
-19:22:58.274 | I | BuildRust            |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
-19:22:58.274 | I | BuildRust            |    = help: in order for the call to be safe, the context requires the following additional target feature: neon
-19:22:58.274 | I | BuildRust            |    = note: the neon target feature being enabled in the build configuration does not remove the requirement to list it in `#[target_feature]`
-19:22:58.274 | I | BuildRust            | 
-19:22:58.274 | I | BuildRust            | warning[E0133]: call to function `std::arch::aarch64::vgetq_lane_u32` with `#[target_feature]` is unsafe and requires unsafe block
-19:22:58.274 | I | BuildRust            |   --> src/lib.rs:37:15
-19:22:58.274 | I | BuildRust            |    |
-19:22:58.274 | I | BuildRust            | 37 |     let day = vgetq_lane_u32(date_parts, 3);
-19:22:58.274 | I | BuildRust            |    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ call to function with `#[target_feature]`
-19:22:58.274 | I | BuildRust            |    |
-19:22:58.274 | I | BuildRust            |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
-19:22:58.274 | I | BuildRust            |    = help: in order for the call to be safe, the context requires the following additional target feature: neon
-19:22:58.274 | I | BuildRust            |    = note: the neon target feature being enabled in the build configuration does not remove the requirement to list it in `#[target_feature]`
-19:22:58.274 | I | BuildRust            | 
-19:22:58.274 | I | BuildRust            | warning[E0133]: call to function `std::arch::aarch64::vgetq_lane_u32` with `#[target_feature]` is unsafe and requires unsafe block
-19:22:58.274 | I | BuildRust            |   --> src/lib.rs:39:16
-19:22:58.274 | I | BuildRust            |    |
-19:22:58.274 | I | BuildRust            | 39 |     let hour = vgetq_lane_u32(time_parts, 0);
-19:22:58.274 | I | BuildRust            |    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ call to function with `#[target_feature]`
-19:22:58.274 | I | BuildRust            |    |
-19:22:58.274 | I | BuildRust            |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
-19:22:58.274 | I | BuildRust            |    = help: in order for the call to be safe, the context requires the following additional target feature: neon
-19:22:58.274 | I | BuildRust            |    = note: the neon target feature being enabled in the build configuration does not remove the requirement to list it in `#[target_feature]`
-19:22:58.274 | I | BuildRust            | 
-19:22:58.274 | I | BuildRust            | warning[E0133]: call to function `std::arch::aarch64::vgetq_lane_u32` with `#[target_feature]` is unsafe and requires unsafe block
-19:22:58.274 | I | BuildRust            |   --> src/lib.rs:40:18
-19:22:58.274 | I | BuildRust            |    |
-19:22:58.274 | I | BuildRust            | 40 |     let minute = vgetq_lane_u32(time_parts, 1);
-19:22:58.274 | I | BuildRust            |    |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ call to function with `#[target_feature]`
-19:22:58.274 | I | BuildRust            |    |
-19:22:58.274 | I | BuildRust            |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
-19:22:58.274 | I | BuildRust            |    = help: in order for the call to be safe, the context requires the following additional target feature: neon
-19:22:58.274 | I | BuildRust            |    = note: the neon target feature being enabled in the build configuration does not remove the requirement to list it in `#[target_feature]`
-19:22:58.274 | I | BuildRust            | 
-19:22:58.274 | I | BuildRust            | warning[E0133]: dereference of raw pointer is unsafe and requires unsafe block
-19:22:58.274 | I | BuildRust            |   --> src/lib.rs:43:11
-19:22:58.274 | I | BuildRust            |    |
-19:22:58.275 | I | BuildRust            | 43 |         ((*input.add(17) - ASCII_ZERO) as u32) * 10 +
-19:22:58.275 | I | BuildRust            |    |           ^^^^^^^^^^^^^^ dereference of raw pointer
-19:22:58.275 | I | BuildRust            |    |
-19:22:58.275 | I | BuildRust            |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
-19:22:58.275 | I | BuildRust            |    = note: raw pointers may be null, dangling or unaligned; they can violate aliasing rules and cause data races: all of these are undefined behavior
-19:22:58.275 | I | BuildRust            | 
-19:22:58.275 | I | BuildRust            | warning[E0133]: call to unsafe function `std::ptr::const_ptr::<impl *const T>::add` is unsafe and requires unsafe block
-19:22:58.275 | I | BuildRust            |   --> src/lib.rs:43:12
-19:22:58.275 | I | BuildRust            |    |
-19:22:58.275 | I | BuildRust            | 43 |         ((*input.add(17) - ASCII_ZERO) as u32) * 10 +
-19:22:58.275 | I | BuildRust            |    |            ^^^^^^^^^^^^^ call to unsafe function
-19:22:58.275 | I | BuildRust            |    |
-19:22:58.275 | I | BuildRust            |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
-19:22:58.275 | I | BuildRust            |    = note: consult the function's documentation for information on how to avoid undefined behavior
-19:22:58.275 | I | BuildRust            | 
-19:22:58.275 | I | BuildRust            | warning[E0133]: dereference of raw pointer is unsafe and requires unsafe block
-19:22:58.275 | I | BuildRust            |   --> src/lib.rs:44:11
-19:22:58.275 | I | BuildRust            |    |
-19:22:58.275 | I | BuildRust            | 44 |         ((*input.add(18) - ASCII_ZERO) as u32);
-19:22:58.275 | I | BuildRust            |    |           ^^^^^^^^^^^^^^ dereference of raw pointer
-19:22:58.275 | I | BuildRust            |    |
-19:22:58.275 | I | BuildRust            |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
-19:22:58.275 | I | BuildRust            |    = note: raw pointers may be null, dangling or unaligned; they can violate aliasing rules and cause data races: all of these are undefined behavior
-19:22:58.275 | I | BuildRust            | 
-19:22:58.275 | I | BuildRust            | warning[E0133]: call to unsafe function `std::ptr::const_ptr::<impl *const T>::add` is unsafe and requires unsafe block
-19:22:58.275 | I | BuildRust            |   --> src/lib.rs:44:12
-19:22:58.275 | I | BuildRust            |    |
-19:22:58.275 | I | BuildRust            | 44 |         ((*input.add(18) - ASCII_ZERO) as u32);
-19:22:58.275 | I | BuildRust            |    |            ^^^^^^^^^^^^^ call to unsafe function
-19:22:58.275 | I | BuildRust            |    |
-19:22:58.275 | I | BuildRust            |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
-19:22:58.275 | I | BuildRust            |    = note: consult the function's documentation for information on how to avoid undefined behavior
-19:22:58.275 | I | BuildRust            | 
-19:22:58.275 | I | BuildRust            | For more information about this error, try `rustc --explain E0133`.
-19:22:58.275 | I | BuildRust            | Copying dll for OSX...
-19:22:58.277 | I | BuildRust            | Rust library built and copied successfully
-19:22:58.277 | V | BuildRust            | Telemetry.OnTargetSucceeded (0)
-19:22:58.278 | V | BuildRust            | EventInvoker.OnTargetSucceeded (-3.4028235E+38)
-19:22:58.278 | V | Restore              | EventInvoker.OnTargetRunning (-3.4028235E+38)
-19:22:58.297 | I | Restore              | > /usr/local/share/dotnet/dotnet restore "/Users/gregjames/Desktop/Files/[01] Greg/[03] Projects/FastDate/FastDate.sln"
-19:22:58.297 | V | Restore              | @ /Users/gregjames/Desktop/Files/[01] Greg/[03] Projects/FastDate
-19:22:58.873 | D | Restore              |   Determining projects to restore...
-19:22:59.053 | D | Restore              |   All projects are up-to-date for restore.
-19:22:59.063 | V | Restore              | Telemetry.OnTargetSucceeded (0)
-19:22:59.153 | V | Restore              | Sending TargetSucceeded telemetry event ...
-19:22:59.153 | V | Restore              |   build_components         = 
-19:22:59.153 | V | Restore              |   build_type               = Project
-19:22:59.153 | V | Restore              |   compile_time             = 6
-19:22:59.153 | V | Restore              |   config_generators        = 
-19:22:59.153 | V | Restore              |   host                     = Rider
-19:22:59.153 | V | Restore              |   num_custom_components    = 0
-19:22:59.153 | V | Restore              |   num_custom_extensions    = 0
-19:22:59.153 | V | Restore              |   num_partitioned_targets  = 0
-19:22:59.153 | V | Restore              |   num_secrets              = 0
-19:22:59.153 | V | Restore              |   num_targets              = 5
-19:22:59.153 | V | Restore              |   os_architecture          = Arm64
-19:22:59.153 | V | Restore              |   os_platform              = OSX
-19:22:59.153 | V | Restore              |   repo_branch              = main
-19:22:59.153 | V | Restore              |   repo_commit              = bd77e4
-19:22:59.153 | V | Restore              |   repo_provider            = GitHub
-19:22:59.153 | V | Restore              |   repo_url                 = 1f20f9
-19:22:59.153 | V | Restore              |   target_current_partition = 1
-19:22:59.153 | V | Restore              |   target_duration          = 1
-19:22:59.153 | V | Restore              |   target_framework         = .NETCoreApp,Version=v10.0
-19:22:59.153 | V | Restore              |   target_name              = Restore
-19:22:59.153 | V | Restore              |   target_total_partitions  = 1
-19:22:59.153 | V | Restore              |   version_dotnet_sdk       = 10.0.201
-19:22:59.153 | V | Restore              |   version_nuke_common      = 10.0.0
-19:22:59.153 | V | Restore              |   version_nuke_global_tool = 10.0.0
-19:22:59.327 | V | Restore              | EventInvoker.OnTargetSucceeded (-3.4028235E+38)
-19:22:59.328 | V | Compile              | EventInvoker.OnTargetRunning (-3.4028235E+38)
-19:22:59.339 | I | Compile              | > /usr/local/share/dotnet/dotnet build "/Users/gregjames/Desktop/Files/[01] Greg/[03] Projects/FastDate/FastDate.sln" --configuration Release --no-restore --property:Version=1.0.0
-19:22:59.339 | V | Compile              | @ /Users/gregjames/Desktop/Files/[01] Greg/[03] Projects/FastDate
-19:22:59.797 | D | Compile              |   FastDate -> /Users/gregjames/Desktop/Files/[01] Greg/[03] Projects/FastDate/FastDate/bin/Release/net10.0/FastDate.dll
-19:23:00.002 | D | Compile              |   FastDateTester -> /Users/gregjames/Desktop/Files/[01] Greg/[03] Projects/FastDate/FastDateTester/bin/Release/net10.0/FastDateTester.dll
-19:23:00.020 | D | Compile              | 
-19:23:00.020 | D | Compile              | Build succeeded.
-19:23:00.020 | D | Compile              |     0 Warning(s)
-19:23:00.020 | D | Compile              |     0 Error(s)
-19:23:00.020 | D | Compile              | 
-19:23:00.020 | D | Compile              | Time Elapsed 00:00:00.55
-19:23:00.028 | V | Compile              | Telemetry.OnTargetSucceeded (0)
-19:23:00.120 | V | Compile              | Sending TargetSucceeded telemetry event ...
-19:23:00.120 | V | Compile              |   build_components         = 
-19:23:00.120 | V | Compile              |   build_type               = Project
-19:23:00.120 | V | Compile              |   compile_time             = 7
-19:23:00.120 | V | Compile              |   config_generators        = 
-19:23:00.120 | V | Compile              |   host                     = Rider
-19:23:00.120 | V | Compile              |   num_custom_components    = 0
-19:23:00.120 | V | Compile              |   num_custom_extensions    = 0
-19:23:00.120 | V | Compile              |   num_partitioned_targets  = 0
-19:23:00.120 | V | Compile              |   num_secrets              = 0
-19:23:00.120 | V | Compile              |   num_targets              = 5
-19:23:00.120 | V | Compile              |   os_architecture          = Arm64
-19:23:00.120 | V | Compile              |   os_platform              = OSX
-19:23:00.120 | V | Compile              |   repo_branch              = main
-19:23:00.120 | V | Compile              |   repo_commit              = bd77e4
-19:23:00.120 | V | Compile              |   repo_provider            = GitHub
-19:23:00.120 | V | Compile              |   repo_url                 = 1f20f9
-19:23:00.120 | V | Compile              |   target_current_partition = 1
-19:23:00.120 | V | Compile              |   target_duration          = 1
-19:23:00.120 | V | Compile              |   target_framework         = .NETCoreApp,Version=v10.0
-19:23:00.120 | V | Compile              |   target_name              = Compile
-19:23:00.120 | V | Compile              |   target_total_partitions  = 1
-19:23:00.120 | V | Compile              |   version_dotnet_sdk       = 10.0.201
-19:23:00.120 | V | Compile              |   version_nuke_common      = 10.0.0
-19:23:00.120 | V | Compile              |   version_nuke_global_tool = 10.0.0
-19:23:00.286 | V | Compile              | EventInvoker.OnTargetSucceeded (-3.4028235E+38)
-19:23:00.287 | V | Pack                 | EventInvoker.OnTargetRunning (-3.4028235E+38)
-19:23:00.293 | I | Pack                 | > /usr/local/share/dotnet/dotnet pack "/Users/gregjames/Desktop/Files/[01] Greg/[03] Projects/FastDate/FastDate.sln" --configuration Release --no-build --no-restore --output "/Users/gregjames/Desktop/Files/[01] Greg/[03] Projects/FastDate/artifacts" --property:Version=1.0.0 --property:PackageVersion=1.0.0
-19:23:00.293 | V | Pack                 | @ /Users/gregjames/Desktop/Files/[01] Greg/[03] Projects/FastDate
-19:23:00.791 | I | Pack                 | Created nuget package with version: 1.0.0
-19:23:00.792 | V | Pack                 | Telemetry.OnTargetSucceeded (0)
-19:23:00.792 | V | Pack                 | EventInvoker.OnTargetSucceeded (-3.4028235E+38)
-19:23:00.794 | V |                      | UpdateNotification.OnBuildFinished (10)
-19:23:00.794 | V |                      | SerializeBuildServerState.OnBuildFinished (0)
-19:23:00.794 | V |                      | EventInvoker.OnBuildFinished (-3.4028235E+38)
+19:56:45.907 | V |                      | ArgumentsFromParametersFile.OnBuildCreated (150)
+19:56:45.915 | V |                      | HandleReSharperSurrogateArguments.OnBuildCreated (150)
+19:56:45.915 | V |                      | InjectParameterValues.OnBuildCreated (100)
+19:56:45.926 | V |                      | HandleShellCompletion.OnBuildCreated (75)
+19:56:46.111 | V |                      | GenerateBuildServerConfigurations.OnBuildCreated (50)
+19:56:46.111 | V |                      | InvokeBuildServerConfigurationGeneration.OnBuildCreated (45)
+19:56:46.116 | V |                      | UpdateNotification.OnBuildCreated (10)
+19:56:46.116 | V |                      | UnsetVisualStudioEnvironmentVariables.OnBuildCreated (0)
+19:56:46.116 | V |                      | HandleVisualStudioDebugging.OnBuildCreated (0)
+19:56:46.117 | V |                      | EventInvoker.OnBuildCreated (-3.4028235E+38)
+19:56:46.124 | V |                      | HandlePlanRequests.OnBuildInitialized (10)
+19:56:46.124 | V |                      | HandleHelpRequests.OnBuildInitialized (5)
+19:56:46.124 | V |                      | Telemetry.OnBuildInitialized (0)
+19:56:46.461 | V |                      | Sending BuildStarted telemetry event ...
+19:56:46.462 | V |                      |   build_components         = 
+19:56:46.462 | V |                      |   build_type               = Project
+19:56:46.462 | V |                      |   compile_time             = 2
+19:56:46.462 | V |                      |   config_generators        = 
+19:56:46.462 | V |                      |   host                     = Rider
+19:56:46.462 | V |                      |   num_custom_components    = 0
+19:56:46.462 | V |                      |   num_custom_extensions    = 0
+19:56:46.462 | V |                      |   num_partitioned_targets  = 0
+19:56:46.462 | V |                      |   num_secrets              = 0
+19:56:46.462 | V |                      |   num_targets              = 11
+19:56:46.462 | V |                      |   os_architecture          = Arm64
+19:56:46.462 | V |                      |   os_platform              = OSX
+19:56:46.462 | V |                      |   repo_branch              = main
+19:56:46.462 | V |                      |   repo_commit              = ee3409
+19:56:46.462 | V |                      |   repo_provider            = GitHub
+19:56:46.462 | V |                      |   repo_url                 = 1f20f9
+19:56:46.462 | V |                      |   target_framework         = .NETCoreApp,Version=v10.0
+19:56:46.462 | V |                      |   version_dotnet_sdk       = 10.0.201
+19:56:46.462 | V |                      |   version_nuke_common      = 10.0.0
+19:56:46.462 | V |                      |   version_nuke_global_tool = 10.0.0
+19:56:47.057 | V |                      | InjectNonParameterValues.OnBuildInitialized (-100)
+19:56:47.099 | V |                      | EventInvoker.OnBuildInitialized (-3.4028235E+38)
+19:56:47.106 | V | BuildRustLocal       | EventInvoker.OnTargetRunning (-3.4028235E+38)
+19:56:47.107 | I | BuildRustLocal       | Ensuring Rust library is up to date for osx-arm64...
+19:56:47.144 | I | BuildRustLocal       | > /Users/gregjames/.cargo/bin/cargo build --release --target aarch64-apple-darwin
+19:56:47.145 | I | BuildRustLocal       | @ /Users/gregjames/Desktop/Files/[01] Greg/[03] Projects/FastDate/src/fastdatecore
+19:56:47.295 | E | BuildRustLocal       | warning[E0133]: call to unsafe function `std::arch::aarch64::vld1q_u8` is unsafe and requires unsafe block
+19:56:47.295 | E | BuildRustLocal       |   --> src/lib.rs:23:15
+19:56:47.295 | E | BuildRustLocal       |    |
+19:56:47.295 | E | BuildRustLocal       | 23 |     let src = vld1q_u8(input);
+19:56:47.295 | E | BuildRustLocal       |    |               ^^^^^^^^^^^^^^^ call to unsafe function
+19:56:47.295 | E | BuildRustLocal       |    |
+19:56:47.295 | E | BuildRustLocal       |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
+19:56:47.295 | E | BuildRustLocal       |    = note: consult the function's documentation for information on how to avoid undefined behavior
+19:56:47.295 | E | BuildRustLocal       | note: an unsafe function restricts its caller, but its body is safe by default
+19:56:47.295 | E | BuildRustLocal       |   --> src/lib.rs:22:1
+19:56:47.295 | E | BuildRustLocal       |    |
+19:56:47.295 | E | BuildRustLocal       | 22 | pub unsafe extern "C" fn parse_iso_date_neon(input: *const u8) -> PackedDateTime {
+19:56:47.295 | E | BuildRustLocal       |    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+19:56:47.295 | E | BuildRustLocal       |    = note: `#[warn(unsafe_op_in_unsafe_fn)]` (part of `#[warn(rust_2024_compatibility)]`) on by default
+19:56:47.295 | E | BuildRustLocal       | 
+19:56:47.295 | E | BuildRustLocal       | warning[E0133]: call to function `std::arch::aarch64::vsubq_u8` with `#[target_feature]` is unsafe and requires unsafe block
+19:56:47.295 | E | BuildRustLocal       |   --> src/lib.rs:24:18
+19:56:47.295 | E | BuildRustLocal       |    |
+19:56:47.295 | E | BuildRustLocal       | 24 |     let digits = vsubq_u8(src, vdupq_n_u8(ASCII_ZERO));
+19:56:47.295 | E | BuildRustLocal       |    |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ call to function with `#[target_feature]`
+19:56:47.295 | E | BuildRustLocal       |    |
+19:56:47.295 | E | BuildRustLocal       |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
+19:56:47.295 | E | BuildRustLocal       |    = help: in order for the call to be safe, the context requires the following additional target feature: neon
+19:56:47.295 | E | BuildRustLocal       |    = note: the neon target feature being enabled in the build configuration does not remove the requirement to list it in `#[target_feature]`
+19:56:47.295 | E | BuildRustLocal       | 
+19:56:47.295 | E | BuildRustLocal       | warning[E0133]: call to function `std::arch::aarch64::vdupq_n_u8` with `#[target_feature]` is unsafe and requires unsafe block
+19:56:47.295 | E | BuildRustLocal       |   --> src/lib.rs:24:32
+19:56:47.295 | E | BuildRustLocal       |    |
+19:56:47.295 | E | BuildRustLocal       | 24 |     let digits = vsubq_u8(src, vdupq_n_u8(ASCII_ZERO));
+19:56:47.295 | E | BuildRustLocal       |    |                                ^^^^^^^^^^^^^^^^^^^^^^ call to function with `#[target_feature]`
+19:56:47.296 | E | BuildRustLocal       |    |
+19:56:47.296 | E | BuildRustLocal       |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
+19:56:47.296 | E | BuildRustLocal       |    = help: in order for the call to be safe, the context requires the following additional target feature: neon
+19:56:47.296 | E | BuildRustLocal       |    = note: the neon target feature being enabled in the build configuration does not remove the requirement to list it in `#[target_feature]`
+19:56:47.296 | E | BuildRustLocal       | 
+19:56:47.296 | E | BuildRustLocal       | warning[E0133]: call to function `std::arch::aarch64::vqtbl1q_u8` with `#[target_feature]` is unsafe and requires unsafe block
+19:56:47.296 | E | BuildRustLocal       |   --> src/lib.rs:26:19
+19:56:47.296 | E | BuildRustLocal       |    |
+19:56:47.296 | E | BuildRustLocal       | 26 |     let aligned = vqtbl1q_u8(digits, vld1q_u8(SHUFFLE.as_ptr()));
+19:56:47.296 | E | BuildRustLocal       |    |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ call to function with `#[target_feature]`
+19:56:47.296 | E | BuildRustLocal       |    |
+19:56:47.296 | E | BuildRustLocal       |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
+19:56:47.296 | E | BuildRustLocal       |    = help: in order for the call to be safe, the context requires the following additional target feature: neon
+19:56:47.296 | E | BuildRustLocal       |    = note: the neon target feature being enabled in the build configuration does not remove the requirement to list it in `#[target_feature]`
+19:56:47.296 | E | BuildRustLocal       | 
+19:56:47.296 | E | BuildRustLocal       | warning[E0133]: call to unsafe function `std::arch::aarch64::vld1q_u8` is unsafe and requires unsafe block
+19:56:47.296 | E | BuildRustLocal       |   --> src/lib.rs:26:38
+19:56:47.296 | E | BuildRustLocal       |    |
+19:56:47.296 | E | BuildRustLocal       | 26 |     let aligned = vqtbl1q_u8(digits, vld1q_u8(SHUFFLE.as_ptr()));
+19:56:47.296 | E | BuildRustLocal       |    |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^ call to unsafe function
+19:56:47.296 | E | BuildRustLocal       |    |
+19:56:47.296 | E | BuildRustLocal       |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
+19:56:47.296 | E | BuildRustLocal       |    = note: consult the function's documentation for information on how to avoid undefined behavior
+19:56:47.296 | E | BuildRustLocal       | 
+19:56:47.296 | E | BuildRustLocal       | warning[E0133]: call to unsafe function `std::arch::aarch64::vld1q_u8` is unsafe and requires unsafe block
+19:56:47.296 | E | BuildRustLocal       |   --> src/lib.rs:27:16
+19:56:47.296 | E | BuildRustLocal       |    |
+19:56:47.296 | E | BuildRustLocal       | 27 |     let mult = vld1q_u8(MULTIPLIERS.as_ptr());
+19:56:47.296 | E | BuildRustLocal       |    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ call to unsafe function
+19:56:47.296 | E | BuildRustLocal       |    |
+19:56:47.296 | E | BuildRustLocal       |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
+19:56:47.296 | E | BuildRustLocal       |    = note: consult the function's documentation for information on how to avoid undefined behavior
+19:56:47.296 | E | BuildRustLocal       | 
+19:56:47.296 | E | BuildRustLocal       | warning[E0133]: call to function `std::arch::aarch64::vmull_u8` with `#[target_feature]` is unsafe and requires unsafe block
+19:56:47.296 | E | BuildRustLocal       |   --> src/lib.rs:29:19
+19:56:47.296 | E | BuildRustLocal       |    |
+19:56:47.296 | E | BuildRustLocal       | 29 |     let prod_lo = vmull_u8(vget_low_u8(aligned), vget_low_u8(mult));
+19:56:47.296 | E | BuildRustLocal       |    |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ call to function with `#[target_feature]`
+19:56:47.296 | E | BuildRustLocal       |    |
+19:56:47.296 | E | BuildRustLocal       |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
+19:56:47.296 | E | BuildRustLocal       |    = help: in order for the call to be safe, the context requires the following additional target feature: neon
+19:56:47.296 | E | BuildRustLocal       |    = note: the neon target feature being enabled in the build configuration does not remove the requirement to list it in `#[target_feature]`
+19:56:47.296 | E | BuildRustLocal       | 
+19:56:47.297 | E | BuildRustLocal       | warning[E0133]: call to function `std::arch::aarch64::vget_low_u8` with `#[target_feature]` is unsafe and requires unsafe block
+19:56:47.297 | E | BuildRustLocal       |   --> src/lib.rs:29:28
+19:56:47.297 | E | BuildRustLocal       |    |
+19:56:47.297 | E | BuildRustLocal       | 29 |     let prod_lo = vmull_u8(vget_low_u8(aligned), vget_low_u8(mult));
+19:56:47.297 | E | BuildRustLocal       |    |                            ^^^^^^^^^^^^^^^^^^^^ call to function with `#[target_feature]`
+19:56:47.297 | E | BuildRustLocal       |    |
+19:56:47.297 | E | BuildRustLocal       |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
+19:56:47.297 | E | BuildRustLocal       |    = help: in order for the call to be safe, the context requires the following additional target feature: neon
+19:56:47.297 | E | BuildRustLocal       |    = note: the neon target feature being enabled in the build configuration does not remove the requirement to list it in `#[target_feature]`
+19:56:47.297 | E | BuildRustLocal       | 
+19:56:47.297 | E | BuildRustLocal       | warning[E0133]: call to function `std::arch::aarch64::vget_low_u8` with `#[target_feature]` is unsafe and requires unsafe block
+19:56:47.297 | E | BuildRustLocal       |   --> src/lib.rs:29:50
+19:56:47.297 | E | BuildRustLocal       |    |
+19:56:47.297 | E | BuildRustLocal       | 29 |     let prod_lo = vmull_u8(vget_low_u8(aligned), vget_low_u8(mult));
+19:56:47.297 | E | BuildRustLocal       |    |                                                  ^^^^^^^^^^^^^^^^^ call to function with `#[target_feature]`
+19:56:47.297 | E | BuildRustLocal       |    |
+19:56:47.297 | E | BuildRustLocal       |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
+19:56:47.297 | E | BuildRustLocal       |    = help: in order for the call to be safe, the context requires the following additional target feature: neon
+19:56:47.297 | E | BuildRustLocal       |    = note: the neon target feature being enabled in the build configuration does not remove the requirement to list it in `#[target_feature]`
+19:56:47.297 | E | BuildRustLocal       | 
+19:56:47.297 | E | BuildRustLocal       | warning[E0133]: call to function `std::arch::aarch64::vmull_u8` with `#[target_feature]` is unsafe and requires unsafe block
+19:56:47.297 | E | BuildRustLocal       |   --> src/lib.rs:30:19
+19:56:47.297 | E | BuildRustLocal       |    |
+19:56:47.297 | E | BuildRustLocal       | 30 |     let prod_hi = vmull_u8(vget_high_u8(aligned), vget_high_u8(mult));
+19:56:47.297 | E | BuildRustLocal       |    |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ call to function with `#[target_feature]`
+19:56:47.297 | E | BuildRustLocal       |    |
+19:56:47.297 | E | BuildRustLocal       |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
+19:56:47.297 | E | BuildRustLocal       |    = help: in order for the call to be safe, the context requires the following additional target feature: neon
+19:56:47.297 | E | BuildRustLocal       |    = note: the neon target feature being enabled in the build configuration does not remove the requirement to list it in `#[target_feature]`
+19:56:47.297 | E | BuildRustLocal       | 
+19:56:47.297 | E | BuildRustLocal       | warning[E0133]: call to function `std::arch::aarch64::vget_high_u8` with `#[target_feature]` is unsafe and requires unsafe block
+19:56:47.297 | E | BuildRustLocal       |   --> src/lib.rs:30:28
+19:56:47.297 | E | BuildRustLocal       |    |
+19:56:47.297 | E | BuildRustLocal       | 30 |     let prod_hi = vmull_u8(vget_high_u8(aligned), vget_high_u8(mult));
+19:56:47.297 | E | BuildRustLocal       |    |                            ^^^^^^^^^^^^^^^^^^^^^ call to function with `#[target_feature]`
+19:56:47.297 | E | BuildRustLocal       |    |
+19:56:47.297 | E | BuildRustLocal       |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
+19:56:47.297 | E | BuildRustLocal       |    = help: in order for the call to be safe, the context requires the following additional target feature: neon
+19:56:47.297 | E | BuildRustLocal       |    = note: the neon target feature being enabled in the build configuration does not remove the requirement to list it in `#[target_feature]`
+19:56:47.297 | E | BuildRustLocal       | 
+19:56:47.297 | E | BuildRustLocal       | warning[E0133]: call to function `std::arch::aarch64::vget_high_u8` with `#[target_feature]` is unsafe and requires unsafe block
+19:56:47.297 | E | BuildRustLocal       |   --> src/lib.rs:30:51
+19:56:47.297 | E | BuildRustLocal       |    |
+19:56:47.297 | E | BuildRustLocal       | 30 |     let prod_hi = vmull_u8(vget_high_u8(aligned), vget_high_u8(mult));
+19:56:47.297 | E | BuildRustLocal       |    |                                                   ^^^^^^^^^^^^^^^^^^ call to function with `#[target_feature]`
+19:56:47.297 | E | BuildRustLocal       |    |
+19:56:47.297 | E | BuildRustLocal       |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
+19:56:47.297 | E | BuildRustLocal       |    = help: in order for the call to be safe, the context requires the following additional target feature: neon
+19:56:47.297 | E | BuildRustLocal       |    = note: the neon target feature being enabled in the build configuration does not remove the requirement to list it in `#[target_feature]`
+19:56:47.297 | E | BuildRustLocal       | 
+19:56:47.297 | E | BuildRustLocal       | warning[E0133]: call to function `std::arch::aarch64::vpaddlq_u16` with `#[target_feature]` is unsafe and requires unsafe block
+19:56:47.297 | E | BuildRustLocal       |   --> src/lib.rs:32:22
+19:56:47.297 | E | BuildRustLocal       |    |
+19:56:47.297 | E | BuildRustLocal       | 32 |     let date_parts = vpaddlq_u16(prod_lo);
+19:56:47.297 | E | BuildRustLocal       |    |                      ^^^^^^^^^^^^^^^^^^^^ call to function with `#[target_feature]`
+19:56:47.297 | E | BuildRustLocal       |    |
+19:56:47.297 | E | BuildRustLocal       |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
+19:56:47.297 | E | BuildRustLocal       |    = help: in order for the call to be safe, the context requires the following additional target feature: neon
+19:56:47.297 | E | BuildRustLocal       |    = note: the neon target feature being enabled in the build configuration does not remove the requirement to list it in `#[target_feature]`
+19:56:47.297 | E | BuildRustLocal       | 
+19:56:47.297 | E | BuildRustLocal       | warning[E0133]: call to function `std::arch::aarch64::vpaddlq_u16` with `#[target_feature]` is unsafe and requires unsafe block
+19:56:47.297 | E | BuildRustLocal       |   --> src/lib.rs:33:22
+19:56:47.297 | E | BuildRustLocal       |    |
+19:56:47.297 | E | BuildRustLocal       | 33 |     let time_parts = vpaddlq_u16(prod_hi);
+19:56:47.297 | E | BuildRustLocal       |    |                      ^^^^^^^^^^^^^^^^^^^^ call to function with `#[target_feature]`
+19:56:47.297 | E | BuildRustLocal       |    |
+19:56:47.297 | E | BuildRustLocal       |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
+19:56:47.297 | E | BuildRustLocal       |    = help: in order for the call to be safe, the context requires the following additional target feature: neon
+19:56:47.298 | E | BuildRustLocal       |    = note: the neon target feature being enabled in the build configuration does not remove the requirement to list it in `#[target_feature]`
+19:56:47.298 | E | BuildRustLocal       | 
+19:56:47.298 | E | BuildRustLocal       | warning[E0133]: call to function `std::arch::aarch64::vgetq_lane_u32` with `#[target_feature]` is unsafe and requires unsafe block
+19:56:47.298 | E | BuildRustLocal       |   --> src/lib.rs:35:16
+19:56:47.298 | E | BuildRustLocal       |    |
+19:56:47.298 | E | BuildRustLocal       | 35 |     let year = vgetq_lane_u32(date_parts, 0) * 100 + vgetq_lane_u32(date_parts, 1);
+19:56:47.298 | E | BuildRustLocal       |    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ call to function with `#[target_feature]`
+19:56:47.298 | E | BuildRustLocal       |    |
+19:56:47.298 | E | BuildRustLocal       |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
+19:56:47.298 | E | BuildRustLocal       |    = help: in order for the call to be safe, the context requires the following additional target feature: neon
+19:56:47.298 | E | BuildRustLocal       |    = note: the neon target feature being enabled in the build configuration does not remove the requirement to list it in `#[target_feature]`
+19:56:47.298 | E | BuildRustLocal       | 
+19:56:47.298 | E | BuildRustLocal       | warning[E0133]: call to function `std::arch::aarch64::vgetq_lane_u32` with `#[target_feature]` is unsafe and requires unsafe block
+19:56:47.298 | E | BuildRustLocal       |   --> src/lib.rs:35:54
+19:56:47.298 | E | BuildRustLocal       |    |
+19:56:47.298 | E | BuildRustLocal       | 35 |     let year = vgetq_lane_u32(date_parts, 0) * 100 + vgetq_lane_u32(date_parts, 1);
+19:56:47.298 | E | BuildRustLocal       |    |                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ call to function with `#[target_feature]`
+19:56:47.298 | E | BuildRustLocal       |    |
+19:56:47.298 | E | BuildRustLocal       |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
+19:56:47.298 | E | BuildRustLocal       |    = help: in order for the call to be safe, the context requires the following additional target feature: neon
+19:56:47.298 | E | BuildRustLocal       |    = note: the neon target feature being enabled in the build configuration does not remove the requirement to list it in `#[target_feature]`
+19:56:47.298 | E | BuildRustLocal       | 
+19:56:47.298 | E | BuildRustLocal       | warning[E0133]: call to function `std::arch::aarch64::vgetq_lane_u32` with `#[target_feature]` is unsafe and requires unsafe block
+19:56:47.298 | E | BuildRustLocal       |   --> src/lib.rs:36:17
+19:56:47.298 | E | BuildRustLocal       |    |
+19:56:47.298 | E | BuildRustLocal       | 36 |     let month = vgetq_lane_u32(date_parts, 2);
+19:56:47.298 | E | BuildRustLocal       |    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ call to function with `#[target_feature]`
+19:56:47.298 | E | BuildRustLocal       |    |
+19:56:47.298 | E | BuildRustLocal       |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
+19:56:47.298 | E | BuildRustLocal       |    = help: in order for the call to be safe, the context requires the following additional target feature: neon
+19:56:47.298 | E | BuildRustLocal       |    = note: the neon target feature being enabled in the build configuration does not remove the requirement to list it in `#[target_feature]`
+19:56:47.298 | E | BuildRustLocal       | 
+19:56:47.298 | E | BuildRustLocal       | warning[E0133]: call to function `std::arch::aarch64::vgetq_lane_u32` with `#[target_feature]` is unsafe and requires unsafe block
+19:56:47.298 | E | BuildRustLocal       |   --> src/lib.rs:37:15
+19:56:47.298 | E | BuildRustLocal       |    |
+19:56:47.298 | E | BuildRustLocal       | 37 |     let day = vgetq_lane_u32(date_parts, 3);
+19:56:47.298 | E | BuildRustLocal       |    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ call to function with `#[target_feature]`
+19:56:47.298 | E | BuildRustLocal       |    |
+19:56:47.298 | E | BuildRustLocal       |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
+19:56:47.298 | E | BuildRustLocal       |    = help: in order for the call to be safe, the context requires the following additional target feature: neon
+19:56:47.298 | E | BuildRustLocal       |    = note: the neon target feature being enabled in the build configuration does not remove the requirement to list it in `#[target_feature]`
+19:56:47.298 | E | BuildRustLocal       | 
+19:56:47.298 | E | BuildRustLocal       | warning[E0133]: call to function `std::arch::aarch64::vgetq_lane_u32` with `#[target_feature]` is unsafe and requires unsafe block
+19:56:47.298 | E | BuildRustLocal       |   --> src/lib.rs:39:16
+19:56:47.298 | E | BuildRustLocal       |    |
+19:56:47.298 | E | BuildRustLocal       | 39 |     let hour = vgetq_lane_u32(time_parts, 0);
+19:56:47.298 | E | BuildRustLocal       |    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ call to function with `#[target_feature]`
+19:56:47.298 | E | BuildRustLocal       |    |
+19:56:47.298 | E | BuildRustLocal       |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
+19:56:47.298 | E | BuildRustLocal       |    = help: in order for the call to be safe, the context requires the following additional target feature: neon
+19:56:47.298 | E | BuildRustLocal       |    = note: the neon target feature being enabled in the build configuration does not remove the requirement to list it in `#[target_feature]`
+19:56:47.298 | E | BuildRustLocal       | 
+19:56:47.298 | E | BuildRustLocal       | warning[E0133]: call to function `std::arch::aarch64::vgetq_lane_u32` with `#[target_feature]` is unsafe and requires unsafe block
+19:56:47.298 | E | BuildRustLocal       |   --> src/lib.rs:40:18
+19:56:47.298 | E | BuildRustLocal       |    |
+19:56:47.298 | E | BuildRustLocal       | 40 |     let minute = vgetq_lane_u32(time_parts, 1);
+19:56:47.298 | E | BuildRustLocal       |    |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ call to function with `#[target_feature]`
+19:56:47.298 | E | BuildRustLocal       |    |
+19:56:47.298 | E | BuildRustLocal       |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
+19:56:47.298 | E | BuildRustLocal       |    = help: in order for the call to be safe, the context requires the following additional target feature: neon
+19:56:47.298 | E | BuildRustLocal       |    = note: the neon target feature being enabled in the build configuration does not remove the requirement to list it in `#[target_feature]`
+19:56:47.298 | E | BuildRustLocal       | 
+19:56:47.298 | E | BuildRustLocal       | warning[E0133]: dereference of raw pointer is unsafe and requires unsafe block
+19:56:47.298 | E | BuildRustLocal       |   --> src/lib.rs:43:11
+19:56:47.298 | E | BuildRustLocal       |    |
+19:56:47.298 | E | BuildRustLocal       | 43 |         ((*input.add(17) - ASCII_ZERO) as u32) * 10 +
+19:56:47.298 | E | BuildRustLocal       |    |           ^^^^^^^^^^^^^^ dereference of raw pointer
+19:56:47.298 | E | BuildRustLocal       |    |
+19:56:47.298 | E | BuildRustLocal       |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
+19:56:47.298 | E | BuildRustLocal       |    = note: raw pointers may be null, dangling or unaligned; they can violate aliasing rules and cause data races: all of these are undefined behavior
+19:56:47.299 | E | BuildRustLocal       | 
+19:56:47.299 | E | BuildRustLocal       | warning[E0133]: call to unsafe function `std::ptr::const_ptr::<impl *const T>::add` is unsafe and requires unsafe block
+19:56:47.299 | E | BuildRustLocal       |   --> src/lib.rs:43:12
+19:56:47.299 | E | BuildRustLocal       |    |
+19:56:47.299 | E | BuildRustLocal       | 43 |         ((*input.add(17) - ASCII_ZERO) as u32) * 10 +
+19:56:47.299 | E | BuildRustLocal       |    |            ^^^^^^^^^^^^^ call to unsafe function
+19:56:47.299 | E | BuildRustLocal       |    |
+19:56:47.299 | E | BuildRustLocal       |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
+19:56:47.299 | E | BuildRustLocal       |    = note: consult the function's documentation for information on how to avoid undefined behavior
+19:56:47.299 | E | BuildRustLocal       | 
+19:56:47.299 | E | BuildRustLocal       | warning[E0133]: dereference of raw pointer is unsafe and requires unsafe block
+19:56:47.299 | E | BuildRustLocal       |   --> src/lib.rs:44:11
+19:56:47.299 | E | BuildRustLocal       |    |
+19:56:47.299 | E | BuildRustLocal       | 44 |         ((*input.add(18) - ASCII_ZERO) as u32);
+19:56:47.299 | E | BuildRustLocal       |    |           ^^^^^^^^^^^^^^ dereference of raw pointer
+19:56:47.299 | E | BuildRustLocal       |    |
+19:56:47.299 | E | BuildRustLocal       |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
+19:56:47.299 | E | BuildRustLocal       |    = note: raw pointers may be null, dangling or unaligned; they can violate aliasing rules and cause data races: all of these are undefined behavior
+19:56:47.299 | E | BuildRustLocal       | 
+19:56:47.299 | E | BuildRustLocal       | warning[E0133]: call to unsafe function `std::ptr::const_ptr::<impl *const T>::add` is unsafe and requires unsafe block
+19:56:47.299 | E | BuildRustLocal       |   --> src/lib.rs:44:12
+19:56:47.299 | E | BuildRustLocal       |    |
+19:56:47.299 | E | BuildRustLocal       | 44 |         ((*input.add(18) - ASCII_ZERO) as u32);
+19:56:47.299 | E | BuildRustLocal       |    |            ^^^^^^^^^^^^^ call to unsafe function
+19:56:47.299 | E | BuildRustLocal       |    |
+19:56:47.299 | E | BuildRustLocal       |    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/unsafe-op-in-unsafe-fn.html>
+19:56:47.299 | E | BuildRustLocal       |    = note: consult the function's documentation for information on how to avoid undefined behavior
+19:56:47.299 | E | BuildRustLocal       | 
+19:56:47.299 | E | BuildRustLocal       | For more information about this error, try `rustc --explain E0133`.
+19:56:47.299 | E | BuildRustLocal       | warning: `fastdate` (lib) generated 24 warnings (run `cargo fix --lib -p fastdate` to apply 1 suggestion)
+19:56:47.299 | E | BuildRustLocal       |     Finished `release` profile [optimized] target(s) in 0.06s
+19:56:47.300 | I | BuildRustLocal       | Copied /Users/gregjames/Desktop/Files/[01] Greg/[03] Projects/FastDate/src/fastdatecore/target/aarch64-apple-darwin/release/libfastdate.dylib → /Users/gregjames/Desktop/Files/[01] Greg/[03] Projects/FastDate/src/FastDate/runtimes/osx-arm64/native/libfastdate.dylib
+19:56:47.301 | V | BuildRustLocal       | Telemetry.OnTargetSucceeded (0)
+19:56:47.301 | V | BuildRustLocal       | EventInvoker.OnTargetSucceeded (-3.4028235E+38)
+19:56:47.302 | V | Restore              | EventInvoker.OnTargetRunning (-3.4028235E+38)
+19:56:47.321 | I | Restore              | > /usr/local/share/dotnet/dotnet restore "/Users/gregjames/Desktop/Files/[01] Greg/[03] Projects/FastDate/FastDate.sln"
+19:56:47.321 | V | Restore              | @ /Users/gregjames/Desktop/Files/[01] Greg/[03] Projects/FastDate
+19:56:47.669 | D | Restore              |   Determining projects to restore...
+19:56:47.828 | D | Restore              |   All projects are up-to-date for restore.
+19:56:47.837 | V | Restore              | Telemetry.OnTargetSucceeded (0)
+19:56:47.932 | V | Restore              | Sending TargetSucceeded telemetry event ...
+19:56:47.932 | V | Restore              |   build_components         = 
+19:56:47.932 | V | Restore              |   build_type               = Project
+19:56:47.932 | V | Restore              |   compile_time             = 3
+19:56:47.932 | V | Restore              |   config_generators        = 
+19:56:47.932 | V | Restore              |   host                     = Rider
+19:56:47.932 | V | Restore              |   num_custom_components    = 0
+19:56:47.932 | V | Restore              |   num_custom_extensions    = 0
+19:56:47.932 | V | Restore              |   num_partitioned_targets  = 0
+19:56:47.932 | V | Restore              |   num_secrets              = 0
+19:56:47.932 | V | Restore              |   num_targets              = 11
+19:56:47.932 | V | Restore              |   os_architecture          = Arm64
+19:56:47.932 | V | Restore              |   os_platform              = OSX
+19:56:47.932 | V | Restore              |   repo_branch              = main
+19:56:47.932 | V | Restore              |   repo_commit              = ee3409
+19:56:47.932 | V | Restore              |   repo_provider            = GitHub
+19:56:47.932 | V | Restore              |   repo_url                 = 1f20f9
+19:56:47.932 | V | Restore              |   target_current_partition = 1
+19:56:47.932 | V | Restore              |   target_duration          = 1
+19:56:47.932 | V | Restore              |   target_framework         = .NETCoreApp,Version=v10.0
+19:56:47.932 | V | Restore              |   target_name              = Restore
+19:56:47.932 | V | Restore              |   target_total_partitions  = 1
+19:56:47.932 | V | Restore              |   version_dotnet_sdk       = 10.0.201
+19:56:47.932 | V | Restore              |   version_nuke_common      = 10.0.0
+19:56:47.932 | V | Restore              |   version_nuke_global_tool = 10.0.0
+19:56:48.098 | V | Restore              | EventInvoker.OnTargetSucceeded (-3.4028235E+38)
+19:56:48.099 | V | Compile              | EventInvoker.OnTargetRunning (-3.4028235E+38)
+19:56:48.099 | I | Compile              | Building version 1.0.0...
+19:56:48.116 | I | Compile              | > /usr/local/share/dotnet/dotnet build "/Users/gregjames/Desktop/Files/[01] Greg/[03] Projects/FastDate/FastDate.sln" --configuration Debug --no-restore --property:Version=1.0.0
+19:56:48.116 | V | Compile              | @ /Users/gregjames/Desktop/Files/[01] Greg/[03] Projects/FastDate
+19:56:48.400 | D | Compile              |   FastDate -> /Users/gregjames/Desktop/Files/[01] Greg/[03] Projects/FastDate/src/FastDate/bin/Debug/net10.0/FastDate.dll
+19:56:48.630 | D | Compile              |   FastDateTester -> /Users/gregjames/Desktop/Files/[01] Greg/[03] Projects/FastDate/src/FastDateTester/bin/Debug/net10.0/FastDateTester.dll
+19:56:48.638 | D | Compile              | 
+19:56:48.638 | D | Compile              | Build succeeded.
+19:56:48.638 | D | Compile              |     0 Warning(s)
+19:56:48.638 | D | Compile              |     0 Error(s)
+19:56:48.638 | D | Compile              | 
+19:56:48.638 | D | Compile              | Time Elapsed 00:00:00.39
+19:56:48.645 | V | Compile              | Telemetry.OnTargetSucceeded (0)
+19:56:48.738 | V | Compile              | Sending TargetSucceeded telemetry event ...
+19:56:48.738 | V | Compile              |   build_components         = 
+19:56:48.738 | V | Compile              |   build_type               = Project
+19:56:48.738 | V | Compile              |   compile_time             = 4
+19:56:48.738 | V | Compile              |   config_generators        = 
+19:56:48.738 | V | Compile              |   host                     = Rider
+19:56:48.738 | V | Compile              |   num_custom_components    = 0
+19:56:48.738 | V | Compile              |   num_custom_extensions    = 0
+19:56:48.738 | V | Compile              |   num_partitioned_targets  = 0
+19:56:48.738 | V | Compile              |   num_secrets              = 0
+19:56:48.738 | V | Compile              |   num_targets              = 11
+19:56:48.738 | V | Compile              |   os_architecture          = Arm64
+19:56:48.738 | V | Compile              |   os_platform              = OSX
+19:56:48.738 | V | Compile              |   repo_branch              = main
+19:56:48.738 | V | Compile              |   repo_commit              = ee3409
+19:56:48.738 | V | Compile              |   repo_provider            = GitHub
+19:56:48.738 | V | Compile              |   repo_url                 = 1f20f9
+19:56:48.738 | V | Compile              |   target_current_partition = 1
+19:56:48.738 | V | Compile              |   target_duration          = 1
+19:56:48.738 | V | Compile              |   target_framework         = .NETCoreApp,Version=v10.0
+19:56:48.738 | V | Compile              |   target_name              = Compile
+19:56:48.738 | V | Compile              |   target_total_partitions  = 1
+19:56:48.738 | V | Compile              |   version_dotnet_sdk       = 10.0.201
+19:56:48.738 | V | Compile              |   version_nuke_common      = 10.0.0
+19:56:48.738 | V | Compile              |   version_nuke_global_tool = 10.0.0
+19:56:48.897 | V | Compile              | EventInvoker.OnTargetSucceeded (-3.4028235E+38)
+19:56:48.898 | V | Pack                 | EventInvoker.OnTargetRunning (-3.4028235E+38)
+19:56:48.898 | I | Pack                 | Packing version 1.0.0...
+19:56:48.904 | I | Pack                 | > /usr/local/share/dotnet/dotnet pack "/Users/gregjames/Desktop/Files/[01] Greg/[03] Projects/FastDate/src/FastDate/FastDate.csproj" --configuration Debug --property:Version=1.0.0 --no-build --output "/Users/gregjames/Desktop/Files/[01] Greg/[03] Projects/FastDate/artifacts/packages"
+19:56:48.904 | V | Pack                 | @ /Users/gregjames/Desktop/Files/[01] Greg/[03] Projects/FastDate
+19:56:49.418 | V | Pack                 | Telemetry.OnTargetSucceeded (0)
+19:56:49.418 | V | Pack                 | EventInvoker.OnTargetSucceeded (-3.4028235E+38)
