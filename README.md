@@ -1,3 +1,10 @@
+[![CI](https://github.com/gregyjames/FastDate/actions/workflows/build.yml/badge.svg)](https://github.com/gregyjames/HyperTrie/actions/workflows/ci.yml)
+![NuGet Downloads](https://img.shields.io/nuget/dt/FastDate)
+![NuGet Version](https://img.shields.io/nuget/v/FastDate)
+![GitHub License](https://img.shields.io/github/license/gregyjames/FastDate)
+![Rust](https://img.shields.io/badge/rust-%23000000.svg?style=for-the-badge&logo=rust&logoColor=white)
+![C#](https://img.shields.io/badge/c%23-%23239120.svg?style=for-the-badge&logo=csharp&logoColor=white)
+
 # FastDate
 
 FastDate is a SIMD vectorized datetime (ISO 8601) parser that is ~7x faster (86% less time) than DateTime.Parse()/ParseExact().
