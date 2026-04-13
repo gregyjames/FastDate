@@ -1,13 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net10.0</TargetFramework>
+        <TargetFrameworks>net10.0;net8.0;</TargetFrameworks>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
         <PackageIcon>logo.png</PackageIcon>
         <Title>FastDate</Title>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <Copyright>Greg James @ 2026</Copyright>
+        <RuntimeIdentifiers>osx-arm64</RuntimeIdentifiers>
         <PackageProjectUrl>https://github.com/gregyjames/FastDate</PackageProjectUrl>
         <RepositoryUrl>https://github.com/gregyjames/FastDate</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
