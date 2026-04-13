@@ -6,15 +6,9 @@ pub struct PackedDateTime {
     pub time: u32,
 }
 
-const SHUFFLE: [u8; 16] = [
-    0, 1, 2, 3, 5, 6, 8, 9,
-    11, 12, 14, 15, 255, 255, 255, 255,
-];
+const SHUFFLE: [u8; 16] = [0, 1, 2, 3, 5, 6, 8, 9, 11, 12, 14, 15, 255, 255, 255, 255];
 
-const MULTIPLIERS: [u8; 16] = [
-    10, 1, 10, 1, 10, 1, 10, 1,
-    10, 1, 10, 1, 0, 0, 0, 0,
-];
+const MULTIPLIERS: [u8; 16] = [10, 1, 10, 1, 10, 1, 10, 1, 10, 1, 10, 1, 0, 0, 0, 0];
 
 const ASCII_ZERO: u8 = b'0';
 
@@ -40,8 +34,7 @@ pub unsafe extern "C" fn parse_iso_date_neon(input: *const u8) -> PackedDateTime
     let minute = vgetq_lane_u32(time_parts, 1);
 
     let second =
-        ((*input.add(17) - ASCII_ZERO) as u32) * 10 +
-        ((*input.add(18) - ASCII_ZERO) as u32);
+        ((*input.add(17) - ASCII_ZERO) as u32) * 10 + ((*input.add(18) - ASCII_ZERO) as u32);
 
     PackedDateTime {
         date: (year << 16) | (month << 8) | day,

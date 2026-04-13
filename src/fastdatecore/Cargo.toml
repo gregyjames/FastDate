@@ -10,4 +10,4 @@ crate-type = ["cdylib"]
 
 
 [build-dependencies]
-csbindgen = "1.9.6"
+csbindgen = "1.9.7"
