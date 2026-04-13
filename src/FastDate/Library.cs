@@ -1,4 +1,6 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Buffers;
+using System.Globalization;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics.Arm;
 using System.Text;
@@ -26,6 +28,7 @@ internal static class DateTimeExtensions
 
 public static class FastDate
 {
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static unsafe DateTime FromISO8601(string datetime)
     {
         if (datetime.Length != 19) ThrowFormat();
@@ -52,6 +55,20 @@ public static class FastDate
         return date;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static unsafe DateTime FromISO8601(ReadOnlySpan<byte> data)
+    {
+        if (data.Length < 19) ThrowFormat();
+        
+        byte* pBuffer = (byte*)Unsafe.AsPointer(ref MemoryMarshal.GetReference(data));
+        
+        PackedDateTime packed = NativeMethods.parse_iso_date_neon(pBuffer);
+
+        if (packed.date == 0) ThrowFormat();
+
+        return packed.ToDateTime();
+    }
+    
     [MethodImpl(MethodImplOptions.NoInlining)]
     private static void ThrowFormat() => throw new FormatException("Invalid ISO8601 format.");
 }

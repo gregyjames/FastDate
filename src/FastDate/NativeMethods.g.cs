@@ -20,8 +20,7 @@ namespace FastDate
 
 
         [LibraryImport(__DllName, EntryPoint = "parse_iso_date_neon")]
-        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        [SuppressGCTransition]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvSuppressGCTransition), typeof(CallConvCdecl)])]
         internal static partial PackedDateTime parse_iso_date_neon(byte* input);
 
 

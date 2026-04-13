@@ -10,14 +10,14 @@ public class DateParsingBenchmarks
 {
     private string[] _dateStrings = null!;
     private byte[][] _utf8Dates = null!;
-    private const int Iterations = 100;
+    private const int Iterations = 1000;
 
     [GlobalSetup]
     public void Setup()
     {
         // Generate a variety of dates to prevent CPU branch prediction bias
         _dateStrings = Enumerable.Range(0, Iterations)
-            .Select(i => DateTime.UtcNow.AddMinutes(i).ToString("yyyy-MM-dd'T'HH:mm:ss"))
+            .Select(i => DateTime.UtcNow.AddDays(i).ToString("yyyy-MM-dd'T'HH:mm:ss"))
             .ToArray();
 
         _utf8Dates = _dateStrings.Select(System.Text.Encoding.UTF8.GetBytes).ToArray();
