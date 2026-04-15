@@ -1,6 +1,9 @@
 #[cfg(target_arch = "aarch64")]
 use std::arch::aarch64::*;
 
+#[cfg(target_arch = "x86_64")]
+use std::arch::x86_64::*;
+
 #[repr(C)]
 pub struct PackedDateTime {
     pub date: u32,
@@ -47,6 +50,16 @@ pub unsafe extern "C" fn parse_iso_date_neon(input: *const u8) -> PackedDateTime
             date: (year << 16) | (month << 8) | day,
             time: (hour << 24) | (minute << 16) | (second << 8),
         }
+    }
+}
+
+#[cfg(target_arch = "x86_64")]
+pub unsafe extern "C" fn parse_iso_date_sse(input: *const u8) -> PackedDateTime {
+    let src = _mm_loadu_si128(input as *const __m128i);
+
+    PackedDateTime{
+        date: 0,
+        time: 0,
     }
 }
 
