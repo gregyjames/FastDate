@@ -59,6 +59,9 @@ pub unsafe extern "C" fn parse_iso_date_sse(input: *const u8) -> PackedDateTime 
     let ascii_zero = _mm_set1_epi8(ASCII_ZERO as i8);
     let digits = _mm_sub_epi8(src, ascii_zero);
 
+    let mask = _mm_loadu_si128(SHUFFLE.as_ptr() as *const __m128i);
+    let aligned = _mm_shuffle_epi8(digits, mask);
+
     PackedDateTime{
         date: 0,
         time: 0,
