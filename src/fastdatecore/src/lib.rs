@@ -112,7 +112,7 @@ mod tests {
 
     #[test]
     #[cfg(target_arch = "aarch64")]
-    fn test_parse_iso_date_boundaries() {
+    fn test_parse_iso_date_boundaries_neon() {
         // Test Year 0001 and high values like 9999
         let inputs = [
             (b"0001-01-01T00:00:00", 1, 1, 1, 0, 0, 0),
@@ -161,7 +161,7 @@ mod tests {
 
     #[test]
     #[cfg(target_arch = "x86_64")]
-    fn test_parse_iso_date_sse_edge_case() {
+    fn test_parse_iso_date_sse_edge_case_sse() {
         // Testing a different month/day to ensure shuffle/multipliers are correct
         let input = b"1999-12-31T23:59:59";
 
