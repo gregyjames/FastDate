@@ -66,6 +66,13 @@ pub unsafe extern "C" fn parse_iso_date_sse(input: *const u8) -> PackedDateTime 
     let mult = _mm_loadu_si128(MULTIPLIERS.as_ptr() as *const __m128i);
     let combined = _mm_maddubs_epi16(aligned, mult);
 
+    let year_hi = _mm_extract_epi16(combined, 0) as u32; // 20
+    let year_lo = _mm_extract_epi16(combined, 1) as u32; // 26
+    let month   = _mm_extract_epi16(combined, 2) as u32; // 04
+    let day     = _mm_extract_epi16(combined, 3) as u32; // 12
+    let hour    = _mm_extract_epi16(combined, 4) as u32; // 15
+    let minute  = _mm_extract_epi16(combined, 5) as u32; // 04
+
     PackedDateTime{
         date: 0,
         time: 0,
