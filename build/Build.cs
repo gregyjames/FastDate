@@ -77,8 +77,8 @@ sealed class Build : NukeBuild
     // Platform definitions for local cross-compilation
     static readonly (string Rid, string Target, string LibName, string RustFlags)[] Platforms =
     [
-        //("linux-x64",   "x86_64-unknown-linux-gnu",  "libfastdate.so",     "-C target-feature=+aes,+sse2 -C linker=gcc"),
-        //("windows-x64", "x86_64-pc-windows-msvc",    "fastdate.dll",       "-C target-feature=+aes,+sse2"),
+        ("linux-x64",   "x86_64-unknown-linux-gnu",  "libfastdate.so",     "-C target-feature=+aes,+sse2 -C linker=gcc"),
+        ("windows-x64", "x86_64-pc-windows-msvc",    "fastdate.dll",       "-C target-feature=+aes,+sse2"),
         //("windows-x86", "i686-pc-windows-msvc",      "fastdate.dll",       "-C target-feature=+aes,+sse2"),
         ("osx-arm64",   "aarch64-apple-darwin",       "libfastdate.dylib",  "-C target-feature=+neon"),
     ];
@@ -185,6 +185,7 @@ sealed class Build : NukeBuild
                 .SetConfiguration(Config)
                 .SetVersion(version)
                 .SetNoBuild(true)
+                .SetNoRestore(true)
                 .SetOutputDirectory(PackageOutputPath));
         });
 

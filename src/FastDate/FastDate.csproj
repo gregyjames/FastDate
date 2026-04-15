@@ -1,7 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net10.0;net8.0;</TargetFrameworks>
+        <TargetFrameworks>net10.0;net8.0</TargetFrameworks>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -9,7 +9,6 @@
         <PackageIcon>logo.png</PackageIcon>
         <PackageId>FastDate</PackageId>
         <Title>FastDate</Title>
-        <RuntimeIdentifiers>osx-arm64;win-x64;linux-x64</RuntimeIdentifiers>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <Copyright>Greg James @ 2026</Copyright>
         <PackageProjectUrl>https://github.com/gregyjames/FastDate</PackageProjectUrl>
@@ -20,21 +19,10 @@
         <SkipLocalsInit>true</SkipLocalsInit>
         <OptimizationPreference>Speed</OptimizationPreference>
         <InvariantGlobalization>true</InvariantGlobalization>
-        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">
-        <PublishAot>true</PublishAot>
-        <PublishTrimmed>true</PublishTrimmed>
-        <TrimMode>full</TrimMode>
     </PropertyGroup>
     
     <ItemGroup>
-        <None Include="runtimes\**\*">
-            <Pack>true</Pack>
-            <PackagePath>runtimes</PackagePath>
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
+        <None Include="runtimes\**\*" Pack="true" PackagePath="runtimes" />
         <None Include="build\FastDate.targets" Pack="true" PackagePath="build\FastDate.targets"/>
         <None Include="..\..\logo.png" Pack="True" PackagePath="" Link="logo.png" />
         <None Include="..\..\README.md" Pack="true" PackagePath="/" />
