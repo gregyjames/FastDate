@@ -73,6 +73,12 @@ pub unsafe extern "C" fn parse_iso_date_sse(input: *const u8) -> PackedDateTime 
     let hour    = _mm_extract_epi16(combined, 4) as u32; // 15
     let minute  = _mm_extract_epi16(combined, 5) as u32; // 04
 
+    let year = (year_hi * 100) + year_lo;
+
+    let s1 = (*input.add(17) - b'0') as u32;
+    let s2 = (*input.add(18) - b'0') as u32;
+    let second = (s1 * 10) + s2;
+
     PackedDateTime{
         date: 0,
         time: 0,
