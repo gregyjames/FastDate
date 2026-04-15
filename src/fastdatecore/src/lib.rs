@@ -56,6 +56,8 @@ pub unsafe extern "C" fn parse_iso_date_neon(input: *const u8) -> PackedDateTime
 #[cfg(target_arch = "x86_64")]
 pub unsafe extern "C" fn parse_iso_date_sse(input: *const u8) -> PackedDateTime {
     let src = _mm_loadu_si128(input as *const __m128i);
+    let ascii_zero = _mm_set1_epi8(ASCII_ZERO as i8);
+    let digits = _mm_sub_epi8(src, ascii_zero);
 
     PackedDateTime{
         date: 0,
