@@ -79,9 +79,9 @@ pub unsafe extern "C" fn parse_iso_date_sse(input: *const u8) -> PackedDateTime 
     let s2 = (*input.add(18) - b'0') as u32;
     let second = (s1 * 10) + s2;
 
-    PackedDateTime{
-        date: 0,
-        time: 0,
+    PackedDateTime {
+        date: (year << 16) | (month << 8) | day,
+        time: (hour << 24) | (minute << 16) | (second << 8),
     }
 }
 
@@ -129,6 +129,52 @@ mod tests {
                 assert_eq!((result.time >> 16) & 0xFF, mm);
                 assert_eq!((result.time >> 8) & 0xFF, ss);
             }
+        }
+    }
+
+    #[test]
+    #[cfg(target_arch = "x86_64")]
+    fn test_parse_iso_date_sse() {
+        // ISO 8601 string: 19 bytes total
+        // The SSE version loads 16 bytes via SIMD and 3 bytes via scalar
+        let input = b"2026-04-15T02:27:31";
+
+        unsafe {
+            let result = parse_iso_date_sse(input.as_ptr());
+
+            // Expected Year: 2026 -> (2026 << 16) = 132775936
+            // Expected Month: 4  -> (4 << 8)    = 1024
+            // Expected Day: 15                  = 15
+            // Date Total: 132776975
+            let expected_date = (2026 << 16) | (4 << 8) | 15;
+
+            // Expected Hour: 2   -> (2 << 24)   = 33554432
+            // Expected Minute: 27 -> (27 << 16) = 1769472
+            // Expected Second: 31 -> (31 << 8)  = 7936
+            // Time Total: 35331840
+            let expected_time = (2 << 24) | (27 << 16) | (31 << 8);
+
+            assert_eq!(result.date, expected_date, "Date packing mismatch");
+            assert_eq!(result.time, expected_time, "Time packing mismatch");
+        }
+    }
+
+    #[test]
+    #[cfg(target_arch = "x86_64")]
+    fn test_parse_iso_date_sse_edge_case() {
+        // Testing a different month/day to ensure shuffle/multipliers are correct
+        let input = b"1999-12-31T23:59:59";
+
+        unsafe {
+            let result = parse_iso_date_sse(input.as_ptr());
+
+            let year = (result.date >> 16) & 0xFFFF;
+            let month = (result.date >> 8) & 0xFF;
+            let day = result.date & 0xFF;
+
+            assert_eq!(year, 1999);
+            assert_eq!(month, 12);
+            assert_eq!(day, 31);
         }
     }
 }
