@@ -19,13 +19,22 @@ namespace FastDate
 
 
         /// <summary>
-        ///  Parse the iso datetime into a packed datetime object.
+        ///  Parse the iso datetime into a packed datetime object (NEON).
         ///  # Safety
         ///
         ///  This method assumes input is in the correct ISO 8601 format.
         /// </summary>
         [DllImport(__DllName, EntryPoint = "parse_iso_date_neon", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
         internal static extern PackedDateTime parse_iso_date_neon(byte* input);
+
+        /// <summary>
+        ///  Parse the iso datetime into a packed datetime object (SSE3).
+        ///  # Safety
+        ///
+        ///  This method assumes input is in the correct ISO 8601 format.
+        /// </summary>
+        [DllImport(__DllName, EntryPoint = "parse_iso_date_sse", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        internal static extern PackedDateTime parse_iso_date_sse(byte* input);
 
 
     }

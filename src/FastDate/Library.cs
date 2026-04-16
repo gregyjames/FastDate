@@ -56,13 +56,15 @@ public static class FastDate
             {
                 case true when OperatingSystem.IsWindows():
                 case true when OperatingSystem.IsLinux():
-                    Console.WriteLine("SSE is supported on platform, but FastDate is only for NEON.");
+                    var packed = NativeMethods.parse_iso_date_sse_fast(buffer);
+                    if (packed.date == 0) ThrowFormat();
+                    date = packed.ToDateTime();
                     break;
                 default:
-                    throw new NotSupportedException("Platform not supported.");
+                    Console.WriteLine("[WARNING] PLATFORM NOT SUPPORTED FALLING BACK ON DATETIME.PARSE");
+                    date = DateTime.ParseExact(datetime, "yyyy-MM-dd'T'HH:mm:ss", CultureInfo.InvariantCulture);
+                    break;
             }
-
-            date = DateTime.ParseExact(datetime, "yyyy-MM-dd'T'HH:mm:ss", CultureInfo.InvariantCulture);
         }
         
         return date;
