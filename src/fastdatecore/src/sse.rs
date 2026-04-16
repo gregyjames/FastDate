@@ -1,6 +1,6 @@
-use std::arch::x86_64::*;
-use crate::constants::*;
 use crate::PackedDateTime;
+use crate::constants::*;
+use std::arch::x86_64::*;
 
 /// Parse the iso datetime into a packed datetime object (SSE3).
 /// # Safety

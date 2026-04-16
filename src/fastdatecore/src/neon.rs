@@ -1,6 +1,6 @@
-use std::arch::aarch64::*;
-use crate::constants::*;
 use crate::PackedDateTime;
+use crate::constants::*;
+use std::arch::aarch64::*;
 
 #[unsafe(no_mangle)]
 /// Parse the iso datetime into a packed datetime object (NEON).
