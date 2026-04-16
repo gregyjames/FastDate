@@ -75,14 +75,34 @@ public static class FastDate
     {
         if (data.Length < 19) ThrowFormat();
         
+        DateTime date;
+        
         byte* pBuffer = (byte*)Unsafe.AsPointer(ref MemoryMarshal.GetReference(data));
         
-        PackedDateTime packed = NativeMethods.parse_iso_date_neon_fast(pBuffer);
-
-        if (packed.date == 0) ThrowFormat();
-
-        return packed.ToDateTime();
+        if ((AdvSimd.Arm64.IsSupported || AdvSimd.IsSupported) && OperatingSystem.IsMacOS())
+        {
+            var packed = NativeMethods.parse_iso_date_neon_fast(pBuffer);
+            if (packed.date == 0) ThrowFormat();
+            date = packed.ToDateTime();
+        }
+        else
+        {
+            if ((Sse.IsSupported && OperatingSystem.IsWindows()) || (Sse.IsSupported && OperatingSystem.IsLinux()))
+            {
+                var packed = NativeMethods.parse_iso_date_sse_fast(pBuffer);
+                if (packed.date == 0) ThrowFormat();
+                date = packed.ToDateTime();
+            }
+            else
+            {
+                throw new PlatformNotSupportedException(
+                    "[ERROR] PLATFORM NOT SUPPORTED FALLING BACK ON DATETIME.PARSE");
+            }
+        }
+        
+        return date;
     }
+    
     
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static void ThrowFormat() => throw new FormatException("Invalid ISO8601 format.");
