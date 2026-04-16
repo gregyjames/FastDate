@@ -77,8 +77,8 @@ sealed class Build : NukeBuild
     // Platform definitions for local cross-compilation
     static readonly (string Rid, string Target, string LibName, string RustFlags)[] Platforms =
     [
-        ("linux-x64",   "x86_64-unknown-linux-gnu",  "libfastdate.so",     "-C target-feature=+aes,+sse2 -C linker=gcc"),
-        ("windows-x64", "x86_64-pc-windows-msvc",    "fastdate.dll",       "-C target-feature=+aes,+sse2"),
+        ("linux-x64",   "x86_64-unknown-linux-gnu",  "libfastdate.so",     "-C target-feature=+sse2,+ssse3 -C linker=gcc"),
+        ("win-x64",     "x86_64-pc-windows-msvc",    "fastdate.dll",       "-C target-feature=+sse2,+ssse3"),
         //("windows-x86", "i686-pc-windows-msvc",      "fastdate.dll",       "-C target-feature=+aes,+sse2"),
         ("osx-arm64",   "aarch64-apple-darwin",       "libfastdate.dylib",  "-C target-feature=+neon"),
     ];
@@ -152,7 +152,7 @@ sealed class Build : NukeBuild
         .OnlyWhenStatic(() => IsLocalBuild)
         .Executes(() =>
         {
-            var currentRid = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? (Environment.Is64BitProcess ? "windows-x64" : "windows-x86") :
+            var currentRid = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? (Environment.Is64BitProcess ? "win-x64" : "win-x86") :
                              RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? "linux-x64" :
                              RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ? "osx-arm64" : null;
 
