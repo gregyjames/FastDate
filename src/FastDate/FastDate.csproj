@@ -8,6 +8,10 @@
         <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
         <PackageIcon>logo.png</PackageIcon>
         <PackageId>FastDate</PackageId>
+        <Authors>Greg James</Authors>
+        <Description>A very high-performance, SIMD Vectorized ISO-8601 DateTime Parser.</Description>
+        <PackageTags>c-sharp rust datetime performance rust native</PackageTags>
+        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
         <Title>FastDate</Title>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <Copyright>Greg James @ 2026</Copyright>
