@@ -18,7 +18,7 @@ const ASCII_ZERO: u8 = b'0';
 
 #[cfg(target_arch = "aarch64")]
 #[unsafe(no_mangle)]
-/// Parse the iso datetime into a packed datetime object.
+/// Parse the iso datetime into a packed datetime object (NEON).
 /// # Safety
 ///
 /// This method assumes input is in the correct ISO 8601 format.
@@ -54,6 +54,11 @@ pub unsafe extern "C" fn parse_iso_date_neon(input: *const u8) -> PackedDateTime
 }
 
 #[cfg(target_arch = "x86_64")]
+/// Parse the iso datetime into a packed datetime object (SSE3).
+/// # Safety
+///
+/// This method assumes input is in the correct ISO 8601 format.
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn parse_iso_date_sse(input: *const u8) -> PackedDateTime {
     let src = _mm_loadu_si128(input as *const __m128i);
     let ascii_zero = _mm_set1_epi8(ASCII_ZERO as i8);
