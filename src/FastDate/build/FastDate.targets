@@ -12,10 +12,5 @@
               DestinationFiles="@(NativeFiles->'$(OutputPath)runtimes\%(RecursiveDir)%(Filename)%(Extension)')"
               SkipUnchangedFiles="true"
               Condition="'@(NativeFiles)' != ''" />
-
-        <Copy SourceFiles="@(NativeFiles)"
-              DestinationFolder="$(OutputPath)"
-              SkipUnchangedFiles="true"
-              Condition="'@(NativeFiles)' != ''" />
     </Target>
 </Project>

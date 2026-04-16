@@ -1,6 +1,9 @@
 #[cfg(target_arch = "aarch64")]
 use std::arch::aarch64::*;
 
+#[cfg(target_arch = "x86_64")]
+use std::arch::x86_64::*;
+
 #[repr(C)]
 pub struct PackedDateTime {
     pub date: u32,
@@ -15,7 +18,7 @@ const ASCII_ZERO: u8 = b'0';
 
 #[cfg(target_arch = "aarch64")]
 #[unsafe(no_mangle)]
-/// Parse the iso datetime into a packed datetime object.
+/// Parse the iso datetime into a packed datetime object (NEON).
 /// # Safety
 ///
 /// This method assumes input is in the correct ISO 8601 format.
@@ -42,6 +45,45 @@ pub unsafe extern "C" fn parse_iso_date_neon(input: *const u8) -> PackedDateTime
 
         let second =
             ((*input.add(17) - ASCII_ZERO) as u32) * 10 + ((*input.add(18) - ASCII_ZERO) as u32);
+
+        PackedDateTime {
+            date: (year << 16) | (month << 8) | day,
+            time: (hour << 24) | (minute << 16) | (second << 8),
+        }
+    }
+}
+
+#[cfg(target_arch = "x86_64")]
+/// Parse the iso datetime into a packed datetime object (SSE3).
+/// # Safety
+///
+/// This method assumes input is in the correct ISO 8601 format.
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn parse_iso_date_sse(input: *const u8) -> PackedDateTime {
+    unsafe {
+        let src = _mm_loadu_si128(input as *const __m128i);
+        let ascii_zero = _mm_set1_epi8(ASCII_ZERO as i8);
+        let digits = _mm_sub_epi8(src, ascii_zero);
+
+        let mask = _mm_loadu_si128(SHUFFLE.as_ptr() as *const __m128i);
+        let aligned = _mm_shuffle_epi8(digits, mask);
+
+        // vertically mult + add adj pairs
+        let mult = _mm_loadu_si128(MULTIPLIERS.as_ptr() as *const __m128i);
+        let combined = _mm_maddubs_epi16(aligned, mult);
+
+        let year_hi = _mm_extract_epi16(combined, 0) as u32; // 20
+        let year_lo = _mm_extract_epi16(combined, 1) as u32; // 26
+        let month = _mm_extract_epi16(combined, 2) as u32; // 04
+        let day = _mm_extract_epi16(combined, 3) as u32; // 12
+        let hour = _mm_extract_epi16(combined, 4) as u32; // 15
+        let minute = _mm_extract_epi16(combined, 5) as u32; // 04
+
+        let year = (year_hi * 100) + year_lo;
+
+        let s1 = (*input.add(17) - b'0') as u32;
+        let s2 = (*input.add(18) - b'0') as u32;
+        let second = (s1 * 10) + s2;
 
         PackedDateTime {
             date: (year << 16) | (month << 8) | day,
@@ -77,7 +119,7 @@ mod tests {
 
     #[test]
     #[cfg(target_arch = "aarch64")]
-    fn test_parse_iso_date_boundaries() {
+    fn test_parse_iso_date_boundaries_neon() {
         // Test Year 0001 and high values like 9999
         let inputs = [
             (b"0001-01-01T00:00:00", 1, 1, 1, 0, 0, 0),
@@ -94,6 +136,52 @@ mod tests {
                 assert_eq!((result.time >> 16) & 0xFF, mm);
                 assert_eq!((result.time >> 8) & 0xFF, ss);
             }
+        }
+    }
+
+    #[test]
+    #[cfg(target_arch = "x86_64")]
+    fn test_parse_iso_date_sse() {
+        // ISO 8601 string: 19 bytes total
+        // The SSE version loads 16 bytes via SIMD and 3 bytes via scalar
+        let input = b"2026-04-15T02:27:31";
+
+        unsafe {
+            let result = parse_iso_date_sse(input.as_ptr());
+
+            // Expected Year: 2026 -> (2026 << 16) = 132775936
+            // Expected Month: 4  -> (4 << 8)    = 1024
+            // Expected Day: 15                  = 15
+            // Date Total: 132776975
+            let expected_date = (2026 << 16) | (4 << 8) | 15;
+
+            // Expected Hour: 2   -> (2 << 24)   = 33554432
+            // Expected Minute: 27 -> (27 << 16) = 1769472
+            // Expected Second: 31 -> (31 << 8)  = 7936
+            // Time Total: 35331840
+            let expected_time = (2 << 24) | (27 << 16) | (31 << 8);
+
+            assert_eq!(result.date, expected_date, "Date packing mismatch");
+            assert_eq!(result.time, expected_time, "Time packing mismatch");
+        }
+    }
+
+    #[test]
+    #[cfg(target_arch = "x86_64")]
+    fn test_parse_iso_date_sse_edge_case_sse() {
+        // Testing a different month/day to ensure shuffle/multipliers are correct
+        let input = b"1999-12-31T23:59:59";
+
+        unsafe {
+            let result = parse_iso_date_sse(input.as_ptr());
+
+            let year = (result.date >> 16) & 0xFFFF;
+            let month = (result.date >> 8) & 0xFF;
+            let day = result.date & 0xFF;
+
+            assert_eq!(year, 1999);
+            assert_eq!(month, 12);
+            assert_eq!(day, 31);
         }
     }
 }

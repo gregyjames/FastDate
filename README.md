@@ -32,8 +32,10 @@ InvocationCount=1  UnrollFactor=1
 | System_Utf8Parser    | 125.42 ns |  48.54 ns | 133.71 ns |  82.0000 ns |  0.19 |    0.22 |    2 |         - |          NA |
 | System_ParseExact    | 732.60 ns | 102.38 ns | 283.70 ns | 604.5000 ns |  1.11 |    0.54 |    3 |         - |          NA |
 
-## Limitations
-- Currently only Supports Apple ARM64 (neon) but more to come!
+## Supported Platforms
+- Apple ARM64 (NEON)
+- Windows x64 (SSE3)
+- Linux x64 (SSE3)
 
 ## License
 MIT License
