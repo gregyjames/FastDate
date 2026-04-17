@@ -10,21 +10,21 @@ public class DateParsingBenchmarks
 {
     private string[] _dateStrings = null!;
     private byte[][] _utf8Dates = null!;
-    private const int Iterations = 1000;
+    private const int ITERATIONS = 1_000;
 
     [GlobalSetup]
     public void Setup()
     {
         // Generate a variety of dates to prevent CPU branch prediction bias
-        _dateStrings = Enumerable.Range(0, Iterations)
+        _dateStrings = Enumerable.Range(0, ITERATIONS)
             .Select(i => DateTime.UtcNow.AddDays(i).ToString("yyyy-MM-dd'T'HH:mm:ss"))
             .ToArray();
 
         _utf8Dates = _dateStrings.Select(System.Text.Encoding.UTF8.GetBytes).ToArray();
     }
 
-    private string GetNextString() => _dateStrings[_index++ % Iterations];
-    private ReadOnlySpan<byte> GetNextUtf8() => _utf8Dates[_index++ % Iterations];
+    private string GetNextString() => _dateStrings[_index++ % ITERATIONS];
+    private ReadOnlySpan<byte> GetNextUtf8() => _utf8Dates[_index++ % ITERATIONS];
 
     [Benchmark(Baseline = true)]
     public DateTime System_ParseExact()

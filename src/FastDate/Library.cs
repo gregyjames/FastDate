@@ -31,6 +31,11 @@ internal static class DateTimeExtensions
 /// </summary>
 public static class Parser
 {
+    private static readonly unsafe delegate*<byte*, PackedDateTime> ParseFn = 
+        (AdvSimd.Arm64.IsSupported && OperatingSystem.IsMacOS()) ? &NativeMethods.parse_iso_date_neon_fast :
+        (Sse.IsSupported && (OperatingSystem.IsWindows() || OperatingSystem.IsLinux())) ? &NativeMethods.parse_iso_date_sse_fast :
+        null;
+    
     /// <summary>
     /// Parses an ISO 8601 string to a DateTime using SIMD-accelerated native parsing.
     /// Falls back to <see cref="DateTime.ParseExact(string, string, IFormatProvider)"/> on unsupported platforms.
@@ -42,6 +47,10 @@ public static class Parser
     public static unsafe DateTime FromIso8601(string datetime)
     {
         if (string.IsNullOrEmpty(datetime) || datetime.Length != 19) ThrowFormat();
+        if (ParseFn == null)
+        {
+            throw new PlatformNotSupportedException();
+        }
         
         byte* buffer = stackalloc byte[19];
         
@@ -52,33 +61,11 @@ public static class Parser
                 buffer[i] = (byte)src[i];
             }
         }
-
-        DateTime date;
         
-        if ((AdvSimd.Arm64.IsSupported || AdvSimd.IsSupported) && OperatingSystem.IsMacOS())
-        {
-            var packed = NativeMethods.parse_iso_date_neon_fast(buffer);
-            if (packed.date == 0) ThrowFormat();
-            date = packed.ToDateTime();
-        }
-        else
-        {
-            switch (Sse.IsSupported)
-            {
-                case true when OperatingSystem.IsWindows():
-                case true when OperatingSystem.IsLinux():
-                    var packed = NativeMethods.parse_iso_date_sse_fast(buffer);
-                    if (packed.date == 0) ThrowFormat();
-                    date = packed.ToDateTime();
-                    break;
-                default:
-                    Console.WriteLine("[WARNING] PLATFORM NOT SUPPORTED FALLING BACK ON DATETIME.PARSE");
-                    date = DateTime.ParseExact(datetime, "yyyy-MM-dd'T'HH:mm:ss", CultureInfo.InvariantCulture);
-                    break;
-            }
-        }
+        var packed = ParseFn(buffer);
         
-        return date;
+        if (packed.date == 0) ThrowFormat();
+        return packed.ToDateTime();
     }
 
     /// <summary>
@@ -91,33 +78,16 @@ public static class Parser
     public static unsafe DateTime FromIso8601(ReadOnlySpan<byte> data)
     {
         if (data.Length < 19) ThrowFormat();
-        
-        DateTime date;
+
+        if (ParseFn == null)
+        {
+            throw new PlatformNotSupportedException();
+        }
         
         byte* pBuffer = (byte*)Unsafe.AsPointer(ref MemoryMarshal.GetReference(data));
-        
-        if ((AdvSimd.Arm64.IsSupported || AdvSimd.IsSupported) && OperatingSystem.IsMacOS())
-        {
-            var packed = NativeMethods.parse_iso_date_neon_fast(pBuffer);
-            if (packed.date == 0) ThrowFormat();
-            date = packed.ToDateTime();
-        }
-        else
-        {
-            if ((Sse.IsSupported && OperatingSystem.IsWindows()) || (Sse.IsSupported && OperatingSystem.IsLinux()))
-            {
-                var packed = NativeMethods.parse_iso_date_sse_fast(pBuffer);
-                if (packed.date == 0) ThrowFormat();
-                date = packed.ToDateTime();
-            }
-            else
-            {
-                throw new PlatformNotSupportedException(
-                    "[ERROR] PLATFORM NOT SUPPORTED FALLING BACK ON DATETIME.PARSE");
-            }
-        }
-        
-        return date;
+        var packed = ParseFn(pBuffer);
+        if (packed.date == 0) ThrowFormat();
+        return packed.ToDateTime();
     }
     
     
