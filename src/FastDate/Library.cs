@@ -52,16 +52,8 @@ public static class Parser
             throw new PlatformNotSupportedException();
         }
         
-        byte* buffer = stackalloc byte[19];
-        
-        fixed (char* src = datetime)
-        {
-            for (var i = 0; i < 19; i++)
-            {
-                buffer[i] = (byte)src[i];
-            }
-        }
-        
+        byte* buffer = stackalloc byte[20];
+        System.Text.Ascii.FromUtf16(datetime.AsSpan(0, 19), new Span<byte>(buffer, 19), out _);
         var packed = ParseFn(buffer);
         
         if (packed.date == 0) ThrowFormat();
