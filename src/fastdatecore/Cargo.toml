@@ -7,7 +7,3 @@ edition = "2024"
 crate-type = ["cdylib"]
 
 [dependencies]
-
-
-[build-dependencies]
-csbindgen = "1.9.7"

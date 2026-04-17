@@ -48,13 +48,13 @@ public class DateParsingBenchmarks
     }
 
     [Benchmark]
-    public DateTime Rust_FastDate_Utf8()
+    public PackedDateTime Rust_FastDate_Utf8()
     {
         return FastDate.Parser.FromIso8601(GetNextUtf8());
     }
     
     [Benchmark]
-    public DateTime Rust_FastDate_String()
+    public PackedDateTime Rust_FastDate_String()
     {
         return FastDate.Parser.FromIso8601(GetNextString());
     }

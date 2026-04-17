@@ -6,25 +6,6 @@ using System.Runtime.Intrinsics.X86;
 
 namespace FastDate;
 
-internal static class DateTimeExtensions
-{
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static DateTime ToDateTime(this PackedDateTime packed)
-    {
-        uint d = packed.date;
-        uint t = packed.time;
-
-        return new DateTime(
-            (int)(d >> 16),          // Year
-            (int)((d >> 8) & 0xFF),  // Month
-            (int)(d & 0xFF),         // Day
-            (int)(t >> 24),          // Hour
-            (int)((t >> 16) & 0xFF), // Minute
-            (int)((t >> 8) & 0xFF)   // Second
-        );
-    }
-}
-
 /// <summary>
 /// Provides SIMD-accelerated parsing of ISO 8601 datetime strings.
 /// Dispatches to NEON (AArch64/macOS) or SSE (x86_64/Windows/Linux) native implementations at runtime.
@@ -44,7 +25,7 @@ public static class Parser
     /// <returns>The <see cref="DateTime"/> equivalent of the input string.</returns>
     /// <exception cref="FormatException">Thrown when the input is null, empty, or not exactly 19 characters.</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveInlining)]
-    public static unsafe DateTime FromIso8601(string datetime)
+    public static unsafe PackedDateTime FromIso8601(string datetime)
     {
         if (string.IsNullOrEmpty(datetime) || datetime.Length != 19) ThrowFormat();
         if (ParseFn == null)
@@ -56,8 +37,8 @@ public static class Parser
         System.Text.Ascii.FromUtf16(datetime.AsSpan(0, 19), new Span<byte>(buffer, 19), out _);
         var packed = ParseFn(buffer);
         
-        if (packed.date == 0) ThrowFormat();
-        return packed.ToDateTime();
+        if (packed.Date == 0) ThrowFormat();
+        return packed;
     }
 
     /// <summary>
@@ -67,10 +48,9 @@ public static class Parser
     /// <returns>The <see cref="DateTime"/> equivalent of the input.</returns>
     /// <exception cref="PlatformNotSupportedException">Thrown when the current platform does not support SSE or NEON SIMD intrinsics.</exception>
     [MethodImpl(MethodImplOptions.AggressiveOptimization | MethodImplOptions.AggressiveInlining)]
-    public static unsafe DateTime FromIso8601(ReadOnlySpan<byte> data)
+    public static unsafe PackedDateTime FromIso8601(ReadOnlySpan<byte> data)
     {
         if (data.Length < 19) ThrowFormat();
-
         if (ParseFn == null)
         {
             throw new PlatformNotSupportedException();
@@ -78,8 +58,8 @@ public static class Parser
         
         byte* pBuffer = (byte*)Unsafe.AsPointer(ref MemoryMarshal.GetReference(data));
         var packed = ParseFn(pBuffer);
-        if (packed.date == 0) ThrowFormat();
-        return packed.ToDateTime();
+        if (packed.Date == 0) ThrowFormat();
+        return packed;
     }
     
     
