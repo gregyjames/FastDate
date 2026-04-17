@@ -2,8 +2,17 @@ using System.Runtime.CompilerServices;
 
 namespace FastDate;
 
-internal static class DateTimeExtensions
+/// <summary>
+/// Provides extension methods for extracting date and time components
+/// from a <see cref="PackedDateTime"/> and converting to <see cref="DateTime"/>.
+/// </summary>
+public static class DateTimeExtensions
 {
+    /// <summary>
+    /// Converts this <see cref="PackedDateTime"/> to a <see cref="DateTime"/>.
+    /// </summary>
+    /// <param name="packed">The packed datetime to convert.</param>
+    /// <returns>A <see cref="DateTime"/> with the unpacked year, month, day, hour, minute, and second.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static DateTime ToDateTime(this PackedDateTime packed)
     {
@@ -20,21 +29,51 @@ internal static class DateTimeExtensions
         );
     }
     
+    /// <summary>
+    /// Extracts the year component (1–9999) from the packed date.
+    /// </summary>
+    /// <param name="packed">The packed datetime to extract from.</param>
+    /// <returns>The year as a 32-bit integer.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static int Year(this PackedDateTime packed) => (int)(packed.Date >> 16);
     
+    /// <summary>
+    /// Extracts the month component (1–12) from the packed date.
+    /// </summary>
+    /// <param name="packed">The packed datetime to extract from.</param>
+    /// <returns>The month as a 32-bit integer.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static int Month(this PackedDateTime packed) => (int)((packed.Date >> 8) & 0xFF);
     
+    /// <summary>
+    /// Extracts the day component (1–31) from the packed date.
+    /// </summary>
+    /// <param name="packed">The packed datetime to extract from.</param>
+    /// <returns>The day as a 32-bit integer.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static int Day(this PackedDateTime packed) => (int)(packed.Date & 0xFF);
     
+    /// <summary>
+    /// Extracts the hour component (0–23) from the packed time.
+    /// </summary>
+    /// <param name="packed">The packed datetime to extract from.</param>
+    /// <returns>The hour as a 32-bit integer.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static int Hour(this PackedDateTime packed) => (int)(packed.Time >> 24);
     
+    /// <summary>
+    /// Extracts the minute component (0–59) from the packed time.
+    /// </summary>
+    /// <param name="packed">The packed datetime to extract from.</param>
+    /// <returns>The minute as a 32-bit integer.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static int Minute(this PackedDateTime packed) => (int)((packed.Time >> 16) & 0xFF);
     
+    /// <summary>
+    /// Extracts the second component (0–59) from the packed time.
+    /// </summary>
+    /// <param name="packed">The packed datetime to extract from.</param>
+    /// <returns>The second as a 32-bit integer.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static int Second(this PackedDateTime packed) => (int)((packed.Time >> 8) & 0xFF);
 }
