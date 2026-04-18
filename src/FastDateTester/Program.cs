@@ -10,7 +10,7 @@ public class DateParsingBenchmarks
 {
     private string[] _dateStrings = null!;
     private byte[][] _utf8Dates = null!;
-    private const int ITERATIONS = 1_000;
+    private const int ITERATIONS = 100_000;
 
     [GlobalSetup]
     public void Setup()

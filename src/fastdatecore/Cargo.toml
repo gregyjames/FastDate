@@ -7,3 +7,10 @@ edition = "2024"
 crate-type = ["cdylib"]
 
 [dependencies]
+
+[profile.release]
+opt-level = 3       # Maximize speed
+lto = "fat"         # Enable Fat Link-Time Optimization (best performance)
+codegen-units = 1   # Single code generation unit (slowest compile time, fastest runtime)
+panic = "abort"     # Remove unwinding machinery overhead
+strip = true        # Strip symbols from the binary to reduce size
