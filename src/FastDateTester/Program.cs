@@ -10,14 +10,14 @@ public class DateParsingBenchmarks
 {
     private string[] _dateStrings = null!;
     private byte[][] _utf8Dates = null!;
-    private const int ITERATIONS = 100_000;
+    private const int ITERATIONS = 1_000;
 
     [GlobalSetup]
     public void Setup()
     {
         // Generate a variety of dates to prevent CPU branch prediction bias
         _dateStrings = Enumerable.Range(0, ITERATIONS)
-            .Select(i => DateTime.UtcNow.AddDays(i).ToString("yyyy-MM-dd'T'HH:mm:ss"))
+            .Select(i => DateTime.UtcNow.AddDays(i).ToString("O"))
             .ToArray();
 
         _utf8Dates = _dateStrings.Select(System.Text.Encoding.UTF8.GetBytes).ToArray();
@@ -29,7 +29,7 @@ public class DateParsingBenchmarks
     [Benchmark(Baseline = true)]
     public DateTime System_ParseExact()
     {
-        return DateTime.ParseExact(GetNextString(), "yyyy-MM-dd'T'HH:mm:ss", CultureInfo.InvariantCulture);
+        return DateTime.ParseExact(GetNextString(), "O", CultureInfo.InvariantCulture);
     }
 
     private int _index;
@@ -40,23 +40,24 @@ public class DateParsingBenchmarks
     [Benchmark]
     public DateTime System_Utf8Parser()
     {
-        if (System.Buffers.Text.Utf8Parser.TryParse(GetNextUtf8(), out DateTime dt, out _))
+        if (System.Buffers.Text.Utf8Parser.TryParse(GetNextUtf8(), out DateTime dt, out _, 'O'))
         {
             return dt;
         }
-        return DateTime.MinValue;
+        
+        throw new FormatException();
     }
 
     [Benchmark]
-    public PackedDateTime Rust_FastDate_Utf8()
+    public DateTime Rust_FastDate_Utf8()
     {
-        return FastDate.Parser.FromIso8601(GetNextUtf8());
+        return FastDate.Parser.FromIso8601(GetNextUtf8()).ToDateTime();
     }
     
     [Benchmark]
-    public PackedDateTime Rust_FastDate_String()
+    public DateTime Rust_FastDate_String()
     {
-        return FastDate.Parser.FromIso8601(GetNextString());
+        return FastDate.Parser.FromIso8601(GetNextString()).ToDateTime();
     }
 }
 

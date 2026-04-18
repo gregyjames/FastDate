@@ -27,7 +27,7 @@ public static class Parser
     [MethodImpl(MethodImplOptions.AggressiveOptimization | MethodImplOptions.AggressiveInlining)]
     public static unsafe PackedDateTime FromIso8601(string datetime)
     {
-        if (string.IsNullOrEmpty(datetime) || datetime.Length != 19) ThrowFormat();
+        if (string.IsNullOrEmpty(datetime) || datetime.Length < 19) ThrowFormat();
         if (ParseFn == null)
         {
             throw new PlatformNotSupportedException();
