@@ -18,6 +18,13 @@ internal static unsafe partial class NativeMethods
     [LibraryImport("fastdate", EntryPoint = "parse_iso_date_neon")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvSuppressGCTransition), typeof(CallConvCdecl)])]
     internal static partial PackedDateTime parse_iso_date_neon_fast(byte* input);
+
+    /// <summary>
+    /// Parses an array of ISO 8601 byte sequences using the NEON (AArch64) SIMD implementation.
+    /// </summary>
+    [LibraryImport("fastdate", EntryPoint = "parse_iso_date_neon_bulk")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvSuppressGCTransition), typeof(CallConvCdecl)])]
+    internal static partial void parse_iso_date_neon_bulk_fast(byte** inputs, PackedDateTime* outputs, nuint count);
     
     /// <summary>
     /// Parses an ISO 8601 byte sequence using the SSE3 (x86_64) SIMD implementation.
@@ -27,6 +34,13 @@ internal static unsafe partial class NativeMethods
     [LibraryImport("fastdate", EntryPoint = "parse_iso_date_sse")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvSuppressGCTransition), typeof(CallConvCdecl)])]
     internal static partial PackedDateTime parse_iso_date_sse_fast(byte* input);
+
+    /// <summary>
+    /// Parses an array of ISO 8601 byte sequences using the SSE3 (x86_64) SIMD implementation.
+    /// </summary>
+    [LibraryImport("fastdate", EntryPoint = "parse_iso_date_sse_bulk")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvSuppressGCTransition), typeof(CallConvCdecl)])]
+    internal static partial void parse_iso_date_sse_bulk_fast(byte** inputs, PackedDateTime* outputs, nuint count);
 }
 
 /// <summary>
