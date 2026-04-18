@@ -19,10 +19,12 @@
         <RepositoryUrl>https://github.com/gregyjames/FastDate</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <NoDynamic>true</NoDynamic>
-        <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+        <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
         <SkipLocalsInit>true</SkipLocalsInit>
         <OptimizationPreference>Speed</OptimizationPreference>
         <InvariantGlobalization>true</InvariantGlobalization>
+        <IsAotCompatible>true</IsAotCompatible>
+        <IsTrimmable>true</IsTrimmable>
         <AnalysisLevel>latest-all</AnalysisLevel>
         <AnalysisMode>All</AnalysisMode>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
