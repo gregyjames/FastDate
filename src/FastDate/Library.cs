@@ -1,4 +1,3 @@
-using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics.Arm;
@@ -34,7 +33,13 @@ public static class Parser
         }
         
         byte* buffer = stackalloc byte[20];
-        System.Text.Ascii.FromUtf16(datetime.AsSpan(0, 19), new Span<byte>(buffer, 19), out _);
+        fixed (char* src = datetime)
+        {
+            for (var i = 0; i < 19; i++)
+            {
+                buffer[i] = (byte)src[i];
+            }
+        }
         var packed = ParseFn(buffer);
         
         if (packed.Date == 0) ThrowFormat();
