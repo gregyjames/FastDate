@@ -10,7 +10,7 @@ public class DateParsingBenchmarks
 {
     private string[] _dateStrings = null!;
     private byte[][] _utf8Dates = null!;
-    private const int ITERATIONS = 1_000;
+    private const int ITERATIONS = 100_000;
 
     [GlobalSetup]
     public void Setup()
@@ -38,6 +38,12 @@ public class DateParsingBenchmarks
     public void IterationSetup() => _index = 0;
 
     [Benchmark]
+    public DateTime System_Parse()
+    {
+        return DateTime.Parse(GetNextString(), CultureInfo.InvariantCulture);
+    }
+    
+    [Benchmark]
     public DateTime System_Utf8Parser()
     {
         if (System.Buffers.Text.Utf8Parser.TryParse(GetNextUtf8(), out DateTime dt, out _, 'O'))
@@ -49,15 +55,15 @@ public class DateParsingBenchmarks
     }
 
     [Benchmark]
-    public DateTime Rust_FastDate_Utf8()
+    public PackedDateTime Rust_FastDate_Utf8()
     {
-        return FastDate.Parser.FromIso8601(GetNextUtf8()).ToDateTime();
+        return FastDate.Parser.FromIso8601(GetNextUtf8());
     }
     
     [Benchmark]
-    public DateTime Rust_FastDate_String()
+    public PackedDateTime Rust_FastDate_String()
     {
-        return FastDate.Parser.FromIso8601(GetNextString()).ToDateTime();
+        return FastDate.Parser.FromIso8601(GetNextString());
     }
 }
 

@@ -25,12 +25,13 @@ Apple M1, 1 CPU, 8 logical and 8 physical cores
 InvocationCount=1  UnrollFactor=1  
 
 ```
-| Method               | Mean      | Error     | StdDev    | Median      | Ratio | RatioSD | Rank | Allocated | Alloc Ratio |
-|--------------------- |----------:|----------:|----------:|------------:|------:|--------:|-----:|----------:|------------:|
-| Rust_FastDate_Utf8   |  46.79 ns |  30.56 ns |  85.18 ns |   0.0000 ns |  0.07 |    0.13 |    1 |         - |          NA |
-| Rust_FastDate_String |  64.10 ns |  18.08 ns |  48.56 ns |  41.0000 ns |  0.10 |    0.08 |    2 |         - |          NA |
-| System_Utf8Parser    | 125.42 ns |  48.54 ns | 133.71 ns |  82.0000 ns |  0.19 |    0.22 |    2 |         - |          NA |
-| System_ParseExact    | 732.60 ns | 102.38 ns | 283.70 ns | 604.5000 ns |  1.11 |    0.54 |    3 |         - |          NA |
+| Method               | Mean      | Error     | StdDev    | Median    | Ratio | RatioSD | Rank | Allocated | Alloc Ratio |
+|--------------------- |----------:|----------:|----------:|----------:|------:|--------:|-----:|----------:|------------:|
+| Rust_FastDate_Utf8   |  1.235 μs | 0.2020 μs | 0.5796 μs |  1.083 μs |  0.12 |    0.08 |    1 |         - |          NA |
+| Rust_FastDate_String |  1.358 μs | 0.2099 μs | 0.5885 μs |  1.292 μs |  0.13 |    0.08 |    1 |         - |          NA |
+| System_Utf8Parser    |  2.089 μs | 0.3471 μs | 0.9903 μs |  1.812 μs |  0.20 |    0.13 |    2 |         - |          NA |
+| System_ParseExact    | 12.143 μs | 1.5306 μs | 4.4650 μs | 11.126 μs |  1.15 |    0.64 |    3 |         - |          NA |
+| System_Parse         | 12.552 μs | 1.5853 μs | 4.3663 μs | 11.729 μs |  1.19 |    0.65 |    3 |         - |          NA |
 
 ## Supported Platforms
 - Apple ARM64 (NEON)
