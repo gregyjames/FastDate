@@ -40,6 +40,23 @@ pub unsafe extern "C" fn parse_iso_date_sse(input: *const u8) -> PackedDateTime 
     }
 }
 
+/// Parse an array of iso datetimes into packed datetime objects (SSE3).
+/// # Safety
+///
+/// This method assumes all inputs are in the correct ISO 8601 format and `inputs` and `outputs` are valid for `count` elements.
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn parse_iso_date_sse_bulk(
+    inputs: *const *const u8,
+    outputs: *mut PackedDateTime,
+    count: usize,
+) {
+    unsafe {
+        for i in 0..count {
+            *outputs.add(i) = parse_iso_date_sse(*inputs.add(i));
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -73,6 +90,33 @@ mod tests {
             assert_eq!(year, 1999);
             assert_eq!(month, 12);
             assert_eq!(day, 31);
+        }
+    }
+
+    #[test]
+    fn test_parse_iso_date_sse_bulk() {
+        let input1 = b"2026-04-15T02:27:31";
+        let input2 = b"1999-12-31T23:59:59";
+        
+        let inputs: [*const u8; 2] = [input1.as_ptr(), input2.as_ptr()];
+        let mut outputs: [PackedDateTime; 2] = [PackedDateTime { date: 0, time: 0 }; 2];
+
+        unsafe {
+            parse_iso_date_sse_bulk(inputs.as_ptr(), outputs.as_mut_ptr(), 2);
+
+            // Verify first
+            let expected_date1 = (2026 << 16) | (4 << 8) | 15;
+            let expected_time1 = (2 << 24) | (27 << 16) | (31 << 8);
+            assert_eq!(outputs[0].date, expected_date1);
+            assert_eq!(outputs[0].time, expected_time1);
+
+            // Verify second
+            let year2 = (outputs[1].date >> 16) & 0xFFFF;
+            let month2 = (outputs[1].date >> 8) & 0xFF;
+            let day2 = outputs[1].date & 0xFF;
+            assert_eq!(year2, 1999);
+            assert_eq!(month2, 12);
+            assert_eq!(day2, 31);
         }
     }
 }

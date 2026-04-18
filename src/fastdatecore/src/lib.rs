@@ -13,6 +13,7 @@ pub use neon::*;
 pub use sse::*;
 
 #[repr(C)]
+#[derive(Copy, Clone)]
 pub struct PackedDateTime {
     pub date: u32,
     pub time: u32,
