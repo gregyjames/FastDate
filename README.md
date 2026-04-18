@@ -20,18 +20,18 @@ BenchmarkDotNet v0.15.8, macOS Tahoe 26.1 (25B78) [Darwin 25.1.0]
 Apple M1, 1 CPU, 8 logical and 8 physical cores
 .NET SDK 10.0.201
   [Host]     : .NET 10.0.5 (10.0.5, 10.0.526.15411), Arm64 RyuJIT armv8.0-a
-  Job-CNUJVU : .NET 10.0.5 (10.0.5, 10.0.526.15411), Arm64 RyuJIT armv8.0-a
+  DefaultJob : .NET 10.0.5 (10.0.5, 10.0.526.15411), Arm64 RyuJIT armv8.0-a
 
-InvocationCount=1  UnrollFactor=1  
 
 ```
-| Method               | Mean      | Error     | StdDev    | Median    | Ratio | RatioSD | Rank | Allocated | Alloc Ratio |
-|--------------------- |----------:|----------:|----------:|----------:|------:|--------:|-----:|----------:|------------:|
-| Rust_FastDate_Utf8   |  1.235 μs | 0.2020 μs | 0.5796 μs |  1.083 μs |  0.12 |    0.08 |    1 |         - |          NA |
-| Rust_FastDate_String |  1.358 μs | 0.2099 μs | 0.5885 μs |  1.292 μs |  0.13 |    0.08 |    1 |         - |          NA |
-| System_Utf8Parser    |  2.089 μs | 0.3471 μs | 0.9903 μs |  1.812 μs |  0.20 |    0.13 |    2 |         - |          NA |
-| System_ParseExact    | 12.143 μs | 1.5306 μs | 4.4650 μs | 11.126 μs |  1.15 |    0.64 |    3 |         - |          NA |
-| System_Parse         | 12.552 μs | 1.5853 μs | 4.3663 μs | 11.729 μs |  1.19 |    0.65 |    3 |         - |          NA |
+| Method                     | Mean       | Error     | StdDev    | Ratio | RatioSD | Rank | Allocated | Alloc Ratio |
+|--------------------------- |-----------:|----------:|----------:|------:|--------:|-----:|----------:|------------:|
+| Rust_FastDate_Bulk_Strings |   5.696 ns | 0.0090 ns | 0.0080 ns |  0.12 |    0.00 |    1 |         - |          NA |
+| Rust_FastDate_Utf8         |   8.883 ns | 0.0173 ns | 0.0162 ns |  0.19 |    0.00 |    2 |         - |          NA |
+| Rust_FastDate_String       |  11.174 ns | 0.1029 ns | 0.1408 ns |  0.24 |    0.00 |    3 |         - |          NA |
+| System_Utf8Parser          |  18.878 ns | 0.0650 ns | 0.0507 ns |  0.40 |    0.00 |    4 |         - |          NA |
+| System_ParseExact          |  47.239 ns | 0.1483 ns | 0.1238 ns |  1.00 |    0.00 |    5 |         - |          NA |
+| System_Parse               | 156.844 ns | 2.9838 ns | 3.4362 ns |  3.32 |    0.07 |    6 |         - |          NA |
 
 ## Supported Platforms
 - Apple ARM64 (NEON)

@@ -21,3 +21,5 @@ RustLib/NativeMethods.g.cs
 /.nuke/temp
 
 src/fastdatecore/.idea/
+
+BenchmarkDotNet.Artifacts/results/
