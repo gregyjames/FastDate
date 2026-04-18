@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics.Arm;
@@ -23,7 +24,7 @@ public static class Parser
     /// <param name="datetime">A 19-character ISO 8601 string in the format <c>YYYY-MM-DDTHH:MM:SS</c>.</param>
     /// <returns>The <see cref="DateTime"/> equivalent of the input string.</returns>
     /// <exception cref="FormatException">Thrown when the input is null, empty, or not exactly 19 characters.</exception>
-    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveInlining)]
+    [MethodImpl(MethodImplOptions.AggressiveOptimization | MethodImplOptions.AggressiveInlining)]
     public static unsafe PackedDateTime FromIso8601(string datetime)
     {
         if (string.IsNullOrEmpty(datetime) || datetime.Length != 19) ThrowFormat();
@@ -33,11 +34,11 @@ public static class Parser
         }
         
         byte* buffer = stackalloc byte[20];
-        fixed (char* src = datetime)
+        fixed (char* c = &MemoryMarshal.GetReference(datetime.AsSpan()))
         {
             for (var i = 0; i < 19; i++)
             {
-                buffer[i] = (byte)src[i];
+                buffer[i] = (byte)c[i];
             }
         }
         var packed = ParseFn(buffer);
@@ -68,6 +69,7 @@ public static class Parser
     }
     
     
+    [DoesNotReturn]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static void ThrowFormat() => throw new FormatException("Invalid ISO8601 format.");
 }
