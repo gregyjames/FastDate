@@ -9,6 +9,10 @@ use std::arch::aarch64::*;
 /// This method assumes input is in the correct ISO 8601 format.
 pub unsafe extern "C" fn parse_iso_date_neon(input: *const u8) -> PackedDateTime {
     unsafe {
+        let s1 = (*input.add(17) - ASCII_ZERO) as u32;
+        let s2 = (*input.add(18) - ASCII_ZERO) as u32;
+        let second = (s1 * 10) + s2;
+
         let src = vld1q_u8(input);
         let digits = vsubq_u8(src, vdupq_n_u8(ASCII_ZERO));
 
@@ -27,9 +31,6 @@ pub unsafe extern "C" fn parse_iso_date_neon(input: *const u8) -> PackedDateTime
 
         let hour = vgetq_lane_u32(time_parts, 0);
         let minute = vgetq_lane_u32(time_parts, 1);
-
-        let second =
-            ((*input.add(17) - ASCII_ZERO) as u32) * 10 + ((*input.add(18) - ASCII_ZERO) as u32);
 
         PackedDateTime {
             date: (year << 16) | (month << 8) | day,
