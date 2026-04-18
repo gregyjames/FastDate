@@ -100,7 +100,7 @@ mod tests {
     fn test_parse_iso_date_neon_bulk() {
         let input1 = b"2026-04-12T15:04:05";
         let input2 = b"9999-12-31T23:59:59";
-        
+
         let inputs: [*const u8; 2] = [input1.as_ptr(), input2.as_ptr()];
         let mut outputs: [PackedDateTime; 2] = [PackedDateTime { date: 0, time: 0 }; 2];
 

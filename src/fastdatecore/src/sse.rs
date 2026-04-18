@@ -12,7 +12,7 @@ pub unsafe extern "C" fn parse_iso_date_sse(input: *const u8) -> PackedDateTime 
         let s1 = (*input.add(17) - b'0') as u32;
         let s2 = (*input.add(18) - b'0') as u32;
         let second = (s1 * 10) + s2;
-        
+
         let src = _mm_loadu_si128(input as *const __m128i);
         let ascii_zero = _mm_set1_epi8(ASCII_ZERO as i8);
         let digits = _mm_sub_epi8(src, ascii_zero);
@@ -97,7 +97,7 @@ mod tests {
     fn test_parse_iso_date_sse_bulk() {
         let input1 = b"2026-04-15T02:27:31";
         let input2 = b"1999-12-31T23:59:59";
-        
+
         let inputs: [*const u8; 2] = [input1.as_ptr(), input2.as_ptr()];
         let mut outputs: [PackedDateTime; 2] = [PackedDateTime { date: 0, time: 0 }; 2];
 
