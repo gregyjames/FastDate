@@ -9,6 +9,10 @@ use std::arch::aarch64::*;
 /// This method assumes input is in the correct ISO 8601 format.
 pub unsafe extern "C" fn parse_iso_date_neon(input: *const u8) -> PackedDateTime {
     unsafe {
+        let s1 = (*input.add(17) - ASCII_ZERO) as u32;
+        let s2 = (*input.add(18) - ASCII_ZERO) as u32;
+        let second = (s1 * 10) + s2;
+
         let src = vld1q_u8(input);
         let digits = vsubq_u8(src, vdupq_n_u8(ASCII_ZERO));
 
@@ -28,12 +32,26 @@ pub unsafe extern "C" fn parse_iso_date_neon(input: *const u8) -> PackedDateTime
         let hour = vgetq_lane_u32(time_parts, 0);
         let minute = vgetq_lane_u32(time_parts, 1);
 
-        let second =
-            ((*input.add(17) - ASCII_ZERO) as u32) * 10 + ((*input.add(18) - ASCII_ZERO) as u32);
-
         PackedDateTime {
             date: (year << 16) | (month << 8) | day,
             time: (hour << 24) | (minute << 16) | (second << 8),
+        }
+    }
+}
+
+/// Parse an array of iso datetimes into packed datetime objects (NEON).
+/// # Safety
+///
+/// This method assumes all inputs are in the correct ISO 8601 format and `inputs` and `outputs` are valid for `count` elements.
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn parse_iso_date_neon_bulk(
+    inputs: *const *const u8,
+    outputs: *mut PackedDateTime,
+    count: usize,
+) {
+    unsafe {
+        for i in 0..count {
+            *outputs.add(i) = parse_iso_date_neon(*inputs.add(i));
         }
     }
 }
@@ -75,6 +93,32 @@ mod tests {
                 assert_eq!((result.time >> 16) & 0xFF, mm);
                 assert_eq!((result.time >> 8) & 0xFF, ss);
             }
+        }
+    }
+
+    #[test]
+    fn test_parse_iso_date_neon_bulk() {
+        let input1 = b"2026-04-12T15:04:05";
+        let input2 = b"9999-12-31T23:59:59";
+
+        let inputs: [*const u8; 2] = [input1.as_ptr(), input2.as_ptr()];
+        let mut outputs: [PackedDateTime; 2] = [PackedDateTime { date: 0, time: 0 }; 2];
+
+        unsafe {
+            parse_iso_date_neon_bulk(inputs.as_ptr(), outputs.as_mut_ptr(), 2);
+
+            // Verify first
+            assert_eq!(outputs[0].date >> 16, 2026);
+            assert_eq!((outputs[0].date >> 8) & 0xFF, 4);
+            assert_eq!(outputs[0].date & 0xFF, 12);
+            assert_eq!(outputs[0].time >> 24, 15);
+            assert_eq!((outputs[0].time >> 16) & 0xFF, 4);
+            assert_eq!((outputs[0].time >> 8) & 0xFF, 5);
+
+            // Verify second
+            assert_eq!(outputs[1].date >> 16, 9999);
+            assert_eq!((outputs[1].date >> 8) & 0xFF, 12);
+            assert_eq!(outputs[1].date & 0xFF, 31);
         }
     }
 }

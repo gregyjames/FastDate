@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
 using FastDate;
@@ -8,55 +8,86 @@ using FastDate;
 [RankColumn]
 public class DateParsingBenchmarks
 {
-    private string[] _dateStrings = null!;
+    private List<string> _dateStrings = null!;
     private byte[][] _utf8Dates = null!;
-    private const int Iterations = 1000;
+    private const int ITERATIONS = 1_000;
 
     [GlobalSetup]
     public void Setup()
     {
         // Generate a variety of dates to prevent CPU branch prediction bias
-        _dateStrings = Enumerable.Range(0, Iterations)
-            .Select(i => DateTime.UtcNow.AddDays(i).ToString("yyyy-MM-dd'T'HH:mm:ss"))
-            .ToArray();
+        _dateStrings = Enumerable.Range(0, ITERATIONS)
+            .Select(i => DateTime.UtcNow.AddDays(i).ToString("O"))
+            .ToList();
 
         _utf8Dates = _dateStrings.Select(System.Text.Encoding.UTF8.GetBytes).ToArray();
+        _bulkOutputs = new PackedDateTime[ITERATIONS];
     }
 
-    private string GetNextString() => _dateStrings[_index++ % Iterations];
-    private ReadOnlySpan<byte> GetNextUtf8() => _utf8Dates[_index++ % Iterations];
+    private PackedDateTime[] _bulkOutputs = null!;
 
-    [Benchmark(Baseline = true)]
-    public DateTime System_ParseExact()
+    [Benchmark(Baseline = true, OperationsPerInvoke = ITERATIONS)]
+    public int System_ParseExact()
     {
-        return DateTime.ParseExact(GetNextString(), "yyyy-MM-dd'T'HH:mm:ss", CultureInfo.InvariantCulture);
-    }
-
-    private int _index;
-
-    [IterationSetup]
-    public void IterationSetup() => _index = 0;
-
-    [Benchmark]
-    public DateTime System_Utf8Parser()
-    {
-        if (System.Buffers.Text.Utf8Parser.TryParse(GetNextUtf8(), out DateTime dt, out _))
+        int sum = 0;
+        for (int i = 0; i < ITERATIONS; i++)
         {
-            return dt;
+            sum += DateTime.ParseExact(_dateStrings[i], "O", CultureInfo.InvariantCulture).Day;
         }
-        return DateTime.MinValue;
+        return sum;
     }
 
-    [Benchmark]
-    public DateTime Rust_FastDate_Utf8()
+    [Benchmark(OperationsPerInvoke = ITERATIONS)]
+    public int System_Parse()
     {
-        return FastDate.Parser.FromIso8601(GetNextUtf8());
+        int sum = 0;
+        for (int i = 0; i < ITERATIONS; i++)
+        {
+            sum += DateTime.Parse(_dateStrings[i], CultureInfo.InvariantCulture).Day;
+        }
+        return sum;
     }
     
-    [Benchmark]
-    public DateTime Rust_FastDate_String()
+    [Benchmark(OperationsPerInvoke = ITERATIONS)]
+    public int System_Utf8Parser()
     {
-        return FastDate.Parser.FromIso8601(GetNextString());
+        int sum = 0;
+        for (int i = 0; i < ITERATIONS; i++)
+        {
+            if (System.Buffers.Text.Utf8Parser.TryParse(_utf8Dates[i], out DateTime dt, out _, 'O'))
+            {
+                sum += dt.Day;
+            }
+        }
+        return sum;
+    }
+
+    [Benchmark(OperationsPerInvoke = ITERATIONS)]
+    public int Rust_FastDate_Utf8()
+    {
+        int sum = 0;
+        for (int i = 0; i < ITERATIONS; i++)
+        {
+            sum += FastDate.Parser.FromIso8601(_utf8Dates[i]).Day();
+        }
+        return sum;
+    }
+    
+    [Benchmark(OperationsPerInvoke = ITERATIONS)]
+    public int Rust_FastDate_String()
+    {
+        int sum = 0;
+        for (int i = 0; i < ITERATIONS; i++)
+        {
+            sum += FastDate.Parser.FromIso8601(_dateStrings[i]).Day();
+        }
+        return sum;
+    }
+
+    [Benchmark(OperationsPerInvoke = ITERATIONS)]
+    public void Rust_FastDate_Bulk_Strings()
+    {
+        FastDate.Parser.FromIso8601Bulk(_dateStrings, _bulkOutputs);
     }
 }
 
