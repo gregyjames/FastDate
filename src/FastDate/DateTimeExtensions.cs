@@ -13,20 +13,36 @@ public static class DateTimeExtensions
     /// </summary>
     /// <param name="packed">The packed datetime to convert.</param>
     /// <returns>A <see cref="DateTime"/> with the unpacked year, month, day, hour, minute, and second.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     public static DateTime ToDateTime(this PackedDateTime packed)
     {
         uint d = packed.Date;
         uint t = packed.Time;
 
         return new DateTime(
-            (int)(d >> 16),             // Year
-            (int)((d >> 8) & 0xFF),    // Month
-            (int)(d & 0xFF),             // Day
-            (int)(t >> 24),             // Hour
-            (int)((t >> 16) & 0xFF),   // Minute
-            (int)((t >> 8) & 0xFF)    // Second
+            (int)(d >> 16),                 // Year
+            (int)((d >> 8) & 0xFF),         // Month
+            (int)(d & 0xFF),                // Day
+            (int)(t >> 24),                 // Hour
+            (int)((t >> 16) & 0xFF),        // Minute
+            (int)((t >> 8) & 0xFF)          // Second
         );
+    }
+
+    /// <summary>
+    /// Converts this <see cref="PackedDateTime"/> to a <see cref="DateOnly"/>, discarding the time component.
+    /// </summary>
+    /// <param name="packed">The packed datetime to convert.</param>
+    /// <returns>A <see cref="DateOnly"/> with the unpacked year, month, and day.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+    public static DateOnly ToDateOnly(this PackedDateTime packed)
+    {
+        uint d = packed.Date;
+        
+        return new DateOnly(
+            (int)(d >> 16),                 // Year
+            (int)((d >> 8) & 0xFF),         // Month
+            (int)(d  & 0xFF));              // Day
     }
     
     /// <summary>
@@ -34,7 +50,7 @@ public static class DateTimeExtensions
     /// </summary>
     /// <param name="packed">The packed datetime to extract from.</param>
     /// <returns>The year as a 32-bit integer.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     public static int Year(this PackedDateTime packed) => (int)(packed.Date >> 16);
     
     /// <summary>
@@ -42,7 +58,7 @@ public static class DateTimeExtensions
     /// </summary>
     /// <param name="packed">The packed datetime to extract from.</param>
     /// <returns>The month as a 32-bit integer.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     public static int Month(this PackedDateTime packed) => (int)((packed.Date >> 8) & 0xFF);
     
     /// <summary>
@@ -50,7 +66,7 @@ public static class DateTimeExtensions
     /// </summary>
     /// <param name="packed">The packed datetime to extract from.</param>
     /// <returns>The day as a 32-bit integer.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     public static int Day(this PackedDateTime packed) => (int)(packed.Date & 0xFF);
     
     /// <summary>
@@ -58,7 +74,7 @@ public static class DateTimeExtensions
     /// </summary>
     /// <param name="packed">The packed datetime to extract from.</param>
     /// <returns>The hour as a 32-bit integer.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     public static int Hour(this PackedDateTime packed) => (int)(packed.Time >> 24);
     
     /// <summary>
@@ -66,7 +82,7 @@ public static class DateTimeExtensions
     /// </summary>
     /// <param name="packed">The packed datetime to extract from.</param>
     /// <returns>The minute as a 32-bit integer.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     public static int Minute(this PackedDateTime packed) => (int)((packed.Time >> 16) & 0xFF);
     
     /// <summary>
@@ -74,6 +90,6 @@ public static class DateTimeExtensions
     /// </summary>
     /// <param name="packed">The packed datetime to extract from.</param>
     /// <returns>The second as a 32-bit integer.</returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     public static int Second(this PackedDateTime packed) => (int)((packed.Time >> 8) & 0xFF);
 }
