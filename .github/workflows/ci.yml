@@ -40,7 +40,7 @@ jobs:
         working-directory: src/fastdatecore
 
       - name: Upload Rust coverage
-        uses: codecov/codecov-action@v6
+        uses: codecov/codecov-action@v7
         with:
           files: src/fastdatecore/codecov.json
           token: ${{ secrets.CODECOV_TOKEN }}
@@ -96,7 +96,7 @@ jobs:
           ./build.sh Test $SKIP_FLAG --configuration Release
 
       - name: Upload coverage
-        uses: codecov/codecov-action@v6
+        uses: codecov/codecov-action@v7
         with:
           report_type: coverage
           files: 'artifacts/**/coverage.cobertura.xml'
