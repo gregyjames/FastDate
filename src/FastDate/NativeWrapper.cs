@@ -47,10 +47,10 @@ internal static unsafe partial class NativeMethods
 /// A bit-packed representation of an ISO 8601 date and time, produced by the native SIMD parser.
 /// </summary>
 /// <remarks>
-/// <para>The date and time components are stored in two 32-bit fields with the following layouts:</para>
+/// <para>The date and time components are stored in a single 64-bit field with the following layout:</para>
 /// <list type="bullet">
-///   <item><description><see cref="Date"/>: <c>[YYYY (16 bits) | MM (8 bits) | DD (8 bits)]</c></description></item>
-///   <item><description><see cref="Time"/>: <c>[HH (8 bits) | MM (8 bits) | SS (8 bits) | unused (8 bits)]</c></description></item>
+///   <item><description>High 32 bits (Date): <c>[YYYY (16 bits) | MM (8 bits) | DD (8 bits)]</c></description></item>
+///   <item><description>Low 32 bits (Time): <c>[HH (8 bits) | MM (8 bits) | SS (8 bits) | unused (8 bits)]</c></description></item>
 /// </list>
 /// <para>Use <see cref="DateTimeExtensions"/> to extract individual components or convert to <see cref="DateTime"/>.</para>
 /// </remarks>
@@ -58,12 +58,7 @@ internal static unsafe partial class NativeMethods
 public record struct PackedDateTime
 {
     /// <summary>
-    /// Bit-packed date: year in bits 16–31, month in bits 8–15, day in bits 0–7.
+    /// Bit-packed value containing both date and time.
     /// </summary>
-    public uint Date;
-    
-    /// <summary>
-    /// Bit-packed time: hour in bits 24–31, minute in bits 16–23, second in bits 8–15.
-    /// </summary>
-    public uint Time;
+    public ulong Value;
 }

@@ -64,7 +64,7 @@ public static class Parser
         
         var packed = ParseFn(buffer);
         
-        if (packed.Date == 0) ThrowFormat();
+        if (packed.Value == 0) ThrowFormat();
         return packed;
     }
 
@@ -85,7 +85,7 @@ public static class Parser
         
         byte* pBuffer = (byte*)Unsafe.AsPointer(ref MemoryMarshal.GetReference(data));
         var packed = ParseFn(pBuffer);
-        if (packed.Date == 0) ThrowFormat();
+        if (packed.Value == 0) ThrowFormat();
         return packed;
     }
 

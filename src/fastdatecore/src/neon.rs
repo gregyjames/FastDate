@@ -32,9 +32,11 @@ pub unsafe extern "C" fn parse_iso_date_neon(input: *const u8) -> PackedDateTime
         let hour = vgetq_lane_u32(time_parts, 0);
         let minute = vgetq_lane_u32(time_parts, 1);
 
+        let date = (year << 16) | (month << 8) | day;
+        let time = (hour << 24) | (minute << 16) | (second << 8);
+
         PackedDateTime {
-            date: (year << 16) | (month << 8) | day,
-            time: (hour << 24) | (minute << 16) | (second << 8),
+            value: ((date as u64) << 32) | (time as u64),
         }
     }
 }
@@ -65,14 +67,16 @@ mod tests {
         let input = b"2026-04-12T15:04:05";
         unsafe {
             let result = parse_iso_date_neon(input.as_ptr());
+            let date = (result.value >> 32) as u32;
+            let time = result.value as u32;
 
-            assert_eq!(result.date >> 16, 2026);
-            assert_eq!((result.date >> 8) & 0xFF, 4);
-            assert_eq!(result.date & 0xFF, 12);
+            assert_eq!(date >> 16, 2026);
+            assert_eq!((date >> 8) & 0xFF, 4);
+            assert_eq!(date & 0xFF, 12);
 
-            assert_eq!(result.time >> 24, 15);
-            assert_eq!((result.time >> 16) & 0xFF, 4);
-            assert_eq!((result.time >> 8) & 0xFF, 5);
+            assert_eq!(time >> 24, 15);
+            assert_eq!((time >> 16) & 0xFF, 4);
+            assert_eq!((time >> 8) & 0xFF, 5);
         }
     }
 
@@ -86,12 +90,14 @@ mod tests {
         for (str_input, y, m, d, hh, mm, ss) in inputs {
             unsafe {
                 let result = parse_iso_date_neon(str_input.as_ptr());
-                assert_eq!(result.date >> 16, y);
-                assert_eq!((result.date >> 8) & 0xFF, m);
-                assert_eq!(result.date & 0xFF, d);
-                assert_eq!(result.time >> 24, hh);
-                assert_eq!((result.time >> 16) & 0xFF, mm);
-                assert_eq!((result.time >> 8) & 0xFF, ss);
+                let date = (result.value >> 32) as u32;
+                let time = result.value as u32;
+                assert_eq!(date >> 16, y);
+                assert_eq!((date >> 8) & 0xFF, m);
+                assert_eq!(date & 0xFF, d);
+                assert_eq!(time >> 24, hh);
+                assert_eq!((time >> 16) & 0xFF, mm);
+                assert_eq!((time >> 8) & 0xFF, ss);
             }
         }
     }
@@ -102,23 +108,26 @@ mod tests {
         let input2 = b"9999-12-31T23:59:59";
 
         let inputs: [*const u8; 2] = [input1.as_ptr(), input2.as_ptr()];
-        let mut outputs: [PackedDateTime; 2] = [PackedDateTime { date: 0, time: 0 }; 2];
+        let mut outputs: [PackedDateTime; 2] = [PackedDateTime { value: 0 }; 2];
 
         unsafe {
             parse_iso_date_neon_bulk(inputs.as_ptr(), outputs.as_mut_ptr(), 2);
 
             // Verify first
-            assert_eq!(outputs[0].date >> 16, 2026);
-            assert_eq!((outputs[0].date >> 8) & 0xFF, 4);
-            assert_eq!(outputs[0].date & 0xFF, 12);
-            assert_eq!(outputs[0].time >> 24, 15);
-            assert_eq!((outputs[0].time >> 16) & 0xFF, 4);
-            assert_eq!((outputs[0].time >> 8) & 0xFF, 5);
+            let date0 = (outputs[0].value >> 32) as u32;
+            let time0 = outputs[0].value as u32;
+            assert_eq!(date0 >> 16, 2026);
+            assert_eq!((date0 >> 8) & 0xFF, 4);
+            assert_eq!(date0 & 0xFF, 12);
+            assert_eq!(time0 >> 24, 15);
+            assert_eq!((time0 >> 16) & 0xFF, 4);
+            assert_eq!((time0 >> 8) & 0xFF, 5);
 
             // Verify second
-            assert_eq!(outputs[1].date >> 16, 9999);
-            assert_eq!((outputs[1].date >> 8) & 0xFF, 12);
-            assert_eq!(outputs[1].date & 0xFF, 31);
+            let date1 = (outputs[1].value >> 32) as u32;
+            assert_eq!(date1 >> 16, 9999);
+            assert_eq!((date1 >> 8) & 0xFF, 12);
+            assert_eq!(date1 & 0xFF, 31);
         }
     }
 }

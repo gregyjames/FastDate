@@ -33,9 +33,11 @@ pub unsafe extern "C" fn parse_iso_date_sse(input: *const u8) -> PackedDateTime 
 
         let year = (year_hi * 100) + year_lo;
 
+        let date = (year << 16) | (month << 8) | day;
+        let time = (hour << 24) | (minute << 16) | (second << 8);
+
         PackedDateTime {
-            date: (year << 16) | (month << 8) | day,
-            time: (hour << 24) | (minute << 16) | (second << 8),
+            value: ((date as u64) << 32) | (time as u64),
         }
     }
 }
@@ -70,9 +72,9 @@ mod tests {
 
             let expected_date = (2026 << 16) | (4 << 8) | 15;
             let expected_time = (2 << 24) | (27 << 16) | (31 << 8);
+            let expected_value = ((expected_date as u64) << 32) | (expected_time as u64);
 
-            assert_eq!(result.date, expected_date, "Date packing mismatch");
-            assert_eq!(result.time, expected_time, "Time packing mismatch");
+            assert_eq!(result.value, expected_value, "Value packing mismatch");
         }
     }
 
@@ -83,9 +85,10 @@ mod tests {
         unsafe {
             let result = parse_iso_date_sse(input.as_ptr());
 
-            let year = (result.date >> 16) & 0xFFFF;
-            let month = (result.date >> 8) & 0xFF;
-            let day = result.date & 0xFF;
+            let date = (result.value >> 32) as u32;
+            let year = (date >> 16) & 0xFFFF;
+            let month = (date >> 8) & 0xFF;
+            let day = date & 0xFF;
 
             assert_eq!(year, 1999);
             assert_eq!(month, 12);
@@ -99,7 +102,7 @@ mod tests {
         let input2 = b"1999-12-31T23:59:59";
 
         let inputs: [*const u8; 2] = [input1.as_ptr(), input2.as_ptr()];
-        let mut outputs: [PackedDateTime; 2] = [PackedDateTime { date: 0, time: 0 }; 2];
+        let mut outputs: [PackedDateTime; 2] = [PackedDateTime { value: 0 }; 2];
 
         unsafe {
             parse_iso_date_sse_bulk(inputs.as_ptr(), outputs.as_mut_ptr(), 2);
@@ -107,13 +110,14 @@ mod tests {
             // Verify first
             let expected_date1 = (2026 << 16) | (4 << 8) | 15;
             let expected_time1 = (2 << 24) | (27 << 16) | (31 << 8);
-            assert_eq!(outputs[0].date, expected_date1);
-            assert_eq!(outputs[0].time, expected_time1);
+            let expected_value1 = ((expected_date1 as u64) << 32) | (expected_time1 as u64);
+            assert_eq!(outputs[0].value, expected_value1);
 
             // Verify second
-            let year2 = (outputs[1].date >> 16) & 0xFFFF;
-            let month2 = (outputs[1].date >> 8) & 0xFF;
-            let day2 = outputs[1].date & 0xFF;
+            let date2 = (outputs[1].value >> 32) as u32;
+            let year2 = (date2 >> 16) & 0xFFFF;
+            let month2 = (date2 >> 8) & 0xFF;
+            let day2 = date2 & 0xFF;
             assert_eq!(year2, 1999);
             assert_eq!(month2, 12);
             assert_eq!(day2, 31);
