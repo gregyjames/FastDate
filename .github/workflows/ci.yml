@@ -9,7 +9,7 @@ jobs:
     name: Rust CI
     runs-on: macos-latest
     env:
-      RUSTFLAGS: "-C target-feature=+aes,+sse2"
+      RUSTFLAGS: "-C target-feature=+neon"
     steps:
       - uses: actions/checkout@v7
 
@@ -51,7 +51,7 @@ jobs:
     name: C# CI
     runs-on: macos-latest
     env:
-      RUSTFLAGS: "-C target-feature=+aes,+sse2"
+      RUSTFLAGS: "-C target-feature=+neon"
     steps:
       - uses: actions/checkout@v7
         with:
@@ -60,9 +60,12 @@ jobs:
       - name: Install .NET SDK
         uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: |
+            10.0.x
+            8.0.x
 
       - name: Cache NuGet packages
+        id: nuget-cache
         uses: actions/cache@v6
         with:
           path: ~/.nuget/packages
@@ -79,7 +82,7 @@ jobs:
       - name: Rust Cache (FFI Lib)
         uses: Swatinem/rust-cache@v2
         with:
-          workspaces: "src/hypertrie -> target"
+          workspaces: "src/fastdatecore -> target"
 
       - name: Build and Test via Nuke
         id: test

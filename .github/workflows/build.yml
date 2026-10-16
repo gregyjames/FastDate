@@ -50,7 +50,9 @@ jobs:
       - name: Install .NET SDK
         uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: |
+            10.0.x
+            8.0.x
 
       - name: Build Rust Library via Nuke
         shell: bash
@@ -83,7 +85,9 @@ jobs:
       - name: Install .NET SDK
         uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: |
+            10.0.x
+            8.0.x
 
       - name: Download all native libraries
         uses: actions/download-artifact@v8
