@@ -16,7 +16,7 @@ FastDate.FromISO8601("2026-04-12T15:04:05")
 ## Benchmark
 ```
 
-BenchmarkDotNet v0.15.8, macOS Tahoe 26.1 (25B78) [Darwin 25.1.0]
+BenchmarkDotNet v0.15.8, macOS Tahoe 26.6.2 (25G83) [Darwin 25.6.0]
 Apple M1, 1 CPU, 8 logical and 8 physical cores
 .NET SDK 10.0.201
   [Host]     : .NET 10.0.5 (10.0.5, 10.0.526.15411), Arm64 RyuJIT armv8.0-a
@@ -26,12 +26,13 @@ Apple M1, 1 CPU, 8 logical and 8 physical cores
 ```
 | Method                     | Mean       | Error     | StdDev    | Ratio | RatioSD | Rank | Allocated | Alloc Ratio |
 |--------------------------- |-----------:|----------:|----------:|------:|--------:|-----:|----------:|------------:|
-| Rust_FastDate_Bulk_Strings |   5.696 ns | 0.0090 ns | 0.0080 ns |  0.12 |    0.00 |    1 |         - |          NA |
-| Rust_FastDate_Utf8         |   8.883 ns | 0.0173 ns | 0.0162 ns |  0.19 |    0.00 |    2 |         - |          NA |
-| Rust_FastDate_String       |  11.174 ns | 0.1029 ns | 0.1408 ns |  0.24 |    0.00 |    3 |         - |          NA |
-| System_Utf8Parser          |  18.878 ns | 0.0650 ns | 0.0507 ns |  0.40 |    0.00 |    4 |         - |          NA |
-| System_ParseExact          |  47.239 ns | 0.1483 ns | 0.1238 ns |  1.00 |    0.00 |    5 |         - |          NA |
-| System_Parse               | 156.844 ns | 2.9838 ns | 3.4362 ns |  3.32 |    0.07 |    6 |         - |          NA |
+| Rust_FastDate_Bulk_Strings |   2.718 ns | 0.0172 ns | 0.0161 ns |  0.04 |    0.00 |    1 |         - |          NA |
+| Rust_FastDate_Utf8         |   3.773 ns | 0.0418 ns | 0.0326 ns |  0.05 |    0.00 |    2 |         - |          NA |
+| Rust_FastDate_String       |   4.129 ns | 0.0021 ns | 0.0017 ns |  0.06 |    0.00 |    3 |         - |          NA |
+| System_Utf8Parser          |  30.590 ns | 0.4890 ns | 0.4083 ns |  0.41 |    0.01 |    4 |         - |          NA |
+| System_ParseExact          |  74.102 ns | 0.2595 ns | 0.2026 ns |  1.00 |    0.00 |    5 |         - |          NA |
+| System_Parse               | 249.199 ns | 1.5370 ns | 1.2835 ns |  3.36 |    0.02 |    6 |         - |          NA |
+
 
 ## Supported Platforms
 - Apple ARM64 (NEON)
