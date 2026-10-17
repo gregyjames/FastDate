@@ -42,19 +42,21 @@ pub unsafe extern "C" fn parse_iso_date_sse(input: *const u8) -> PackedDateTime 
     }
 }
 
-/// Parse an array of iso datetimes into packed datetime objects (SSE3).
+/// Parse a contiguous buffer of 20-byte-strided UTF-8 iso datetimes into packed datetime objects (SSE3).
 /// # Safety
 ///
-/// This method assumes all inputs are in the correct ISO 8601 format and `inputs` and `outputs` are valid for `count` elements.
+/// This method assumes `inputs` points to at least `count * 20` valid bytes where each 20-byte slot starts with a 19-byte ISO 8601 string, and `outputs` is valid for `count` elements.
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn parse_iso_date_sse_bulk(
-    inputs: *const *const u8,
+    inputs: *const u8,
     outputs: *mut PackedDateTime,
     count: usize,
 ) {
     unsafe {
+        let mut p = inputs;
         for i in 0..count {
-            *outputs.add(i) = parse_iso_date_sse(*inputs.add(i));
+            *outputs.add(i) = parse_iso_date_sse(p);
+            p = p.add(20);
         }
     }
 }
@@ -101,11 +103,13 @@ mod tests {
         let input1 = b"2026-04-15T02:27:31";
         let input2 = b"1999-12-31T23:59:59";
 
-        let inputs: [*const u8; 2] = [input1.as_ptr(), input2.as_ptr()];
+        let mut contig_buf = [0u8; 2 * 20];
+        contig_buf[0..19].copy_from_slice(input1);
+        contig_buf[20..39].copy_from_slice(input2);
         let mut outputs: [PackedDateTime; 2] = [PackedDateTime { value: 0 }; 2];
 
         unsafe {
-            parse_iso_date_sse_bulk(inputs.as_ptr(), outputs.as_mut_ptr(), 2);
+            parse_iso_date_sse_bulk(contig_buf.as_ptr(), outputs.as_mut_ptr(), 2);
 
             // Verify first
             let expected_date1 = (2026 << 16) | (4 << 8) | 15;

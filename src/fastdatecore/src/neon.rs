@@ -42,73 +42,12 @@ pub unsafe extern "C" fn parse_iso_date_utf16_neon(input: *const u16) -> PackedD
     }
 }
 
-/// Parse an array of iso datetimes into packed datetime objects (NEON).
-/// # Safety
-///
-/// This method assumes all inputs are in the correct ISO 8601 format and `inputs` and `outputs` are valid for `count` elements.
-#[unsafe(no_mangle)]
-pub unsafe extern "C" fn parse_iso_date_neon_bulk(
-    inputs: *const *const u8,
-    outputs: *mut PackedDateTime,
-    count: usize,
-) {
-    unsafe {
-        let idx_ones = vld1q_u8(SHUF_NEON_BULK_ONES.as_ptr());
-        let idx_tens = vld1q_u8(SHUF_NEON_BULK_TENS.as_ptr());
-        let ten = vdupq_n_u8(10);
-        let year_fix = vld1q_u16(YEAR_FIX_NEON.as_ptr());
-        let ascii_off = vdupq_n_u64(ASCII_OFFSET_NEON);
-
-        let mut i = 0;
-        while i + 4 <= count {
-            let p0 = *inputs.add(i);
-            let p1 = *inputs.add(i + 1);
-            let p2 = *inputs.add(i + 2);
-            let p3 = *inputs.add(i + 3);
-
-            let tab01 = uint8x16x4_t(
-                vld1q_u8(p0),
-                vld1q_u8(p0.add(3)),
-                vld1q_u8(p1),
-                vld1q_u8(p1.add(3)),
-            );
-            let ones01 = vqtbl4q_u8(tab01, idx_ones);
-            let tens01 = vqtbl4q_u8(tab01, idx_tens);
-            let comb01 = vreinterpretq_u16_u8(vmlaq_u8(ones01, tens01, ten));
-            let fix01 = vmlsq_u16(comb01, vshrq_n_u16(comb01, 8), year_fix);
-            let res01 = vsubq_u64(vreinterpretq_u64_u16(fix01), ascii_off);
-
-            let tab23 = uint8x16x4_t(
-                vld1q_u8(p2),
-                vld1q_u8(p2.add(3)),
-                vld1q_u8(p3),
-                vld1q_u8(p3.add(3)),
-            );
-            let ones23 = vqtbl4q_u8(tab23, idx_ones);
-            let tens23 = vqtbl4q_u8(tab23, idx_tens);
-            let comb23 = vreinterpretq_u16_u8(vmlaq_u8(ones23, tens23, ten));
-            let fix23 = vmlsq_u16(comb23, vshrq_n_u16(comb23, 8), year_fix);
-            let res23 = vsubq_u64(vreinterpretq_u64_u16(fix23), ascii_off);
-
-            vst1q_u64(outputs.add(i) as *mut u64, res01);
-            vst1q_u64(outputs.add(i + 2) as *mut u64, res23);
-
-            i += 4;
-        }
-
-        while i < count {
-            *outputs.add(i) = parse_iso_date_neon(*inputs.add(i));
-            i += 1;
-        }
-    }
-}
-
 /// Parse a contiguous buffer of 20-byte-strided UTF-8 iso datetimes into packed datetime objects (NEON).
 /// # Safety
 ///
 /// This method assumes `inputs` points to at least `count * 20` valid bytes where each 20-byte slot starts with a 19-byte ISO 8601 string, and `outputs` is valid for `count` elements.
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn parse_iso_date_neon_bulk_contiguous(
+pub unsafe extern "C" fn parse_iso_date_neon_bulk(
     inputs: *const u8,
     outputs: *mut PackedDateTime,
     count: usize,
@@ -221,7 +160,7 @@ mod tests {
     }
 
     #[test]
-    fn test_parse_iso_date_neon_bulk_and_contiguous() {
+    fn test_parse_iso_date_neon_bulk() {
         let raw_inputs: [&[u8; 19]; 6] = [
             b"2026-04-12T15:04:05",
             b"9999-12-31T23:59:59",
@@ -231,30 +170,18 @@ mod tests {
             b"1970-01-01T00:00:01",
         ];
 
-        let ptrs: [*const u8; 6] = [
-            raw_inputs[0].as_ptr(),
-            raw_inputs[1].as_ptr(),
-            raw_inputs[2].as_ptr(),
-            raw_inputs[3].as_ptr(),
-            raw_inputs[4].as_ptr(),
-            raw_inputs[5].as_ptr(),
-        ];
-
-        let mut outputs_bulk = [PackedDateTime { value: 0 }; 6];
-        let mut outputs_contig = [PackedDateTime { value: 0 }; 6];
+        let mut outputs = [PackedDateTime { value: 0 }; 6];
         let mut contig_buf = [0u8; 6 * 20];
         for (i, inp) in raw_inputs.iter().enumerate() {
             contig_buf[i * 20..i * 20 + 19].copy_from_slice(*inp);
         }
 
         unsafe {
-            parse_iso_date_neon_bulk(ptrs.as_ptr(), outputs_bulk.as_mut_ptr(), 6);
-            parse_iso_date_neon_bulk_contiguous(contig_buf.as_ptr(), outputs_contig.as_mut_ptr(), 6);
+            parse_iso_date_neon_bulk(contig_buf.as_ptr(), outputs.as_mut_ptr(), 6);
 
             for i in 0..6 {
                 let single = parse_iso_date_neon(raw_inputs[i].as_ptr());
-                assert_eq!(outputs_bulk[i].value, single.value, "bulk mismatch at {i}");
-                assert_eq!(outputs_contig[i].value, single.value, "contig mismatch at {i}");
+                assert_eq!(outputs[i].value, single.value, "bulk mismatch at {i}");
             }
         }
     }
