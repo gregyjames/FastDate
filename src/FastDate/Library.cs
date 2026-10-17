@@ -20,6 +20,7 @@ public static class Parser
 
     private static readonly unsafe delegate*<ushort*, PackedDateTime> ParseUtf16Fn =
         (AdvSimd.Arm64.IsSupported && OperatingSystem.IsMacOS()) ? &NativeMethods.parse_iso_date_utf16_neon_fast :
+        (Sse.IsSupported && (OperatingSystem.IsWindows() || OperatingSystem.IsLinux())) ? &NativeMethods.parse_iso_date_utf16_sse_fast :
         null;
         
     private static readonly unsafe delegate*<byte*, PackedDateTime*, nuint, void> ParseBulkFn = 
