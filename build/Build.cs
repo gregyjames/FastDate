@@ -41,13 +41,13 @@ sealed class Build : NukeBuild
                 .SetLoggers($"junit;LogFilePath={TestResultsDirectory}/junit.xml")
                 .SetProperty("CollectCoverage", "true")
                 .SetProperty("CoverletOutputFormat", "cobertura")
-                .SetProperty("CoverletOutput", "coverage"));
+                .SetProperty("CoverletOutput", $"{TestResultsDirectory}/coverage.cobertura.xml"));
         });
 
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Config = IsLocalBuild ? Configuration.Debug : Configuration.Release;
 
-    [Solution(GenerateProjects = true)]
+    [Solution]
     readonly Solution Solution = default!;
 
     [Parameter("Version for NuGet package")]

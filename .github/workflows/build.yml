@@ -8,6 +8,10 @@ on:
 permissions:
   contents: write
   packages: write
+  id-token: write
+
+env:
+  NUKE_TELEMETRY_OPTOUT: "1"
 
 jobs:
   build-rust:
@@ -50,7 +54,9 @@ jobs:
       - name: Install .NET SDK
         uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: |
+            10.0.x
+            8.0.x
 
       - name: Build Rust Library via Nuke
         shell: bash
@@ -83,7 +89,9 @@ jobs:
       - name: Install .NET SDK
         uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: |
+            10.0.x
+            8.0.x
 
       - name: Download all native libraries
         uses: actions/download-artifact@v8
@@ -91,10 +99,16 @@ jobs:
           path: src/FastDate/runtimes
           merge-multiple: false
 
+      - name: NuGet Login (OIDC)
+        id: nuget-login
+        uses: NuGet/login@v1
+        with:
+          user: gjames
+
       - name: Build, Pack, and Publish via Nuke
         shell: bash
         env:
-          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+          NUGET_API_KEY: ${{ steps.nuget-login.outputs.NUGET_API_KEY || secrets.NUGET_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           chmod +x ./build.sh

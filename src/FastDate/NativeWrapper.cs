@@ -20,11 +20,18 @@ internal static unsafe partial class NativeMethods
     internal static partial PackedDateTime parse_iso_date_neon_fast(byte* input);
 
     /// <summary>
-    /// Parses an array of ISO 8601 byte sequences using the NEON (AArch64) SIMD implementation.
+    /// Parses a UTF-16 ISO 8601 character sequence directly using the NEON (AArch64) SIMD implementation.
+    /// </summary>
+    [LibraryImport("fastdate", EntryPoint = "parse_iso_date_utf16_neon")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvSuppressGCTransition), typeof(CallConvCdecl)])]
+    internal static partial PackedDateTime parse_iso_date_utf16_neon_fast(ushort* input);
+
+    /// <summary>
+    /// Parses a contiguous 20-byte-strided buffer of ISO 8601 byte sequences using the NEON (AArch64) SIMD implementation.
     /// </summary>
     [LibraryImport("fastdate", EntryPoint = "parse_iso_date_neon_bulk")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvSuppressGCTransition), typeof(CallConvCdecl)])]
-    internal static partial void parse_iso_date_neon_bulk_fast(byte** inputs, PackedDateTime* outputs, nuint count);
+    internal static partial void parse_iso_date_neon_bulk_fast(byte* inputs, PackedDateTime* outputs, nuint count);
     
     /// <summary>
     /// Parses an ISO 8601 byte sequence using the SSE3 (x86_64) SIMD implementation.
@@ -36,21 +43,28 @@ internal static unsafe partial class NativeMethods
     internal static partial PackedDateTime parse_iso_date_sse_fast(byte* input);
 
     /// <summary>
-    /// Parses an array of ISO 8601 byte sequences using the SSE3 (x86_64) SIMD implementation.
+    /// Parses a UTF-16 ISO 8601 character sequence directly using the SSE3 (x86_64) SIMD implementation.
+    /// </summary>
+    [LibraryImport("fastdate", EntryPoint = "parse_iso_date_utf16_sse")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvSuppressGCTransition), typeof(CallConvCdecl)])]
+    internal static partial PackedDateTime parse_iso_date_utf16_sse_fast(ushort* input);
+
+    /// <summary>
+    /// Parses a contiguous 20-byte-strided buffer of ISO 8601 byte sequences using the SSE3 (x86_64) SIMD implementation.
     /// </summary>
     [LibraryImport("fastdate", EntryPoint = "parse_iso_date_sse_bulk")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvSuppressGCTransition), typeof(CallConvCdecl)])]
-    internal static partial void parse_iso_date_sse_bulk_fast(byte** inputs, PackedDateTime* outputs, nuint count);
+    internal static partial void parse_iso_date_sse_bulk_fast(byte* inputs, PackedDateTime* outputs, nuint count);
 }
 
 /// <summary>
 /// A bit-packed representation of an ISO 8601 date and time, produced by the native SIMD parser.
 /// </summary>
 /// <remarks>
-/// <para>The date and time components are stored in two 32-bit fields with the following layouts:</para>
+/// <para>The date and time components are stored in a single 64-bit field with the following layout:</para>
 /// <list type="bullet">
-///   <item><description><see cref="Date"/>: <c>[YYYY (16 bits) | MM (8 bits) | DD (8 bits)]</c></description></item>
-///   <item><description><see cref="Time"/>: <c>[HH (8 bits) | MM (8 bits) | SS (8 bits) | unused (8 bits)]</c></description></item>
+///   <item><description>High 32 bits (Date): <c>[YYYY (16 bits) | MM (8 bits) | DD (8 bits)]</c></description></item>
+///   <item><description>Low 32 bits (Time): <c>[HH (8 bits) | MM (8 bits) | SS (8 bits) | unused (8 bits)]</c></description></item>
 /// </list>
 /// <para>Use <see cref="DateTimeExtensions"/> to extract individual components or convert to <see cref="DateTime"/>.</para>
 /// </remarks>
@@ -58,12 +72,7 @@ internal static unsafe partial class NativeMethods
 public record struct PackedDateTime
 {
     /// <summary>
-    /// Bit-packed date: year in bits 16–31, month in bits 8–15, day in bits 0–7.
+    /// Bit-packed value containing both date and time.
     /// </summary>
-    public uint Date;
-    
-    /// <summary>
-    /// Bit-packed time: hour in bits 24–31, minute in bits 16–23, second in bits 8–15.
-    /// </summary>
-    public uint Time;
+    public ulong Value;
 }

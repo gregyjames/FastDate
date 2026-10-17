@@ -12,9 +12,8 @@ pub use neon::*;
 #[cfg(target_arch = "x86_64")]
 pub use sse::*;
 
-#[repr(C)]
+#[repr(transparent)]
 #[derive(Copy, Clone)]
 pub struct PackedDateTime {
-    pub date: u32,
-    pub time: u32,
+    pub value: u64,
 }

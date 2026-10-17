@@ -23,3 +23,5 @@ RustLib/NativeMethods.g.cs
 src/fastdatecore/.idea/
 
 BenchmarkDotNet.Artifacts/results/
+
+.agents/
