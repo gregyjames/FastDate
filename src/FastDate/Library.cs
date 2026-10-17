@@ -22,13 +22,9 @@ public static class Parser
         (AdvSimd.Arm64.IsSupported && OperatingSystem.IsMacOS()) ? &NativeMethods.parse_iso_date_utf16_neon_fast :
         null;
         
-    private static readonly unsafe delegate*<byte**, PackedDateTime*, nuint, void> ParseBulkFn = 
+    private static readonly unsafe delegate*<byte*, PackedDateTime*, nuint, void> ParseBulkFn = 
         (AdvSimd.Arm64.IsSupported && OperatingSystem.IsMacOS()) ? &NativeMethods.parse_iso_date_neon_bulk_fast :
         (Sse.IsSupported && (OperatingSystem.IsWindows() || OperatingSystem.IsLinux())) ? &NativeMethods.parse_iso_date_sse_bulk_fast :
-        null;
-
-    private static readonly unsafe delegate*<byte*, PackedDateTime*, nuint, void> ParseBulkContiguousFn =
-        (AdvSimd.Arm64.IsSupported && OperatingSystem.IsMacOS()) ? &NativeMethods.parse_iso_date_neon_bulk_contiguous_fast :
         null;
     
     /// <summary>
@@ -102,78 +98,37 @@ public static class Parser
         int count = datetimes.Count;
         if (count == 0) return;
         if (outputs.Length < count) throw new ArgumentException("Output span is too small.");
+        if (ParseBulkFn == null) throw new PlatformNotSupportedException();
 
+        const int CHUNK_SIZE = 256;
+        byte* pChunkBuffer = stackalloc byte[CHUNK_SIZE * 20];
         ReadOnlySpan<string> span = CollectionsMarshal.AsSpan(datetimes);
 
-        if (ParseBulkContiguousFn != null)
+        fixed (PackedDateTime* pOutputs = outputs)
         {
-            const int CHUNK_SIZE = 256;
-            byte* pChunkBuffer = stackalloc byte[CHUNK_SIZE * 20];
+            ref string sRef = ref MemoryMarshal.GetReference(span);
+            int offset = 0;
 
-            fixed (PackedDateTime* pOutputs = outputs)
+            while (offset < count)
             {
-                ref string sRef = ref MemoryMarshal.GetReference(span);
-                int offset = 0;
+                int batch = Math.Min(CHUNK_SIZE, count - offset);
+                byte* pCurrent = pChunkBuffer;
 
-                while (offset < count)
-                {
-                    int batch = Math.Min(CHUNK_SIZE, count - offset);
-                    byte* pCurrent = pChunkBuffer;
-
-                    for (int i = 0; i < batch; i++)
-                    {
-                        if (sRef.Length < 19) ThrowFormat();
-
-                        ref ushort c = ref Unsafe.As<char, ushort>(ref MemoryMarshal.GetReference(sRef.AsSpan()));
-                        Vector128.Narrow(Vector128.LoadUnsafe(ref c), Vector128.LoadUnsafe(ref c, 8)).Store(pCurrent);
-                        Vector128.Narrow(Vector128.LoadUnsafe(ref c, 3), Vector128.LoadUnsafe(ref c, 11)).Store(pCurrent + 3);
-
-                        pCurrent += 20;
-                        sRef = ref Unsafe.Add(ref sRef, 1);
-                    }
-
-                    ParseBulkContiguousFn(pChunkBuffer, pOutputs + offset, (nuint)batch);
-                    offset += batch;
-                }
-            }
-            return;
-        }
-
-        if (ParseBulkFn == null) throw new PlatformNotSupportedException();
-        
-        byte* pBuffer = (byte*)NativeMemory.Alloc((nuint)(count * 20));
-        IntPtr* pPointers = (IntPtr*)NativeMemory.Alloc((nuint)(count * sizeof(IntPtr)));
-        
-        try
-        {
-            fixed (PackedDateTime* pOutputs = outputs)
-            {
-                byte* pCurrent = pBuffer;
-                IntPtr* pPtr = pPointers;
-                ref string sRef = ref MemoryMarshal.GetReference(span);
-                
-                for (int i = 0; i < count; i++)
+                for (int i = 0; i < batch; i++)
                 {
                     if (sRef.Length < 19) ThrowFormat();
-                    
-                    *pPtr = (IntPtr)pCurrent;
-                    
+
                     ref ushort c = ref Unsafe.As<char, ushort>(ref MemoryMarshal.GetReference(sRef.AsSpan()));
                     Vector128.Narrow(Vector128.LoadUnsafe(ref c), Vector128.LoadUnsafe(ref c, 8)).Store(pCurrent);
                     Vector128.Narrow(Vector128.LoadUnsafe(ref c, 3), Vector128.LoadUnsafe(ref c, 11)).Store(pCurrent + 3);
-                    
+
                     pCurrent += 20;
-                    pPtr++;
                     sRef = ref Unsafe.Add(ref sRef, 1);
                 }
-                
-                ParseBulkFn((byte**)pPointers, pOutputs, (nuint)count);
+
+                ParseBulkFn(pChunkBuffer, pOutputs + offset, (nuint)batch);
+                offset += batch;
             }
-        }
-        finally
-        {
-            NativeMemory.Free(pBuffer);
-            NativeMemory.Free(pPointers);
         }
     }
 
