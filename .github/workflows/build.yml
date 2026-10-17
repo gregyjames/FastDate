@@ -8,6 +8,7 @@ on:
 permissions:
   contents: write
   packages: write
+  id-token: write
 
 jobs:
   build-rust:
@@ -95,10 +96,16 @@ jobs:
           path: src/FastDate/runtimes
           merge-multiple: false
 
+      - name: NuGet Login (OIDC)
+        id: nuget-login
+        uses: NuGet/login@v1
+        with:
+          user: gjames
+
       - name: Build, Pack, and Publish via Nuke
         shell: bash
         env:
-          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+          NUGET_API_KEY: ${{ steps.nuget-login.outputs.NUGET_API_KEY || secrets.NUGET_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           chmod +x ./build.sh
