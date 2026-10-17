@@ -227,7 +227,12 @@ mod tests {
                 let result = parse_iso_date_sse(str_input.as_ptr());
                 let date = (result.value >> 32) as u32;
                 let time = result.value as u32;
-                assert_eq!(date >> 16, y, "year mismatch for {:?}", std::str::from_utf8(str_input));
+                assert_eq!(
+                    date >> 16,
+                    y,
+                    "year mismatch for {:?}",
+                    std::str::from_utf8(str_input)
+                );
                 assert_eq!((date >> 8) & 0xFF, m, "month mismatch");
                 assert_eq!(date & 0xFF, d, "day mismatch");
                 assert_eq!(time >> 24, hh, "hour mismatch");
@@ -236,9 +241,17 @@ mod tests {
                 assert_eq!(time & 0xFF, 0, "unused byte mismatch");
 
                 // Also verify UTF-16 on all boundary dates
-                let utf16_input: Vec<u16> = std::str::from_utf8(str_input).unwrap().encode_utf16().collect();
+                let utf16_input: Vec<u16> = std::str::from_utf8(str_input)
+                    .unwrap()
+                    .encode_utf16()
+                    .collect();
                 let utf16_res = parse_iso_date_utf16_sse(utf16_input.as_ptr());
-                assert_eq!(utf16_res.value, result.value, "UTF-16 mismatch for {:?}", std::str::from_utf8(str_input));
+                assert_eq!(
+                    utf16_res.value,
+                    result.value,
+                    "UTF-16 mismatch for {:?}",
+                    std::str::from_utf8(str_input)
+                );
             }
         }
     }
@@ -292,7 +305,10 @@ mod tests {
             unsafe {
                 let res_utf8 = parse_iso_date_sse(bytes.as_ptr());
                 let res_utf16 = parse_iso_date_utf16_sse(utf16.as_ptr());
-                assert_eq!(res_utf8.value, res_utf16.value, "UTF-8 vs UTF-16 mismatch for year {y}");
+                assert_eq!(
+                    res_utf8.value, res_utf16.value,
+                    "UTF-8 vs UTF-16 mismatch for year {y}"
+                );
 
                 let date = (res_utf8.value >> 32) as u32;
                 let time = res_utf8.value as u32;
@@ -380,7 +396,10 @@ mod tests {
                 unsafe {
                     let res = parse_iso_date_sse(bytes.as_ptr());
                     let res_u16 = parse_iso_date_utf16_sse(utf16.as_ptr());
-                    assert_eq!(res.value, res_u16.value, "UTF-16 mismatch for h={h}, min={min}");
+                    assert_eq!(
+                        res.value, res_u16.value,
+                        "UTF-16 mismatch for h={h}, min={min}"
+                    );
                     let time = res.value as u32;
                     assert_eq!(time >> 24, h);
                     assert_eq!((time >> 16) & 0xFF, min);
@@ -457,7 +476,10 @@ mod tests {
             unsafe {
                 let res_utf8 = parse_iso_date_sse(bytes.as_ptr());
                 let res_utf16 = parse_iso_date_utf16_sse(utf16.as_ptr());
-                assert_eq!(res_utf8.value, res_utf16.value, "Mismatch on suffix for {s}");
+                assert_eq!(
+                    res_utf8.value, res_utf16.value,
+                    "Mismatch on suffix for {s}"
+                );
 
                 let date = (res_utf8.value >> 32) as u32;
                 let time = res_utf8.value as u32;
