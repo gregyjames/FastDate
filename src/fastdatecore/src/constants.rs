@@ -1,11 +1,58 @@
 #[cfg(target_arch = "x86_64")]
-pub const SHUFFLE: [u8; 16] = [0, 1, 2, 3, 5, 6, 8, 9, 11, 12, 14, 15, 255, 255, 255, 255];
+pub const SHUF_SSE_V0: [u8; 16] = [
+    0x80, 0x80, 0x80, 0x80, // pair 0: (0, 0), pair 1: (S0, S1 from v1)
+    14, 15,                 // pair 2: Minute (M0, M1)
+    11, 12,                 // pair 3: Hour (H0, H1)
+    8, 9,                   // pair 4: Day (D0, D1)
+    5, 6,                   // pair 5: Month (M0, M1)
+    2, 3,                   // pair 6: Year low (Y2, Y3)
+    0, 1,                   // pair 7: Year high (Y0, Y1)
+];
 
 #[cfg(target_arch = "x86_64")]
-pub const MULTIPLIERS: [u8; 16] = [10, 1, 10, 1, 10, 1, 10, 1, 10, 1, 10, 1, 0, 0, 0, 0];
+pub const SHUF_SSE_V1: [u8; 16] = [
+    0x80, 0x80,             // pair 0: (0, 0)
+    14, 15,                 // pair 1: Second (S0, S1 from input[17], input[18])
+    0x80, 0x80, 0x80, 0x80,
+    0x80, 0x80, 0x80, 0x80,
+    0x80, 0x80, 0x80, 0x80,
+];
 
 #[cfg(target_arch = "x86_64")]
-pub const ASCII_ZERO: u8 = b'0';
+pub const SHUF_SSE_UTF16_V0: [u8; 16] = [
+    0x80, 0x80, 0x80, 0x80,
+    0x80, 0x80, 0x80, 0x80,
+    0x80, 0x80,
+    10, 12,                 // Month (M0, M1)
+    4, 6,                   // Year low (Y2, Y3)
+    0, 2,                   // Year high (Y0, Y1)
+];
+
+#[cfg(target_arch = "x86_64")]
+pub const SHUF_SSE_UTF16_V1: [u8; 16] = [
+    0x80, 0x80, 0x80, 0x80,
+    12, 14,                 // Minute (M0, M1)
+    6, 8,                   // Hour (H0, H1)
+    0, 2,                   // Day (D0, D1)
+    0x80, 0x80,
+    0x80, 0x80, 0x80, 0x80,
+];
+
+#[cfg(target_arch = "x86_64")]
+pub const SHUF_SSE_UTF16_V2: [u8; 16] = [
+    0x80, 0x80,
+    12, 14,                 // Second (S0, S1)
+    0x80, 0x80, 0x80, 0x80,
+    0x80, 0x80, 0x80, 0x80,
+    0x80, 0x80, 0x80, 0x80,
+];
+
+#[cfg(target_arch = "x86_64")]
+pub const MULTIPLIERS_SSE: [u8; 16] = [10, 1, 10, 1, 10, 1, 10, 1, 10, 1, 10, 1, 10, 1, 10, 1];
+
+#[cfg(target_arch = "x86_64")]
+pub const YEAR_FIX_SSE: [u16; 8] = [0, 0, 0, 156, 0, 0, 0, 156];
+
 
 #[cfg(target_arch = "aarch64")]
 pub const SHUF_NEON_SINGLE: [u8; 16] = [
