@@ -43,6 +43,13 @@ internal static unsafe partial class NativeMethods
     internal static partial PackedDateTime parse_iso_date_sse_fast(byte* input);
 
     /// <summary>
+    /// Parses a UTF-16 ISO 8601 character sequence directly using the SSE3 (x86_64) SIMD implementation.
+    /// </summary>
+    [LibraryImport("fastdate", EntryPoint = "parse_iso_date_utf16_sse")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvSuppressGCTransition), typeof(CallConvCdecl)])]
+    internal static partial PackedDateTime parse_iso_date_utf16_sse_fast(ushort* input);
+
+    /// <summary>
     /// Parses a contiguous 20-byte-strided buffer of ISO 8601 byte sequences using the SSE3 (x86_64) SIMD implementation.
     /// </summary>
     [LibraryImport("fastdate", EntryPoint = "parse_iso_date_sse_bulk")]
