@@ -10,6 +10,9 @@ permissions:
   packages: write
   id-token: write
 
+env:
+  NUKE_TELEMETRY_OPTOUT: "1"
+
 jobs:
   build-rust:
     strategy:

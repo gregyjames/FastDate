@@ -52,6 +52,7 @@ jobs:
     runs-on: macos-latest
     env:
       RUSTFLAGS: "-C target-feature=+neon"
+      NUKE_TELEMETRY_OPTOUT: "1"
     steps:
       - uses: actions/checkout@v7
         with:

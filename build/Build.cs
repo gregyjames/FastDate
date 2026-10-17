@@ -47,7 +47,7 @@ sealed class Build : NukeBuild
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Config = IsLocalBuild ? Configuration.Debug : Configuration.Release;
 
-    [Solution(GenerateProjects = true)]
+    [Solution]
     readonly Solution Solution = default!;
 
     [Parameter("Version for NuGet package")]
