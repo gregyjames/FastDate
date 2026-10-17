@@ -90,14 +90,8 @@ jobs:
         shell: bash
         run: |
           chmod +x ./build.sh
-          
-          SKIP_FLAG=""
-          if [ "${{ steps.nuget-cache.outputs.cache-hit }}" == "true" ]; then
-            SKIP_FLAG="--skip Restore"
-          fi
-          
-          ./build.sh BuildRustSingle $SKIP_FLAG --rust-target aarch64-apple-darwin --runtime-id osx-arm64 --lib-name libfastdate.dylib
-          ./build.sh Test $SKIP_FLAG --configuration Release
+          ./build.sh BuildRustSingle --rust-target aarch64-apple-darwin --runtime-id osx-arm64 --lib-name libfastdate.dylib
+          ./build.sh Test --configuration Release
 
       - name: Upload coverage
         uses: codecov/codecov-action@v7
