@@ -9,6 +9,8 @@
 
 FastDate is a SIMD vectorized datetime (ISO 8601) parser that is ~7x faster (86% less time) than DateTime.Parse()/ParseExact().
 
+[![gregyjames/fastdate, explained in a one-minute video](https://gitdiagram.com/api/video/file?username=gregyjames&repo=fastdate&format=poster)](https://gitdiagram.com/gregyjames/fastdate/video)
+
 ## Usage 
 ```csharp
 FastDate.FromISO8601("2026-04-12T15:04:05")
