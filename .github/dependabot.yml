@@ -3,26 +3,47 @@ updates:
   - package-ecosystem: "cargo"
     directory: "/src/fastdatecore"
     schedule:
-      interval: "daily"
+      interval: "weekly"
+    commit-message:
+      prefix: "chore(deps)"
+    labels:
+      - "dependencies"
     groups:
       rust-dependencies:
         patterns:
           - "*"
+        update-types:
+          - "minor"
+          - "patch"
 
   - package-ecosystem: "nuget"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "weekly"
+    commit-message:
+      prefix: "chore(deps)"
+    labels:
+      - "dependencies"
     groups:
       dotnet-dependencies:
         patterns:
           - "*"
+        update-types:
+          - "minor"
+          - "patch"
 
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
+    commit-message:
+      prefix: "chore(ci)"
+    labels:
+      - "dependencies"
     groups:
       actions-dependencies:
         patterns:
           - "*"
+        update-types:
+          - "minor"
+          - "patch"
