@@ -34,7 +34,7 @@ internal static unsafe partial class NativeMethods
     internal static partial void parse_iso_date_neon_bulk_fast(byte* inputs, PackedDateTime* outputs, nuint count);
     
     /// <summary>
-    /// Parses an ISO 8601 byte sequence using the SSE3 (x86_64) SIMD implementation.
+    /// Parses an ISO 8601 byte sequence using the SSSE3 (x86_64) SIMD implementation.
     /// </summary>
     /// <param name="input">Pointer to at least 19 UTF-8 bytes in <c>YYYY-MM-DDTHH:MM:SS</c> format.</param>
     /// <returns>A <see cref="PackedDateTime"/> with bit-packed date and time components.</returns>
@@ -43,14 +43,14 @@ internal static unsafe partial class NativeMethods
     internal static partial PackedDateTime parse_iso_date_sse_fast(byte* input);
 
     /// <summary>
-    /// Parses a UTF-16 ISO 8601 character sequence directly using the SSE3 (x86_64) SIMD implementation.
+    /// Parses a UTF-16 ISO 8601 character sequence directly using the SSSE3 (x86_64) SIMD implementation.
     /// </summary>
     [LibraryImport("fastdate", EntryPoint = "parse_iso_date_utf16_sse")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvSuppressGCTransition), typeof(CallConvCdecl)])]
     internal static partial PackedDateTime parse_iso_date_utf16_sse_fast(ushort* input);
 
     /// <summary>
-    /// Parses a contiguous 20-byte-strided buffer of ISO 8601 byte sequences using the SSE3 (x86_64) SIMD implementation.
+    /// Parses a contiguous 20-byte-strided buffer of ISO 8601 byte sequences using the SSSE3 (x86_64) SIMD implementation.
     /// </summary>
     [LibraryImport("fastdate", EntryPoint = "parse_iso_date_sse_bulk")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvSuppressGCTransition), typeof(CallConvCdecl)])]
