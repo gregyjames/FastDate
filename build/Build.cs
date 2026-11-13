@@ -66,11 +66,11 @@ sealed class Build : NukeBuild
     readonly string? LibName;
 
     AbsolutePath SourcePath => RootDirectory / "src";
-    AbsolutePath HyperTrieCorePath => SourcePath / "FastDate";
+    AbsolutePath FastDatePath => SourcePath / "FastDate";
     AbsolutePath RustProjectPath => SourcePath / "fastdatecore";
     AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
-    AbsolutePath NativeOutputPath => HyperTrieCorePath / "runtimes";
-    AbsolutePath LibraryProjectPath => HyperTrieCorePath / "FastDate.csproj";
+    AbsolutePath NativeOutputPath => FastDatePath / "runtimes";
+    AbsolutePath LibraryProjectPath => FastDatePath / "FastDate.csproj";
     AbsolutePath PackageOutputPath => ArtifactsDirectory / "packages";
     AbsolutePath TestResultsDirectory => ArtifactsDirectory / "TestResults";
 

@@ -1,4 +1,4 @@
-[![CI](https://github.com/gregyjames/FastDate/actions/workflows/build.yml/badge.svg)](https://github.com/gregyjames/HyperTrie/actions/workflows/ci.yml)
+[![CI](https://github.com/gregyjames/FastDate/actions/workflows/ci.yml/badge.svg)](https://github.com/gregyjames/FastDate/actions/workflows/ci.yml)
 ![NuGet Downloads](https://img.shields.io/nuget/dt/FastDate)
 ![NuGet Version](https://img.shields.io/nuget/v/FastDate)
 [![codecov](https://codecov.io/github/gregyjames/FastDate/graph/badge.svg?token=2FY6SXTEQX)](https://codecov.io/github/gregyjames/FastDate)
@@ -13,7 +13,7 @@ FastDate is a SIMD vectorized datetime (ISO 8601) parser that is ~7x faster (86%
 
 ## Usage 
 ```csharp
-FastDate.FromISO8601("2026-04-12T15:04:05")
+FastDate.Parser.FromIso8601("2026-04-12T15:04:05")
 ```
 ## Benchmark
 ```
