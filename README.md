@@ -38,8 +38,8 @@ Apple M1, 1 CPU, 8 logical and 8 physical cores
 
 ## Supported Platforms
 - Apple ARM64 (NEON)
-- Windows x64 (SSE3)
-- Linux x64 (SSE3)
+- Windows x64 (SSSE3)
+- Linux x64 (SSSE3)
 
 ## License
 MIT License

@@ -2,7 +2,7 @@ use crate::PackedDateTime;
 use crate::constants::*;
 use std::arch::x86_64::*;
 
-/// Parse the iso datetime into a packed datetime object (SSE3).
+/// Parse the iso datetime into a packed datetime object (SSSE3).
 /// # Safety
 ///
 /// This method assumes `input` points to at least 19 UTF-8 bytes in ISO 8601 format (`YYYY-MM-DDTHH:MM:SS`).
@@ -29,7 +29,7 @@ pub unsafe extern "C" fn parse_iso_date_sse(input: *const u8) -> PackedDateTime 
     }
 }
 
-/// Parse a UTF-16 iso datetime directly into a packed datetime object (SSE3).
+/// Parse a UTF-16 iso datetime directly into a packed datetime object (SSSE3).
 /// # Safety
 ///
 /// This method assumes `input` points to at least 19 UTF-16 code units (38 bytes) in ISO 8601 format (`YYYY-MM-DDTHH:MM:SS`).
@@ -62,7 +62,7 @@ pub unsafe extern "C" fn parse_iso_date_utf16_sse(input: *const u16) -> PackedDa
     }
 }
 
-/// Parse a contiguous buffer of 20-byte-strided UTF-8 iso datetimes into packed datetime objects (SSE3).
+/// Parse a contiguous buffer of 20-byte-strided UTF-8 iso datetimes into packed datetime objects (SSSE3).
 /// # Safety
 ///
 /// This method assumes `inputs` points to at least `count * 20` valid bytes where each 20-byte slot starts with a 19-byte ISO 8601 string, and `outputs` is valid for `count` elements.
